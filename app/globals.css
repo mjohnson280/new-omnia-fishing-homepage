@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gutter: 24px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 40px;
+  }
+}
+
+body {
+  @apply bg-white text-slate-900 antialiased;
+}
+
+.container-shell {
+  @apply mx-auto w-full max-w-container px-[var(--gutter)];
+}
+
+.section-space {
+  @apply py-16 lg:py-20;
+}
+
+a:focus-visible,
+button:focus-visible {
+  @apply outline-none ring-2 ring-brand ring-offset-2;
+}
