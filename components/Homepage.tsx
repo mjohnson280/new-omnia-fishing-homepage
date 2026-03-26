@@ -183,6 +183,9 @@ function Hero() {
     <section className="pb-16 pt-[72px] lg:pb-16 lg:pt-24">
       <div className="container-shell grid items-center gap-10 lg:grid-cols-2">
         <div className="max-w-[560px]">
+          <p className="mb-4 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-900">
+            Stage Preview Build
+          </p>
           <h1 className="text-4xl font-semibold leading-[44px] md:text-5xl md:leading-[56px]">
             Plan smarter. Fish better. Shop what works.
           </h1>
