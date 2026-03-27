@@ -26,6 +26,125 @@ const tackleIndex: TackleCategory[] = [
     href: '/shop',
     items: [
       { label: 'Jigs', href: '/shop' },
+      { label: 'Soft Baits', href: '/shop' },
+      { label: 'Hard Baits', href: '/shop' },
+      { label: 'Wire Baits', href: '/shop' },
+      { label: 'Rigs', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Line',
+    href: '/shop',
+    items: [
+      { label: 'Braid / Super Line', href: '/shop' },
+      { label: 'Braid to Fluorocarbon Leader', href: '/shop' },
+      { label: 'Fluorocarbon', href: '/shop' },
+      { label: 'Monofilament', href: '/shop' },
+      { label: 'Lead Core', href: '/shop' },
+      { label: 'Ice Line', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Rods',
+    href: '/shop',
+    items: [
+      { label: 'Casting Rods', href: '/shop' },
+      { label: 'Spinning Rods', href: '/shop' },
+      { label: 'Ice Fishing Rods', href: '/shop' },
+      { label: 'Travel Rods', href: '/shop' },
+      { label: 'Combos', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Reels',
+    href: '/shop',
+    items: [
+      { label: 'Casting Reels', href: '/shop' },
+      { label: 'Spinning Reels', href: '/shop' },
+      { label: 'Ice Fishing Reels', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Terminal',
+    href: '/c/terminal',
+    items: [
+      { label: 'Beads', href: '/c/terminal' },
+      { label: 'Blades', href: '/c/terminal' },
+      { label: 'Bobbers', href: '/c/terminal' },
+      { label: 'Hooks', href: '/c/terminal' },
+      { label: 'Leaders', href: '/c/terminal' },
+      { label: 'Skirts', href: '/c/terminal' },
+      { label: 'Swivels, Snaps, Clevises', href: '/c/terminal' },
+      { label: 'Weights', href: '/c/terminal' },
+      { label: 'Pegs', href: '/c/terminal' },
+      { label: 'Rattles', href: '/c/terminal' },
+    ],
+  },
+  {
+    title: 'Accessories',
+    href: '/shop',
+    items: [
+      { label: 'Gift Cards', href: '/shop' },
+      { label: 'Tackle Management', href: '/shop' },
+      { label: 'Tools', href: '/shop' },
+      { label: 'Tournament Accessories', href: '/shop' },
+      { label: 'Scents', href: '/shop' },
+      { label: 'Bags', href: '/shop' },
+      { label: 'Coffee', href: '/shop' },
+      { label: 'Coolers', href: '/shop' },
+      { label: 'Decals', href: '/shop' },
+      { label: 'Knives', href: '/shop' },
+      { label: 'Rod Racks', href: '/shop' },
+      { label: 'Trolling', href: '/shop' },
+      { label: 'Sunscreen', href: '/shop' },
+      { label: 'Kits', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Apparel',
+    href: '/shop',
+    items: [
+      { label: 'Rain Gear', href: '/shop' },
+      { label: 'Sun Protection', href: '/shop' },
+      { label: 'Sunglasses', href: '/shop' },
+      { label: 'Hats', href: '/shop' },
+      { label: 'Omnia Gear', href: '/shop' },
+      { label: "Women's Apparel", href: '/shop' },
+      { label: 'Footwear', href: '/shop' },
+      { label: 'Gloves', href: '/shop' },
+      { label: 'Layering', href: '/shop' },
+      { label: 'Waders', href: '/shop' },
+      { label: 'Ice Fishing', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Marine',
+    href: '/shop',
+    items: [
+      { label: 'Boat', href: '/shop' },
+      { label: 'Cameras & Accessories', href: '/shop' },
+      { label: 'Electronics', href: '/shop' },
+      { label: 'Flotation & Safety', href: '/shop' },
+      { label: 'Trolling Motors', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Ice',
+    href: '/shop',
+    items: [
+      { label: 'Ice Augers', href: '/shop' },
+      { label: 'Ice Shelters', href: '/shop' },
+      { label: 'Ice Fishing Accessories', href: '/shop' },
+    ],
+  },
+];
+
+const condensedTackleIndex: TackleCategory[] = [
+  {
+    title: 'Baits',
+    href: '/shop',
+    items: [
+      { label: 'Jigs', href: '/shop' },
       { label: 'Hard Baits', href: '/shop' },
       { label: 'Wire Baits', href: '/shop' },
       { label: 'Soft Baits', href: '/shop' },
@@ -46,14 +165,14 @@ const tackleIndex: TackleCategory[] = [
     items: [
       { label: 'Casting Reels', href: '/shop' },
       { label: 'Spinning Reels', href: '/shop' },
-      { label: 'Conventional Reels', href: '/shop' },
+      { label: 'Ice Fishing Reels', href: '/shop' },
     ],
   },
   {
     title: 'Line',
     href: '/shop',
     items: [
-      { label: 'Braid', href: '/shop' },
+      { label: 'Braid / Super Line', href: '/shop' },
       { label: 'Fluorocarbon', href: '/shop' },
       { label: 'Monofilament', href: '/shop' },
     ],
@@ -72,8 +191,9 @@ const tackleIndex: TackleCategory[] = [
     title: 'Accessories',
     href: '/shop',
     items: [
+      { label: 'Gift Cards', href: '/shop' },
       { label: 'Tools', href: '/shop' },
-      { label: 'Storage', href: '/shop' },
+      { label: 'Tackle Management', href: '/shop' },
       { label: 'Nets', href: '/shop' },
     ],
   },
@@ -133,13 +253,22 @@ function Sidebar() {
             <IndentedLinks items={followedLakes.map((lake) => ({ label: lake.name, href: lake.href }))} />
             <ExpandableNav label="Shop Tackle" href="/shop">
               {tackleIndex.map((category) => (
-                <Link
-                  key={category.title}
-                  href={category.href}
-                  className="block py-2 text-[16px] text-slate-500 hover:text-slate-950"
-                >
-                  {category.title}
-                </Link>
+                <div key={category.title} className="py-3">
+                  <Link href={category.href} className="block text-[16px] text-slate-600 hover:text-slate-950">
+                    {category.title}
+                  </Link>
+                  <div className="mt-2 border-l-2 border-slate-200 pl-5">
+                    {category.items.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="block py-1.5 text-[14px] text-slate-500 hover:text-slate-900"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               ))}
             </ExpandableNav>
             <ExpandableNav label="Dashboard" href="/app">
@@ -335,7 +464,7 @@ function UtilitySections() {
               Product categories and subcategories stay visible as a utility layer.
             </h2>
             <div className="mt-6 grid gap-4 xl:grid-cols-2">
-              {tackleIndex.map((category) => (
+              {condensedTackleIndex.map((category) => (
                 <div key={category.title} className="rounded-[20px] border border-black/10 bg-white p-5">
                   <div className="flex items-center justify-between">
                     <Link href={category.href} className="text-xl font-semibold">
