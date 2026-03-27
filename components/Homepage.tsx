@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 type Lake = {
   name: string;
@@ -202,21 +202,6 @@ const condensedTackleIndex: TackleCategory[] = [
   },
 ];
 
-const homepageCards = [
-  {
-    title: 'Plan a day around followed lakes',
-    description:
-      'Put map entry points and recently followed waters at the top of the experience so repeat users can resume instantly.',
-    cta: 'View Lakes',
-  },
-  {
-    title: 'Open tackle categories without leaving the shell',
-    description:
-      'Keep the Omnia product index visible while the content area explains the best next action for the angler.',
-    cta: 'Shop Tackle',
-  },
-];
-
 export default function Homepage() {
   return (
     <main className="min-h-screen bg-white text-slate-950">
@@ -235,9 +220,11 @@ export default function Homepage() {
 function Sidebar() {
   const [mapOpen, setMapOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
+  const mapPanelId = useId();
+  const shopPanelId = useId();
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-[308px] shrink-0 border-r border-black/10 bg-[#f6f7f8] xl:block">
+    <aside className="sticky top-0 hidden h-screen w-[292px] shrink-0 border-r border-black/10 bg-[#f6f7f8] xl:block 2xl:w-[308px]">
       <div className="flex h-full flex-col px-14 py-10">
         <div className="flex items-center justify-between">
           <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/15 text-sm font-semibold">
@@ -252,12 +239,13 @@ function Sidebar() {
           <p className="text-[17px] font-medium text-slate-950">Omnia Fishing</p>
         </div>
 
-        <nav className="mt-12 min-h-0 flex-1 overflow-y-auto pr-2">
+        <nav aria-label="Primary" className="mt-12 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-2">
           <div className="space-y-11">
             <PrimaryNav label="Dashboard" href="/app" active />
             <ExpandableNav
               label="Map"
               href="/map"
+              panelId={mapPanelId}
               open={mapOpen}
               onToggle={() => setMapOpen((value) => !value)}
             >
@@ -268,6 +256,7 @@ function Sidebar() {
             <ExpandableNav
               label="Shop Tackle"
               href="/shop"
+              panelId={shopPanelId}
               open={shopOpen}
               onToggle={() => setShopOpen((value) => !value)}
             >
@@ -282,7 +271,7 @@ function Sidebar() {
                         <Link
                           key={item.label}
                           href={item.href}
-                          className="block py-1.5 text-[14px] text-slate-500 hover:text-slate-900"
+                          className="block rounded-sm py-1.5 text-[14px] text-slate-500 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
                         >
                           {item.label}
                         </Link>
@@ -315,7 +304,8 @@ function PrimaryNav({
       ) : null}
       <Link
         href={href}
-        className={`block text-[16px] ${active ? 'font-medium text-slate-950' : 'text-slate-600 hover:text-slate-950'}`}
+        aria-current={active ? 'page' : undefined}
+        className={`block rounded-sm text-[16px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 ${active ? 'font-medium text-slate-950' : 'text-slate-600 hover:text-slate-950'}`}
       >
         {label}
       </Link>
@@ -326,12 +316,14 @@ function PrimaryNav({
 function ExpandableNav({
   label,
   href,
+  panelId,
   open,
   onToggle,
   children,
 }: {
   label: string;
   href: string;
+  panelId: string;
   open: boolean;
   onToggle: () => void;
   children: React.ReactNode;
@@ -339,20 +331,28 @@ function ExpandableNav({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <Link href={href} className="text-[16px] text-slate-600 hover:text-slate-950">
+        <Link
+          href={href}
+          className="rounded-sm text-[16px] text-slate-600 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+        >
           {label}
         </Link>
         <button
           type="button"
+          aria-controls={panelId}
           aria-expanded={open}
           aria-label={`Toggle ${label}`}
           onClick={onToggle}
-          className="text-slate-500 transition hover:text-slate-900"
+          className="rounded-sm text-slate-500 transition hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
         >
           <span className={`block transition ${open ? 'rotate-180' : ''}`}>⌄</span>
         </button>
       </div>
-      {open ? <div className="mt-3">{children}</div> : null}
+      {open ? (
+        <div id={panelId} className="mt-3">
+          {children}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -368,7 +368,7 @@ function IndentedLinks({
         <Link
           key={item.label}
           href={item.href}
-          className="block py-2 text-[16px] text-slate-500 hover:text-slate-950"
+          className="block rounded-sm py-2 text-[16px] text-slate-500 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
         >
           {item.label}
         </Link>
@@ -379,18 +379,27 @@ function IndentedLinks({
 
 function MobileTopBar() {
   return (
-    <section className="border-b border-black/10 bg-[#f6f7f8] px-6 py-5 xl:hidden">
+    <section className="sticky top-0 z-20 border-b border-black/10 bg-[#f6f7f8]/95 px-6 py-5 backdrop-blur xl:hidden">
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
         Omnia shell study
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
-        <Link href="/map" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold">
+        <Link
+          href="/map"
+          className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+        >
           Map
         </Link>
-        <Link href="/shop" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold">
+        <Link
+          href="/shop"
+          className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+        >
           Shop Tackle
         </Link>
-        <Link href="/app" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold">
+        <Link
+          href="/app"
+          className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+        >
           Dashboard
         </Link>
       </div>
@@ -402,51 +411,57 @@ function HeroSection() {
   return (
     <section className="bg-white">
       <div className="container-shell px-8 py-10 lg:px-14 lg:py-12">
-        <div className="flex items-start justify-between gap-6">
-          <div>
-            <h1 className="text-5xl font-semibold leading-none md:text-6xl">Omnia Fishing</h1>
-            <p className="mt-3 text-lg font-medium text-slate-700 underline underline-offset-4">
-              Left rail homepage concept
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <div className="max-w-[560px]">
+            <h1 className="text-4xl font-semibold leading-[44px] md:text-5xl md:leading-[56px]">
+              Plan smarter. Fish better. Shop what works.
+            </h1>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              Map-based fishing planning plus local reports and tackle curated by lake, season,
+              species, and technique.
             </p>
-          </div>
-          <p className="hidden pt-2 text-lg text-slate-700 lg:block">Hire an expert</p>
-        </div>
-
-        <div className="mt-10 overflow-hidden rounded-[26px] border border-[#dfd6dd] bg-white shadow-[0_4px_18px_rgba(0,0,0,0.04)]">
-          <div className="border-t-[4px] border-t-[#f0139a] px-6 py-7">
-            <p className="text-center text-lg text-slate-800">
-              You currently have a homepage prototype. Pick a path to continue.
-            </p>
-          </div>
-
-          <div className="border-t border-black/10 px-6 py-8">
-            <div className="flex items-center gap-3">
-              <span className="text-xl text-[#7c3aed]">✦</span>
-              <h2 className="text-2xl font-semibold">
-                Everything generated for the new Omnia homepage
-              </h2>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="/map"
+                className="rounded-[10px] bg-slate-900 px-5 py-3 font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+              >
+                Open the Map
+              </Link>
+              <Link
+                href="/app"
+                className="rounded-[10px] border border-black/15 px-5 py-3 font-semibold hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+              >
+                Download the App
+              </Link>
+              <Link
+                href="/shop"
+                className="self-center text-sm font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+              >
+                Shop by Category
+              </Link>
             </div>
+            <div className="mt-5 flex flex-wrap gap-3 text-sm text-slate-700">
+              <span className="rounded-full bg-slate-100 px-3 py-1">Massive lake coverage</span>
+              <span className="rounded-full bg-slate-100 px-3 py-1">Thousands of reports</span>
+              <span className="rounded-full bg-slate-100 px-3 py-1">Huge tackle selection</span>
+            </div>
+          </div>
 
-            <div className="mt-7 grid gap-6 xl:grid-cols-2">
-              {homepageCards.map((card) => (
-                <article
-                  key={card.title}
-                  className="rounded-[24px] border border-black/10 bg-white p-6 shadow-[0_10px_24px_rgba(0,0,0,0.04)]"
-                >
-                  <div className="h-48 rounded-[18px] border border-black/10 bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_100%)]" />
-                  <h3 className="mx-auto mt-8 max-w-[14ch] text-center text-[28px] font-semibold leading-9">
-                    {card.title}
-                  </h3>
-                  <p className="mx-auto mt-4 max-w-[28rem] text-center text-[17px] leading-8 text-slate-600">
-                    {card.description}
-                  </p>
-                  <div className="mt-7 text-center">
-                    <button className="rounded-[10px] border border-black/20 px-4 py-2 text-lg font-medium">
-                      {card.cta}
-                    </button>
-                  </div>
-                </article>
-              ))}
+          <div className="rounded-[24px] border border-black/10 bg-gradient-to-br from-slate-50 to-slate-100 p-6 shadow-[0_10px_24px_rgba(0,0,0,0.04)]">
+            <div className="rounded-[18px] border border-black/10 bg-white p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">
+                Map preview
+              </p>
+              <div className="mt-4 grid grid-cols-3 gap-2">
+                <div className="col-span-2 h-40 rounded-xl bg-cyan-100" />
+                <div className="h-40 rounded-xl bg-slate-100" />
+              </div>
+              <div className="mt-4 rounded-xl border border-black/10 p-3">
+                <p className="text-sm font-semibold">Recommended tackle</p>
+                <p className="mt-1 text-xs text-slate-600">
+                  Matched to lake, season, and species.
+                </p>
+              </div>
             </div>
           </div>
         </div>
