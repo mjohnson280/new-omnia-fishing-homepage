@@ -1,609 +1,380 @@
 import Link from 'next/link';
 
-type Feature = { title: string; description: string; cta: string; href: string };
-type Resource = { title: string; description: string; href: string; example: string };
-type Product = {
+type Lake = {
   name: string;
-  price: string;
-  worksFor: string;
+  state: string;
   href: string;
-  reportHref: string;
 };
 
-const navItems = [
-  { label: 'Maps', href: '/map' },
-  { label: 'Shop', href: '/shop' },
-  { label: 'Reports', href: '/fishing-reports' },
-  { label: 'Lakes', href: '/states' },
-  { label: 'App', href: '/app' },
+type TackleCategory = {
+  title: string;
+  href: string;
+  items: { label: string; href: string }[];
+};
+
+const followedLakes: Lake[] = [
+  { name: 'Lake Minnetonka', state: 'MN', href: '/map' },
+  { name: 'Mille Lacs', state: 'MN', href: '/map' },
+  { name: 'Leech Lake', state: 'MN', href: '/map' },
+  { name: 'Table Rock', state: 'MO', href: '/map' },
+  { name: 'Guntersville', state: 'AL', href: '/map' },
 ];
 
-const features: Feature[] = [
+const tackleIndex: TackleCategory[] = [
   {
-    title: 'Map Layers',
+    title: 'Baits',
+    href: '/shop',
+    items: [
+      { label: 'Jigs', href: '/shop' },
+      { label: 'Hard Baits', href: '/shop' },
+      { label: 'Wire Baits', href: '/shop' },
+      { label: 'Soft Baits', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Rods',
+    href: '/shop',
+    items: [
+      { label: 'Casting Rods', href: '/shop' },
+      { label: 'Spinning Rods', href: '/shop' },
+      { label: 'Travel Rods', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Reels',
+    href: '/shop',
+    items: [
+      { label: 'Casting Reels', href: '/shop' },
+      { label: 'Spinning Reels', href: '/shop' },
+      { label: 'Conventional Reels', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Line',
+    href: '/shop',
+    items: [
+      { label: 'Braid', href: '/shop' },
+      { label: 'Fluorocarbon', href: '/shop' },
+      { label: 'Monofilament', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Terminal',
+    href: '/c/terminal',
+    items: [
+      { label: 'Hooks', href: '/c/terminal' },
+      { label: 'Weights', href: '/c/terminal' },
+      { label: 'Bobbers', href: '/c/terminal' },
+      { label: 'Skirts', href: '/c/terminal' },
+    ],
+  },
+  {
+    title: 'Accessories',
+    href: '/shop',
+    items: [
+      { label: 'Tools', href: '/shop' },
+      { label: 'Storage', href: '/shop' },
+      { label: 'Nets', href: '/shop' },
+    ],
+  },
+];
+
+const homepageCards = [
+  {
+    title: 'Plan a day around followed lakes',
     description:
-      'Water temp, clarity, contours, weather, and reports layered in one place.',
-    cta: 'Explore Maps',
-    href: '/map',
+      'Put map entry points and recently followed waters at the top of the experience so repeat users can resume instantly.',
+    cta: 'View Lakes',
   },
   {
-    title: 'Local Fishing Reports',
-    description: 'See what is working right now and which baits produced the bite.',
-    cta: 'Browse Reports',
-    href: '/fishing-reports',
-  },
-  {
-    title: 'Contextual Tackle Picks',
-    description: 'Shop baits tied to lake, season, species, and technique in a click.',
-    cta: 'See Picks on Map',
-    href: '/map',
-  },
-  {
-    title: 'PRO Layers + Perks',
+    title: 'Open tackle categories without leaving the shell',
     description:
-      'Unlock advanced map tools and member-only benefits as you pattern fish.',
-    cta: 'Try PRO',
-    href: '/map',
+      'Keep the Omnia product index visible while the content area explains the best next action for the angler.',
+    cta: 'Shop Tackle',
   },
-];
-
-const resources: Resource[] = [
-  {
-    title: 'Fishing Reports',
-    description: 'Fresh local intel and lure details.',
-    href: '/fishing-reports',
-    example: 'Latest: Metro bass update',
-  },
-  {
-    title: 'Techniques',
-    description: 'Pattern breakdowns by season and water conditions.',
-    href: '/fishing-techniques',
-    example: 'Guide: Cold-front jerkbaiting',
-  },
-  {
-    title: 'Species',
-    description: 'Target behavior and bait recommendations by species.',
-    href: '/fishing-species',
-    example: 'Smallmouth spring transitions',
-  },
-  {
-    title: 'Lakes by State',
-    description: 'Explore fisheries and map coverage nationwide.',
-    href: '/states',
-    example: 'Trending: Minnesota waters',
-  },
-];
-
-const categories = [
-  'Baits',
-  'Rods',
-  'Reels',
-  'Line',
-  'Terminal Tackle',
-  'Accessories',
-  'Electronics',
-  'Ice',
-];
-
-const products: Product[] = [
-  {
-    name: 'Vision 110 Jerkbait',
-    price: '$24.99',
-    worksFor: 'Prespawn | Smallmouth | Jerkbait',
-    href: '/map',
-    reportHref: '/fishing-reports',
-  },
-  {
-    name: 'Finesse Swimbait Kit',
-    price: '$18.99',
-    worksFor: 'Postspawn | Largemouth | Swimbait',
-    href: '/map',
-    reportHref: '/fishing-reports',
-  },
-  {
-    name: 'Football Jig Pack',
-    price: '$9.49',
-    worksFor: 'Summer | Spotted Bass | Offshore',
-    href: '/map',
-    reportHref: '/fishing-reports',
-  },
-  {
-    name: 'Dropshot Starter Set',
-    price: '$32.00',
-    worksFor: 'Clear Water | Smallmouth | Finesse',
-    href: '/map',
-    reportHref: '/fishing-reports',
-  },
-];
-
-const testimonials = [
-  '"I open the map first every trip. It shortens my learning curve instantly."',
-  '"Reports + tackle context helped me dial in a new lake in one afternoon."',
-  '"Finally a fishing app where planning and shopping connect."',
 ];
 
 export default function Homepage() {
   return (
-    <main>
-      <HeaderNav />
-      <Hero />
-      <PathTiles />
-      <FeatureCards />
-      <HowItWorks />
-      <ResourceGrid />
-      <ContextualProductShelf />
-      <CategoryGrid />
-      <AppPromo />
-      <TestimonialsRow />
-      <Footer />
+    <main className="min-h-screen bg-white text-slate-950">
+      <div className="mx-auto flex max-w-[1600px]">
+        <Sidebar />
+        <div className="min-w-0 flex-1">
+          <MobileTopBar />
+          <HeroSection />
+          <UtilitySections />
+        </div>
+      </div>
     </main>
   );
 }
 
-function HeaderNav() {
+function Sidebar() {
   return (
-    <header className="sticky top-0 z-50 h-[72px] border-b border-slate-200 bg-white/95 backdrop-blur">
-      <div className="container-shell flex h-full items-center justify-between gap-6">
-        <Link href="/" className="text-xl font-semibold tracking-tight">
-          OmniaFishing
-        </Link>
-        <nav className="hidden items-center gap-6 md:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="text-sm font-medium text-slate-700 hover:text-slate-900"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="flex items-center gap-3">
-          <Link
-            href="/app"
-            className="hidden rounded-btn border border-slate-300 px-4 py-2 text-sm font-semibold md:inline-flex"
-          >
-            Download App
-          </Link>
-          <Link
-            href="/map"
-            data-event="home_click_map"
-            className="rounded-btn bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-dark"
-          >
-            Open Map
-          </Link>
-        </div>
-      </div>
-    </header>
-  );
-}
-
-function Hero() {
-  return (
-    <section className="pb-16 pt-[72px] lg:pb-16 lg:pt-24">
-      <div className="container-shell grid items-center gap-10 lg:grid-cols-2">
-        <div className="max-w-[560px]">
-          <p className="mb-4 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-900">
-            Stage Preview Build
-          </p>
-          <h1 className="text-4xl font-semibold leading-[44px] md:text-5xl md:leading-[56px]">
-            Plan smarter. Fish better. Shop what works.
-          </h1>
-          <p className="mt-4 text-base leading-6 text-slate-600">
-            Map-based fishing planning + local reports + tackle curated by lake,
-            season, species, and technique.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              href="/map"
-              data-event="home_click_map"
-              className="rounded-btn bg-brand px-5 py-3 font-semibold text-white hover:bg-brand-dark"
-            >
-              Open the Map
-            </Link>
-            <Link
-              href="/app"
-              data-event="home_click_app"
-              className="rounded-btn border border-slate-300 px-5 py-3 font-semibold"
-            >
-              Download the App
-            </Link>
-            <Link
-              href="/shop"
-              data-event="home_click_shop_categories"
-              className="self-center text-sm font-semibold text-brand underline-offset-4 hover:underline"
-            >
-              Shop by Category
-            </Link>
+    <aside className="sticky top-0 hidden h-screen w-[308px] shrink-0 border-r border-black/10 bg-[#f6f7f8] xl:block">
+      <div className="flex h-full flex-col px-14 py-10">
+        <div className="flex items-center justify-between">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/15 text-sm font-semibold">
+            O
           </div>
-          <div className="mt-5 flex flex-wrap gap-4 text-sm text-slate-700">
-            <span className="rounded-full bg-slate-100 px-3 py-1">
-              Massive lake coverage
-            </span>
-            <span className="rounded-full bg-slate-100 px-3 py-1">
-              Thousands of reports
-            </span>
-            <span className="rounded-full bg-slate-100 px-3 py-1">
-              Huge tackle selection
-            </span>
+          <div className="rounded-md border border-black/10 px-2 py-1 text-[11px] text-slate-500">
+            [ ]
           </div>
         </div>
-        <div className="rounded-card border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-6 shadow-soft">
-          <div className="rounded-card border border-slate-200 bg-white p-5">
-            <p className="text-xs font-semibold uppercase tracking-wider text-brand">
-              Map preview
-            </p>
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              <div className="col-span-2 h-40 rounded-xl bg-brand-light" />
-              <div className="h-40 rounded-xl bg-slate-100" />
-            </div>
-            <div className="mt-4 rounded-xl border border-slate-200 p-3">
-              <p className="text-sm font-semibold">Recommended tackle</p>
-              <p className="mt-1 text-xs text-slate-600">
-                Matched to lake + season + species.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-function PathTiles() {
-  return (
-    <section className="section-space bg-slate-50">
-      <div className="container-shell grid gap-6 md:grid-cols-2">
-        {[
-          {
-            title: 'Start with a lake',
-            desc: 'See conditions, reports, and best baits on the map.',
-            cta: 'Go to Map',
-            href: '/map',
-          },
-          {
-            title: 'Start with tackle',
-            desc: 'Shop categories first, then refine by lake and species.',
-            cta: 'Shop Categories',
-            href: '/shop',
-          },
-        ].map((tile) => (
-          <article
-            key={tile.title}
-            className="rounded-card border border-slate-200 bg-white p-6 shadow-soft"
-          >
-            <h2 className="text-2xl font-semibold leading-8">{tile.title}</h2>
-            <p className="mt-3 text-slate-600">{tile.desc}</p>
-            <Link
-              href={tile.href}
-              className="mt-4 inline-flex rounded-btn border border-slate-300 px-4 py-2 text-sm font-semibold"
-            >
-              {tile.cta}
-            </Link>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
+        <div className="mt-14">
+          <p className="text-[17px] font-medium text-slate-950">Omnia Fishing</p>
+        </div>
 
-function FeatureCards() {
-  return (
-    <section className="section-space">
-      <div className="container-shell">
-        <h2 className="text-3xl font-semibold leading-10">
-          Everything you need to plan, learn, and gear up.
-        </h2>
-        <p className="mt-3 text-slate-600">
-          Fast feature snapshots to get you into the right flow.
-        </p>
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature) => (
-            <article
-              key={feature.title}
-              className="rounded-card border border-slate-200 p-6 shadow-soft"
-            >
-              <h3 className="text-xl font-semibold leading-7">
-                {feature.title}
-              </h3>
-              <p className="mt-2 text-slate-600">{feature.description}</p>
-              <Link
-                href={feature.href}
-                className="mt-4 inline-flex text-sm font-semibold text-brand hover:underline"
-              >
-                {feature.cta}
-              </Link>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function HowItWorks() {
-  return (
-    <section className="section-space bg-slate-50">
-      <div className="container-shell">
-        <h2 className="text-3xl font-semibold leading-10">
-          Open the map, then everything else gets easier.
-        </h2>
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {[
-            'Pick your lake',
-            'See conditions + reports',
-            'Shop baits that match the pattern',
-          ].map((step, idx) => (
-            <article
-              key={step}
-              className="rounded-card border border-slate-200 bg-white p-6"
-            >
-              <p className="text-sm font-semibold text-brand">Step {idx + 1}</p>
-              <h3 className="mt-2 text-xl font-semibold">{step}</h3>
-            </article>
-          ))}
-        </div>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link
-            href="/map"
-            data-event="home_click_map"
-            className="rounded-btn bg-brand px-5 py-3 font-semibold text-white hover:bg-brand-dark"
-          >
-            Open Map
-          </Link>
-          <Link
-            href="/app"
-            data-event="home_click_app"
-            className="rounded-btn border border-slate-300 px-5 py-3 font-semibold"
-          >
-            Get the App
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ResourceGrid() {
-  return (
-    <section className="section-space">
-      <div className="container-shell">
-        <h2 className="text-3xl font-semibold leading-10">
-          Resources that keep you one step ahead.
-        </h2>
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {resources.map((resource) => (
-            <article
-              key={resource.title}
-              className="rounded-card border border-slate-200 p-6 shadow-soft"
-            >
-              <h3 className="text-xl font-semibold">{resource.title}</h3>
-              <p className="mt-2 text-slate-600">{resource.description}</p>
-              <p className="mt-3 text-sm text-slate-500">{resource.example}</p>
-              <Link
-                href={resource.href}
-                className="mt-4 inline-flex text-sm font-semibold text-brand hover:underline"
-              >
-                Explore
-              </Link>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ContextualProductShelf() {
-  return (
-    <section className="section-space bg-slate-50">
-      <div className="container-shell">
-        <h2 className="text-3xl font-semibold leading-10">
-          Tackle with context (not an endless catalog).
-        </h2>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {['Season', 'Species', 'Technique', 'Lake'].map((chip) => (
-            <button
-              key={chip}
-              className="rounded-full border border-slate-300 px-3 py-2 text-sm"
-            >
-              {chip}
-            </button>
-          ))}
-        </div>
-        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <article
-              key={product.name}
-              className="rounded-card border border-slate-200 bg-white p-5"
-            >
-              <div className="h-28 rounded-xl bg-slate-100" />
-              <h3 className="mt-3 text-base font-semibold">{product.name}</h3>
-              <p className="text-sm font-semibold text-slate-800">
-                {product.price}
-              </p>
-              <p className="mt-2 text-xs text-slate-600">
-                Works for: {product.worksFor}
-              </p>
-              <div className="mt-3 flex gap-3 text-sm font-semibold">
+        <nav className="mt-12 min-h-0 flex-1 overflow-y-auto pr-2">
+          <div className="space-y-11">
+            <PrimaryNav label="Dashboard" href="/app" active />
+            <PrimaryNav label="Map" href="/map" />
+            <IndentedLinks items={followedLakes.map((lake) => ({ label: lake.name, href: lake.href }))} />
+            <ExpandableNav label="Shop Tackle" href="/shop">
+              {tackleIndex.map((category) => (
                 <Link
-                  href={product.href}
-                  data-event="home_contextual_product_click"
-                  className="text-brand hover:underline"
+                  key={category.title}
+                  href={category.href}
+                  className="block py-2 text-[16px] text-slate-500 hover:text-slate-950"
                 >
-                  See on Map
+                  {category.title}
                 </Link>
-                <Link
-                  href={product.reportHref}
-                  data-event="home_contextual_product_click"
-                  className="text-slate-700 hover:underline"
-                >
-                  Reports using this
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link
-            href="/shop"
-            className="rounded-btn bg-brand px-5 py-3 font-semibold text-white"
-          >
-            Shop these picks
-          </Link>
-          <Link
-            href="/map"
-            className="rounded-btn border border-slate-300 px-5 py-3 font-semibold"
-          >
-            See the pattern on the map
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CategoryGrid() {
-  return (
-    <section className="section-space">
-      <div className="container-shell">
-        <h2 className="text-3xl font-semibold leading-10">Shop by category</h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((category) => (
-            <Link
-              key={category}
-              href="/shop"
-              className="rounded-card border border-slate-200 p-5 text-lg font-semibold shadow-soft hover:bg-slate-50"
-            >
-              {category}
-            </Link>
-          ))}
-        </div>
-        <Link
-          href="/shop"
-          className="mt-6 inline-flex text-sm font-semibold text-brand hover:underline"
-        >
-          Shop All Categories
-        </Link>
-      </div>
-    </section>
-  );
-}
-
-function AppPromo() {
-  return (
-    <section className="section-space bg-slate-50">
-      <div className="container-shell grid items-center gap-8 lg:grid-cols-2">
-        <div>
-          <h2 className="text-3xl font-semibold leading-10">
-            Everything works better in the app.
-          </h2>
-          <ul className="mt-4 space-y-2 text-slate-600">
-            <li>- Save waypoints and patterns</li>
-            <li>- Use layers on the water</li>
-            <li>- Shop faster with your map context</li>
-          </ul>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              href="/app"
-              className="rounded-btn bg-slate-900 px-5 py-3 font-semibold text-white"
-            >
-              Apple App Store
-            </Link>
-            <Link
-              href="/app"
-              className="rounded-btn bg-slate-900 px-5 py-3 font-semibold text-white"
-            >
-              Google Play
-            </Link>
-          </div>
-          <Link
-            href="/app"
-            className="mt-4 inline-flex text-sm font-semibold text-brand hover:underline"
-          >
-            Learn more
-          </Link>
-        </div>
-        <div className="rounded-card border border-slate-200 bg-white p-8 shadow-soft">
-          <div className="mx-auto h-72 w-44 rounded-[32px] border-8 border-slate-900 bg-gradient-to-b from-brand-light to-slate-100" />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TestimonialsRow() {
-  return (
-    <section className="section-space">
-      <div className="container-shell">
-        <h2 className="text-3xl font-semibold leading-10">
-          Trusted by anglers nationwide.
-        </h2>
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {testimonials.map((quote, idx) => (
-            <article
-              key={idx}
-              className="rounded-card border border-slate-200 p-6 shadow-soft"
-            >
-              <p className="text-slate-700">{quote}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Footer() {
-  const columns = {
-    Explore: [
-      ['Map', '/map'],
-      ['App', '/app'],
-      ['Reports', '/fishing-reports'],
-      ['Lakes', '/states'],
-    ],
-    Shop: [
-      ['Shop Categories', '/shop'],
-      ['Best Sellers', '/shop'],
-      ['New Arrivals', '/shop'],
-      ['Deals', '/shop'],
-    ],
-    Support: [
-      ['Shipping & Returns', '/shipping-returns'],
-      ['FAQs', '/faqs'],
-      ['Contact', '/contact'],
-    ],
-  } as const;
-
-  return (
-    <footer className="border-t border-slate-200 bg-slate-50 pt-16">
-      <div className="container-shell grid gap-10 pb-10 md:grid-cols-3">
-        {Object.entries(columns).map(([title, links]) => (
-          <div key={title}>
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-              {title}
-            </h3>
-            <ul className="mt-3 space-y-3">
-              {links.map(([label, href]) => (
-                <li key={label}>
-                  <Link href={href} className="text-slate-700 hover:text-slate-900">
-                    {label}
-                  </Link>
-                </li>
               ))}
-            </ul>
+            </ExpandableNav>
+            <ExpandableNav label="Dashboard" href="/app">
+              <Link href="/app" className="block py-2 text-[16px] text-slate-500 hover:text-slate-950">
+                Saved Patterns
+              </Link>
+              <Link href="/app" className="block py-2 text-[16px] text-slate-500 hover:text-slate-950">
+                Trip Board
+              </Link>
+            </ExpandableNav>
           </div>
-        ))}
+        </nav>
       </div>
-      <div className="border-t border-slate-200 py-6">
-        <div className="container-shell flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500">
-          <div className="flex gap-4">
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
+    </aside>
+  );
+}
+
+function PrimaryNav({
+  label,
+  href,
+  active = false,
+}: {
+  label: string;
+  href: string;
+  active?: boolean;
+}) {
+  return (
+    <div className="relative">
+      {active ? (
+        <span className="absolute -left-14 top-1/2 h-11 w-2 -translate-y-1/2 rounded-r-full bg-cyan-400" />
+      ) : null}
+      <Link
+        href={href}
+        className={`block text-[16px] ${active ? 'font-medium text-slate-950' : 'text-slate-600 hover:text-slate-950'}`}
+      >
+        {label}
+      </Link>
+    </div>
+  );
+}
+
+function ExpandableNav({
+  label,
+  href,
+  children,
+}: {
+  label: string;
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <Link href={href} className="text-[16px] text-slate-600 hover:text-slate-950">
+          {label}
+        </Link>
+        <span className="text-slate-500">⌄</span>
+      </div>
+      <div className="mt-3">{children}</div>
+    </div>
+  );
+}
+
+function IndentedLinks({
+  items,
+}: {
+  items: { label: string; href: string }[];
+}) {
+  return (
+    <div className="border-l-2 border-slate-200 pl-8">
+      {items.map((item) => (
+        <Link
+          key={item.label}
+          href={item.href}
+          className="block py-2 text-[16px] text-slate-500 hover:text-slate-950"
+        >
+          {item.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function MobileTopBar() {
+  return (
+    <section className="border-b border-black/10 bg-[#f6f7f8] px-6 py-5 xl:hidden">
+      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+        Omnia shell study
+      </p>
+      <div className="mt-4 flex flex-wrap gap-3">
+        <Link href="/map" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold">
+          Map
+        </Link>
+        <Link href="/shop" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold">
+          Shop Tackle
+        </Link>
+        <Link href="/app" className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-semibold">
+          Dashboard
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function HeroSection() {
+  return (
+    <section className="bg-white">
+      <div className="container-shell px-8 py-10 lg:px-14 lg:py-12">
+        <div className="flex items-start justify-between gap-6">
+          <div>
+            <h1 className="text-5xl font-semibold leading-none md:text-6xl">Omnia Fishing</h1>
+            <p className="mt-3 text-lg font-medium text-slate-700 underline underline-offset-4">
+              Left rail homepage concept
+            </p>
           </div>
-          <p>(c) {new Date().getFullYear()} Omnia Fishing | Chanhassen, MN</p>
+          <p className="hidden pt-2 text-lg text-slate-700 lg:block">Hire an expert</p>
+        </div>
+
+        <div className="mt-10 overflow-hidden rounded-[26px] border border-[#dfd6dd] bg-white shadow-[0_4px_18px_rgba(0,0,0,0.04)]">
+          <div className="border-t-[4px] border-t-[#f0139a] px-6 py-7">
+            <p className="text-center text-lg text-slate-800">
+              You currently have a homepage prototype. Pick a path to continue.
+            </p>
+          </div>
+
+          <div className="border-t border-black/10 px-6 py-8">
+            <div className="flex items-center gap-3">
+              <span className="text-xl text-[#7c3aed]">✦</span>
+              <h2 className="text-2xl font-semibold">
+                Everything generated for the new Omnia homepage
+              </h2>
+            </div>
+
+            <div className="mt-7 grid gap-6 xl:grid-cols-2">
+              {homepageCards.map((card) => (
+                <article
+                  key={card.title}
+                  className="rounded-[24px] border border-black/10 bg-white p-6 shadow-[0_10px_24px_rgba(0,0,0,0.04)]"
+                >
+                  <div className="h-48 rounded-[18px] border border-black/10 bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_100%)]" />
+                  <h3 className="mx-auto mt-8 max-w-[14ch] text-center text-[28px] font-semibold leading-9">
+                    {card.title}
+                  </h3>
+                  <p className="mx-auto mt-4 max-w-[28rem] text-center text-[17px] leading-8 text-slate-600">
+                    {card.description}
+                  </p>
+                  <div className="mt-7 text-center">
+                    <button className="rounded-[10px] border border-black/20 px-4 py-2 text-lg font-medium">
+                      {card.cta}
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-    </footer>
+    </section>
+  );
+}
+
+function UtilitySections() {
+  return (
+    <section className="container-shell px-8 pb-14 lg:px-14">
+      <div className="grid gap-6 pt-10 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="space-y-6">
+          <article className="rounded-[24px] border border-black/10 bg-[#fafafa] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+              Followed Lakes
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold leading-10">
+              Quick map links live directly below the main navigation item.
+            </h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {followedLakes.map((lake) => (
+                <Link
+                  key={lake.name}
+                  href={lake.href}
+                  className="rounded-[20px] border border-black/10 bg-white px-5 py-4"
+                >
+                  <p className="text-lg font-semibold">{lake.name}</p>
+                  <p className="mt-1 text-sm text-slate-500">{lake.state}</p>
+                </Link>
+              ))}
+            </div>
+          </article>
+
+          <article className="rounded-[24px] border border-black/10 bg-[#fafafa] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+              Tackle Taxonomy
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold leading-10">
+              Product categories and subcategories stay visible as a utility layer.
+            </h2>
+            <div className="mt-6 grid gap-4 xl:grid-cols-2">
+              {tackleIndex.map((category) => (
+                <div key={category.title} className="rounded-[20px] border border-black/10 bg-white p-5">
+                  <div className="flex items-center justify-between">
+                    <Link href={category.href} className="text-xl font-semibold">
+                      {category.title}
+                    </Link>
+                    <Link href={category.href} className="text-sm font-semibold text-slate-600">
+                      View
+                    </Link>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {category.items.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="rounded-full border border-black/10 bg-[#fafafa] px-3 py-2 text-xs font-medium text-slate-700"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+
+        <aside className="rounded-[24px] border border-black/10 bg-[#f6f7f8] p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+            Handoff Notes
+          </p>
+          <div className="mt-5 space-y-4 text-sm leading-7 text-slate-700">
+            <p>Desktop keeps the utility rail fixed on the left.</p>
+            <p>Spacing and grouping are based on your GoDaddy reference screenshot.</p>
+            <p>Map uses a followed-lake list as the first nested layer.</p>
+            <p>Shop Tackle exposes categories and subcategories for recall speed.</p>
+            <p>Mobile collapses to a simpler top shortcut bar.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
   );
 }
