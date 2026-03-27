@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 type Lake = {
   name: string;
@@ -230,6 +233,9 @@ export default function Homepage() {
 }
 
 function Sidebar() {
+  const [mapOpen, setMapOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
+
   return (
     <aside className="sticky top-0 hidden h-screen w-[308px] shrink-0 border-r border-black/10 bg-[#f6f7f8] xl:block">
       <div className="flex h-full flex-col px-14 py-10">
@@ -249,35 +255,42 @@ function Sidebar() {
         <nav className="mt-12 min-h-0 flex-1 overflow-y-auto pr-2">
           <div className="space-y-11">
             <PrimaryNav label="Dashboard" href="/app" active />
-            <PrimaryNav label="Map" href="/map" />
-            <IndentedLinks items={followedLakes.map((lake) => ({ label: lake.name, href: lake.href }))} />
-            <ExpandableNav label="Shop Tackle" href="/shop">
-              {tackleIndex.map((category) => (
-                <div key={category.title} className="py-3">
-                  <Link href={category.href} className="block text-[16px] text-slate-600 hover:text-slate-950">
-                    {category.title}
-                  </Link>
-                  <div className="mt-2 border-l-2 border-slate-200 pl-5">
-                    {category.items.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className="block py-1.5 text-[14px] text-slate-500 hover:text-slate-900"
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
+            <ExpandableNav
+              label="Map"
+              href="/map"
+              open={mapOpen}
+              onToggle={() => setMapOpen((value) => !value)}
+            >
+              <IndentedLinks
+                items={followedLakes.map((lake) => ({ label: lake.name, href: lake.href }))}
+              />
             </ExpandableNav>
-            <ExpandableNav label="Dashboard" href="/app">
-              <Link href="/app" className="block py-2 text-[16px] text-slate-500 hover:text-slate-950">
-                Saved Patterns
-              </Link>
-              <Link href="/app" className="block py-2 text-[16px] text-slate-500 hover:text-slate-950">
-                Trip Board
-              </Link>
+            <ExpandableNav
+              label="Shop Tackle"
+              href="/shop"
+              open={shopOpen}
+              onToggle={() => setShopOpen((value) => !value)}
+            >
+              <div className="border-l-2 border-slate-200 pl-5">
+                {tackleIndex.map((category) => (
+                  <div key={category.title} className="py-3">
+                    <Link href={category.href} className="block text-[16px] text-slate-600 hover:text-slate-950">
+                      {category.title}
+                    </Link>
+                    <div className="mt-2 pl-4">
+                      {category.items.map((item) => (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          className="block py-1.5 text-[14px] text-slate-500 hover:text-slate-900"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </ExpandableNav>
           </div>
         </nav>
@@ -313,10 +326,14 @@ function PrimaryNav({
 function ExpandableNav({
   label,
   href,
+  open,
+  onToggle,
   children,
 }: {
   label: string;
   href: string;
+  open: boolean;
+  onToggle: () => void;
   children: React.ReactNode;
 }) {
   return (
@@ -325,9 +342,17 @@ function ExpandableNav({
         <Link href={href} className="text-[16px] text-slate-600 hover:text-slate-950">
           {label}
         </Link>
-        <span className="text-slate-500">⌄</span>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-label={`Toggle ${label}`}
+          onClick={onToggle}
+          className="text-slate-500 transition hover:text-slate-900"
+        >
+          <span className={`block transition ${open ? 'rotate-180' : ''}`}>⌄</span>
+        </button>
       </div>
-      <div className="mt-3">{children}</div>
+      {open ? <div className="mt-3">{children}</div> : null}
     </div>
   );
 }
