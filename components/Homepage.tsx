@@ -119,8 +119,10 @@ const speciesAvailabilityByState: Record<string, string[]> = {
   'Striped Bass': statesList,
 };
 
-const sharedHotbaitImage = 'https://omnia-fishing.imgix.net/production/omnia_videos/935/fa4e3767271aa800faf37096078fe47b.jpg?auto=format';
-const sharedFishingReportImage = 'https://omnia-fishing.imgix.net/production/styles/20220127172323.Swim_Jigs.jpg?auto=format';
+const sharedHotbaitImage =
+  'https://omnia-fishing.imgix.net/production/product_family_images/20200331182556.151201megabassblack-173-1200x675.jpg?auto=format&w=1000';
+const sharedFishingReportImage =
+  'https://omnia-fishing.imgix.net/production/fishing_reports/45962/bc4fa4a78d44ca4f834623f7f5042a31.jpg?auto=format&crop=faces&w=478';
 
 const fishingReports: FishingReport[] = [
   {
