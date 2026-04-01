@@ -119,34 +119,36 @@ const speciesAvailabilityByState: Record<string, string[]> = {
   'Striped Bass': statesList,
 };
 
+const sharedHotbaitImage = 'https://omnia-fishing.imgix.net/production/omnia_videos/935/fa4e3767271aa800faf37096078fe47b.jpg?auto=format';
+const sharedFishingReportImage = 'https://omnia-fishing.imgix.net/production/styles/20220127172323.Swim_Jigs.jpg?auto=format';
+
 const fishingReports: FishingReport[] = [
   {
     title: 'Early morning weedline bite is active',
     lake: 'Lake Minnetonka',
     summary: 'Topwater and swim jigs are producing in 5-9 ft near cabbage edges.',
-    imageUrl: 'https://omnia-fishing.imgix.net/production/styles/20220127172323.Swim_Jigs.jpg?auto=format',
+    imageUrl: sharedFishingReportImage,
     href: '/map',
   },
   {
     title: 'Wind-blown points heating up this week',
     lake: 'Leech Lake',
     summary: 'Dragging football jigs and a finesse worm around rock transitions.',
-    imageUrl: 'https://omnia-fishing.imgix.net/production/styles/20220127172504.Umbrella_Rigs.jpg?auto=format',
+    imageUrl: sharedFishingReportImage,
     href: '/map',
   },
   {
     title: 'Post-front finesse pattern still holding',
     lake: 'Mille Lacs',
     summary: 'Drop shot around isolated boulders remains consistent by midday.',
-    imageUrl:
-      'https://omnia-fishing.imgix.net/production/styles/20220127172211.Soft_Body_Swimbaits__Small_Medium_.jpg?auto=format',
+    imageUrl: sharedFishingReportImage,
     href: '/map',
   },
   {
     title: 'Dock fish are sliding shallow at sunset',
     lake: 'Table Rock',
     summary: 'Skipping compact jigs and weightless plastics under shady slips.',
-    imageUrl: 'https://omnia-fishing.imgix.net/production/styles/20220127171448.Chatterbaits.jpg?auto=format',
+    imageUrl: sharedFishingReportImage,
     href: '/map',
   },
 ];
@@ -157,8 +159,7 @@ const hotbaits: Hotbait[] = [
     brand: 'Megabass',
     price: '$24.99',
     summary: 'A proven clear-water trigger when fish suspend off breaks.',
-    imageUrl:
-      'https://omnia-fishing.imgix.net/production/product_family_images/20200331182643.Vision-Oneten-110-Jerkbait-oke4zqwr6d7yawk5sredy9ztrv6zxyaqlmrh6zafm0.jpg?auto=format&w=1000',
+    imageUrl: sharedHotbaitImage,
     href: 'https://www.omniafishing.com/p/megabass-vision-110-jerkbait',
   },
   {
@@ -166,8 +167,7 @@ const hotbaits: Hotbait[] = [
     brand: 'Z-Man',
     price: '$14.99',
     summary: 'Strong vibration and profile for windy banks and stained water.',
-    imageUrl:
-      'https://omnia-fishing.imgix.net/production/product_family_images/20210811172343.thc1.png?auto=format&w=1000',
+    imageUrl: sharedHotbaitImage,
     href: 'https://www.omniafishing.com/p/strike-king-thunder-cricket',
   },
   {
@@ -175,7 +175,7 @@ const hotbaits: Hotbait[] = [
     brand: 'Z-Man',
     price: '$5.49',
     summary: 'Go-to Ned option for pressured bass in calm conditions.',
-    imageUrl: 'https://omnia-fishing.imgix.net/production/omnia_videos/935/fa4e3767271aa800faf37096078fe47b.jpg?auto=format',
+    imageUrl: sharedHotbaitImage,
     href: 'https://www.omniafishing.com/p/zman-finesse-trd',
   },
   {
@@ -183,8 +183,7 @@ const hotbaits: Hotbait[] = [
     brand: 'Keitech',
     price: '$6.79',
     summary: 'Reliable swimbait profile for chasing fish over grass flats.',
-    imageUrl:
-      'https://omnia-fishing.imgix.net/production/product_family_images/20210826185048.1.png?auto=format&w=1000',
+    imageUrl: sharedHotbaitImage,
     href: 'https://www.omniafishing.com/p/keitech-swing-impact',
   },
 ];
