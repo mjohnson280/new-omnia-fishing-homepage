@@ -122,7 +122,7 @@ const speciesAvailabilityByState: Record<string, string[]> = {
 const sharedHotbaitImage =
   'https://omnia-fishing.imgix.net/production/product_family_images/20200331182556.151201megabassblack-173-1200x675.jpg?auto=format&w=1000';
 const sharedFishingReportImage =
-  'https://omnia-fishing.imgix.net/production/fishing_reports/45962/bc4fa4a78d44ca4f834623f7f5042a31.jpg?auto=format&crop=faces&w=478';
+  'https://omnia-fishing.imgix.net/production/styles/20220127172323.Swim_Jigs.jpg?auto=format';
 
 const fishingReports: FishingReport[] = [
   {
