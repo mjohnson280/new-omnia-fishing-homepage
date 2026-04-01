@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useId, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 
 type Lake = {
   name: string;
@@ -14,6 +14,149 @@ type TackleCategory = {
   href: string;
   items: { label: string; href: string }[];
 };
+
+type FishingReport = {
+  title: string;
+  lake: string;
+  summary: string;
+  href: string;
+};
+
+type Hotbait = {
+  name: string;
+  brand: string;
+  price: string;
+  summary: string;
+  href: string;
+};
+
+const fallbackState = 'Minnesota';
+
+const statesList = [
+  'Alabama',
+  'Alaska',
+  'Arizona',
+  'Arkansas',
+  'California',
+  'Colorado',
+  'Connecticut',
+  'Delaware',
+  'Florida',
+  'Georgia',
+  'Hawaii',
+  'Idaho',
+  'Illinois',
+  'Indiana',
+  'Iowa',
+  'Kansas',
+  'Kentucky',
+  'Louisiana',
+  'Maine',
+  'Maryland',
+  'Massachusetts',
+  'Michigan',
+  'Minnesota',
+  'Mississippi',
+  'Missouri',
+  'Montana',
+  'Nebraska',
+  'Nevada',
+  'New Hampshire',
+  'New Jersey',
+  'New Mexico',
+  'New York',
+  'North Carolina',
+  'North Dakota',
+  'Ohio',
+  'Oklahoma',
+  'Oregon',
+  'Pennsylvania',
+  'Rhode Island',
+  'South Carolina',
+  'South Dakota',
+  'Tennessee',
+  'Texas',
+  'Utah',
+  'Vermont',
+  'Virginia',
+  'Washington',
+  'West Virginia',
+  'Wisconsin',
+  'Wyoming',
+];
+
+const topSpecies = ['Largemouth Bass', 'Smallmouth Bass'];
+
+const additionalSpecies = [
+  'Spotted Bass',
+  'Walleye',
+  'Northern Pike',
+  'Muskie',
+  'Crappie',
+  'Bluegill',
+  'Trout',
+  'Catfish',
+  'Perch',
+  'Striped Bass',
+];
+
+const fishingReports: FishingReport[] = [
+  {
+    title: 'Early morning weedline bite is active',
+    lake: 'Lake Minnetonka',
+    summary: 'Topwater and swim jigs are producing in 5-9 ft near cabbage edges.',
+    href: '/map',
+  },
+  {
+    title: 'Wind-blown points heating up this week',
+    lake: 'Leech Lake',
+    summary: 'Dragging football jigs and a finesse worm around rock transitions.',
+    href: '/map',
+  },
+  {
+    title: 'Post-front finesse pattern still holding',
+    lake: 'Mille Lacs',
+    summary: 'Drop shot around isolated boulders remains consistent by midday.',
+    href: '/map',
+  },
+  {
+    title: 'Dock fish are sliding shallow at sunset',
+    lake: 'Table Rock',
+    summary: 'Skipping compact jigs and weightless plastics under shady slips.',
+    href: '/map',
+  },
+];
+
+const hotbaits: Hotbait[] = [
+  {
+    name: 'Vision 110 Jerkbait',
+    brand: 'Megabass',
+    price: '$24.99',
+    summary: 'A proven clear-water trigger when fish suspend off breaks.',
+    href: '/shop',
+  },
+  {
+    name: 'Thunder Cricket',
+    brand: 'Z-Man',
+    price: '$14.99',
+    summary: 'Strong vibration and profile for windy banks and stained water.',
+    href: '/shop',
+  },
+  {
+    name: 'Finesse TRD',
+    brand: 'Z-Man',
+    price: '$5.49',
+    summary: 'Go-to Ned option for pressured bass in calm conditions.',
+    href: '/shop',
+  },
+  {
+    name: 'Keitech Swing Impact',
+    brand: 'Keitech',
+    price: '$6.79',
+    summary: 'Reliable swimbait profile for chasing fish over grass flats.',
+    href: '/shop',
+  },
+];
 
 const followedLakes: Lake[] = [
   { name: 'Lake Minnetonka', state: 'MN', href: '/map' },
@@ -210,11 +353,26 @@ export default function Homepage() {
         <div className="min-w-0 flex-1">
           <MobileTopBar />
           <HeroSection />
+          <LocalDiscoverySection />
           <UtilitySections />
         </div>
       </div>
     </main>
   );
+}
+
+async function detectStateFromLocation(latitude: number, longitude: number): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+    );
+    if (!response.ok) return null;
+    const data = (await response.json()) as { address?: { state?: string } };
+    const state = data.address?.state?.trim();
+    return state && statesList.includes(state) ? state : null;
+  } catch {
+    return null;
+  }
 }
 
 function Sidebar() {
@@ -381,7 +539,7 @@ function MobileTopBar() {
   return (
     <section className="sticky top-0 z-20 border-b border-black/10 bg-[#f6f7f8]/95 px-6 py-5 backdrop-blur xl:hidden">
       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-        Omnia shell study
+        Omnia Fishing
       </p>
       <div className="mt-4 flex flex-wrap gap-3">
         <Link
@@ -423,18 +581,21 @@ function HeroSection() {
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/map"
+                data-event="home_click_map"
                 className="rounded-[10px] bg-slate-900 px-5 py-3 font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
               >
                 Open the Map
               </Link>
               <Link
                 href="/app"
+                data-event="home_click_app"
                 className="rounded-[10px] border border-black/15 px-5 py-3 font-semibold hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
               >
                 Download the App
               </Link>
               <Link
                 href="/shop"
+                data-event="home_click_shop_categories"
                 className="self-center text-sm font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
               >
                 Shop by Category
@@ -464,6 +625,201 @@ function HeroSection() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LocalDiscoverySection() {
+  const [selectedSpecies, setSelectedSpecies] = useState(topSpecies[0]);
+  const [selectedState, setSelectedState] = useState(fallbackState);
+  const [speciesOpen, setSpeciesOpen] = useState(false);
+  const [stateOpen, setStateOpen] = useState(false);
+  const [locationSuggestedState, setLocationSuggestedState] = useState<string | null>(null);
+
+  const orderedStates = useMemo(() => {
+    if (!locationSuggestedState) return statesList;
+    return [locationSuggestedState, ...statesList.filter((state) => state !== locationSuggestedState)];
+  }, [locationSuggestedState]);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const state = await detectStateFromLocation(position.coords.latitude, position.coords.longitude);
+        if (state) {
+          setLocationSuggestedState(state);
+          setSelectedState(state);
+        }
+      },
+      () => {
+        setLocationSuggestedState(null);
+      },
+      { enableHighAccuracy: false, timeout: 5000, maximumAge: 600000 }
+    );
+  }, []);
+
+  return (
+    <section className="container-shell px-8 pb-6 lg:px-14">
+      <div className="rounded-[24px] border border-black/10 bg-[#f7f8fa] p-4 shadow-[0_8px_24px_rgba(0,0,0,0.03)] md:p-5">
+        <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setSpeciesOpen((value) => !value);
+                setStateOpen(false);
+              }}
+              className="w-full rounded-[14px] border border-black/10 bg-white px-4 py-3 text-left transition hover:border-black/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">Species</p>
+              <p className="mt-1 text-sm font-semibold text-slate-900">{selectedSpecies}</p>
+            </button>
+            {speciesOpen ? (
+              <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 rounded-[14px] border border-black/10 bg-white p-3 shadow-xl">
+                <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Top suggested
+                </p>
+                {topSpecies.map((species) => (
+                  <button
+                    key={species}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSpecies(species);
+                      setSpeciesOpen(false);
+                    }}
+                    className="block w-full rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                  >
+                    {species}
+                  </button>
+                ))}
+                <p className="px-2 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Other species
+                </p>
+                {additionalSpecies.map((species) => (
+                  <button
+                    key={species}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSpecies(species);
+                      setSpeciesOpen(false);
+                    }}
+                    className="block w-full rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                  >
+                    {species}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setStateOpen((value) => !value);
+                setSpeciesOpen(false);
+              }}
+              className="w-full rounded-[14px] border border-black/10 bg-white px-4 py-3 text-left transition hover:border-black/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+            >
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">State</p>
+              <p className="mt-1 text-sm font-semibold text-slate-900">{selectedState}</p>
+            </button>
+            {stateOpen ? (
+              <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-30 max-h-[320px] overflow-y-auto rounded-[14px] border border-black/10 bg-white p-3 shadow-xl">
+                <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Suggested near you
+                </p>
+                {orderedStates.slice(0, 12).map((state) => (
+                  <button
+                    key={state}
+                    type="button"
+                    onClick={() => {
+                      setSelectedState(state);
+                      setStateOpen(false);
+                    }}
+                    className="block w-full rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                  >
+                    {state}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <Link
+            href={`/map?state=${encodeURIComponent(selectedState)}&species=${encodeURIComponent(selectedSpecies)}`}
+            data-event="home_search_near_me"
+            className="inline-flex items-center justify-center rounded-[14px] bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+          >
+            Search Near Me
+          </Link>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="text-2xl font-semibold leading-tight md:text-3xl">
+            Recently Filed Fishing Reports in {selectedState}
+          </h2>
+          <Link
+            href={`/map?state=${encodeURIComponent(selectedState)}&species=${encodeURIComponent(selectedSpecies)}`}
+            className="shrink-0 text-sm font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-950"
+          >
+            View all reports
+          </Link>
+        </div>
+        <div className="mt-4 flex gap-4 overflow-x-auto pb-2">
+          {fishingReports.map((report) => (
+            <article
+              key={report.title}
+              className="min-w-[280px] max-w-[320px] rounded-[20px] border border-black/10 bg-white p-5 shadow-[0_6px_18px_rgba(0,0,0,0.04)]"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">Report</p>
+              <h3 className="mt-3 text-lg font-semibold leading-6">{report.title}</h3>
+              <p className="mt-2 text-sm font-medium text-slate-700">{report.lake}</p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{report.summary}</p>
+              <Link
+                href={report.href}
+                data-event="home_click_recent_report_lake"
+                className="mt-4 inline-flex rounded-[10px] bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+              >
+                Open Lake Report
+              </Link>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="text-2xl font-semibold leading-tight md:text-3xl">Hotbaits in Your Area</h2>
+          <Link href="/shop" className="shrink-0 text-sm font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-950">
+            View all hotbaits
+          </Link>
+        </div>
+        <div className="mt-4 flex gap-4 overflow-x-auto pb-2">
+          {hotbaits.map((bait) => (
+            <article
+              key={bait.name}
+              className="min-w-[280px] max-w-[320px] rounded-[20px] border border-black/10 bg-white p-5 shadow-[0_6px_18px_rgba(0,0,0,0.04)]"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-700">Hotbait</p>
+              <h3 className="mt-3 text-lg font-semibold leading-6">{bait.name}</h3>
+              <p className="mt-2 text-sm font-medium text-slate-700">
+                {bait.brand} - {bait.price}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{bait.summary}</p>
+              <Link
+                href={bait.href}
+                data-event="home_click_hotbait_pdp"
+                className="mt-4 inline-flex rounded-[10px] bg-fuchsia-600 px-4 py-2 text-sm font-semibold text-white hover:bg-fuchsia-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/80"
+              >
+                View Product Details
+              </Link>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -533,14 +889,14 @@ function UtilitySections() {
 
         <aside className="rounded-[24px] border border-black/10 bg-[#f6f7f8] p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-            Handoff Notes
+            Why anglers use Omnia
           </p>
           <div className="mt-5 space-y-4 text-sm leading-7 text-slate-700">
-            <p>Desktop keeps the utility rail fixed on the left.</p>
-            <p>Spacing and grouping are based on your GoDaddy reference screenshot.</p>
-            <p>Map uses a followed-lake list as the first nested layer.</p>
-            <p>Shop Tackle exposes categories and subcategories for recall speed.</p>
-            <p>Mobile collapses to a simpler top shortcut bar.</p>
+            <p>Start on the map to plan around your exact lake and current conditions.</p>
+            <p>Use reports for local patterns so first casts are more intentional.</p>
+            <p>Jump straight into tackle categories matched to season and species.</p>
+            <p>Keep everything in one flow instead of bouncing between tools and tabs.</p>
+            <p>On mobile, key actions stay one tap away from the top shortcut bar.</p>
           </div>
         </aside>
       </div>
