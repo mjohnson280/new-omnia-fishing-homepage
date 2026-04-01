@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 
 type Lake = {
   name: string;
@@ -361,20 +361,6 @@ export default function Homepage() {
   );
 }
 
-async function detectStateFromLocation(latitude: number, longitude: number): Promise<string | null> {
-  try {
-    const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
-    );
-    if (!response.ok) return null;
-    const data = (await response.json()) as { address?: { state?: string } };
-    const state = data.address?.state?.trim();
-    return state && statesList.includes(state) ? state : null;
-  } catch {
-    return null;
-  }
-}
-
 function Sidebar() {
   const [mapOpen, setMapOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
@@ -601,11 +587,6 @@ function HeroSection() {
                 Shop by Category
               </Link>
             </div>
-            <div className="mt-5 flex flex-wrap gap-3 text-sm text-slate-700">
-              <span className="rounded-full bg-slate-100 px-3 py-1">Massive lake coverage</span>
-              <span className="rounded-full bg-slate-100 px-3 py-1">Thousands of reports</span>
-              <span className="rounded-full bg-slate-100 px-3 py-1">Huge tackle selection</span>
-            </div>
           </div>
 
           <div className="rounded-[24px] border border-black/10 bg-gradient-to-br from-slate-50 to-slate-100 p-6 shadow-[0_10px_24px_rgba(0,0,0,0.04)]">
@@ -642,23 +623,6 @@ function LocalDiscoverySection() {
     if (!locationSuggestedState) return statesList;
     return [locationSuggestedState, ...statesList.filter((state) => state !== locationSuggestedState)];
   }, [locationSuggestedState]);
-
-  useEffect(() => {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const state = await detectStateFromLocation(position.coords.latitude, position.coords.longitude);
-        if (state) {
-          setLocationSuggestedState(state);
-          setSelectedState(state);
-        }
-      },
-      () => {
-        setLocationSuggestedState(null);
-      },
-      { enableHighAccuracy: false, timeout: 5000, maximumAge: 600000 }
-    );
-  }, []);
 
   return (
     <section className="container-shell px-8 pb-6 lg:px-14">
