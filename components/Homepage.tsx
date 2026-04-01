@@ -19,6 +19,7 @@ type FishingReport = {
   title: string;
   lake: string;
   summary: string;
+  imageUrl: string;
   href: string;
 };
 
@@ -27,6 +28,7 @@ type Hotbait = {
   brand: string;
   price: string;
   summary: string;
+  imageUrl: string;
   href: string;
 };
 
@@ -100,29 +102,51 @@ const additionalSpecies = [
   'Striped Bass',
 ];
 
+// NOTE: This is the species/state availability gate. In production this should come
+// from our real data source so states without matching species data are removed.
+const speciesAvailabilityByState: Record<string, string[]> = {
+  'Largemouth Bass': statesList,
+  'Smallmouth Bass': statesList,
+  'Spotted Bass': statesList,
+  Walleye: statesList,
+  'Northern Pike': statesList,
+  Muskie: statesList,
+  Crappie: statesList,
+  Bluegill: statesList,
+  Trout: statesList,
+  Catfish: statesList,
+  Perch: statesList,
+  'Striped Bass': statesList,
+};
+
 const fishingReports: FishingReport[] = [
   {
     title: 'Early morning weedline bite is active',
     lake: 'Lake Minnetonka',
     summary: 'Topwater and swim jigs are producing in 5-9 ft near cabbage edges.',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/styles/20220127172323.Swim_Jigs.jpg?auto=format',
     href: '/map',
   },
   {
     title: 'Wind-blown points heating up this week',
     lake: 'Leech Lake',
     summary: 'Dragging football jigs and a finesse worm around rock transitions.',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/styles/20220127172504.Umbrella_Rigs.jpg?auto=format',
     href: '/map',
   },
   {
     title: 'Post-front finesse pattern still holding',
     lake: 'Mille Lacs',
     summary: 'Drop shot around isolated boulders remains consistent by midday.',
+    imageUrl:
+      'https://omnia-fishing.imgix.net/production/styles/20220127172211.Soft_Body_Swimbaits__Small_Medium_.jpg?auto=format',
     href: '/map',
   },
   {
     title: 'Dock fish are sliding shallow at sunset',
     lake: 'Table Rock',
     summary: 'Skipping compact jigs and weightless plastics under shady slips.',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/styles/20220127171448.Chatterbaits.jpg?auto=format',
     href: '/map',
   },
 ];
@@ -133,28 +157,35 @@ const hotbaits: Hotbait[] = [
     brand: 'Megabass',
     price: '$24.99',
     summary: 'A proven clear-water trigger when fish suspend off breaks.',
-    href: '/shop',
+    imageUrl:
+      'https://omnia-fishing.imgix.net/production/product_family_images/20200331182643.Vision-Oneten-110-Jerkbait-oke4zqwr6d7yawk5sredy9ztrv6zxyaqlmrh6zafm0.jpg?auto=format&w=1000',
+    href: 'https://www.omniafishing.com/p/megabass-vision-110-jerkbait',
   },
   {
     name: 'Thunder Cricket',
     brand: 'Z-Man',
     price: '$14.99',
     summary: 'Strong vibration and profile for windy banks and stained water.',
-    href: '/shop',
+    imageUrl:
+      'https://omnia-fishing.imgix.net/production/product_family_images/20210811172343.thc1.png?auto=format&w=1000',
+    href: 'https://www.omniafishing.com/p/strike-king-thunder-cricket',
   },
   {
     name: 'Finesse TRD',
     brand: 'Z-Man',
     price: '$5.49',
     summary: 'Go-to Ned option for pressured bass in calm conditions.',
-    href: '/shop',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/omnia_videos/935/fa4e3767271aa800faf37096078fe47b.jpg?auto=format',
+    href: 'https://www.omniafishing.com/p/zman-finesse-trd',
   },
   {
     name: 'Keitech Swing Impact',
     brand: 'Keitech',
     price: '$6.79',
     summary: 'Reliable swimbait profile for chasing fish over grass flats.',
-    href: '/shop',
+    imageUrl:
+      'https://omnia-fishing.imgix.net/production/product_family_images/20210826185048.1.png?auto=format&w=1000',
+    href: 'https://www.omniafishing.com/p/keitech-swing-impact',
   },
 ];
 
@@ -371,9 +402,13 @@ function Sidebar() {
     <aside className="sticky top-0 hidden h-screen w-[292px] shrink-0 border-r border-black/10 bg-[#f6f7f8] xl:block 2xl:w-[308px]">
       <div className="flex h-full flex-col px-14 py-10">
         <div className="flex items-center justify-between">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full border border-black/15 text-sm font-semibold">
-            O
-          </div>
+          <Link
+            href="/"
+            aria-label="Omnia Fishing Home"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-black/15 bg-white p-1"
+          >
+            <img src="https://www.omniafishing.com/logo.svg" alt="Omnia Fishing" className="h-5 w-5 object-contain" />
+          </Link>
           <div className="rounded-md border border-black/10 px-2 py-1 text-[11px] text-slate-500">
             [ ]
           </div>
@@ -617,12 +652,16 @@ function LocalDiscoverySection() {
   const [selectedState, setSelectedState] = useState(fallbackState);
   const [speciesOpen, setSpeciesOpen] = useState(false);
   const [stateOpen, setStateOpen] = useState(false);
-  const [locationSuggestedState, setLocationSuggestedState] = useState<string | null>(null);
 
-  const orderedStates = useMemo(() => {
-    if (!locationSuggestedState) return statesList;
-    return [locationSuggestedState, ...statesList.filter((state) => state !== locationSuggestedState)];
-  }, [locationSuggestedState]);
+  const availableStates = useMemo(() => {
+    const states = speciesAvailabilityByState[selectedSpecies] ?? statesList;
+    return [...states].sort((a, b) => a.localeCompare(b));
+  }, [selectedSpecies]);
+
+  const suggestedStates = useMemo(() => {
+    if (availableStates.includes(selectedState)) return [selectedState];
+    return [fallbackState];
+  }, [availableStates, selectedState]);
 
   return (
     <section className="container-shell px-8 pb-6 lg:px-14">
@@ -695,9 +734,25 @@ function LocalDiscoverySection() {
                 <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                   Suggested near you
                 </p>
-                {orderedStates.slice(0, 12).map((state) => (
+                {suggestedStates.map((state) => (
                   <button
                     key={state}
+                    type="button"
+                    onClick={() => {
+                      setSelectedState(state);
+                      setStateOpen(false);
+                    }}
+                    className="block w-full rounded-md px-2 py-2 text-left text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-950"
+                  >
+                    {state}
+                  </button>
+                ))}
+                <p className="px-2 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  All states (A-Z)
+                </p>
+                {availableStates.map((state) => (
+                  <button
+                    key={`all-${state}`}
                     type="button"
                     onClick={() => {
                       setSelectedState(state);
@@ -717,19 +772,19 @@ function LocalDiscoverySection() {
             data-event="home_search_near_me"
             className="inline-flex items-center justify-center rounded-[14px] bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
           >
-            Search Near Me
+            See Reports and Baits
           </Link>
         </div>
       </div>
 
       <div className="mt-8">
-        <div className="flex items-end justify-between gap-4">
+        <div className="text-center">
           <h2 className="text-2xl font-semibold leading-tight md:text-3xl">
             Recently Filed Fishing Reports in {selectedState}
           </h2>
           <Link
             href={`/map?state=${encodeURIComponent(selectedState)}&species=${encodeURIComponent(selectedSpecies)}`}
-            className="shrink-0 text-sm font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-950"
+            className="mt-2 inline-flex text-sm font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-950"
           >
             View all reports
           </Link>
@@ -740,6 +795,11 @@ function LocalDiscoverySection() {
               key={report.title}
               className="min-w-[280px] max-w-[320px] rounded-[20px] border border-black/10 bg-white p-5 shadow-[0_6px_18px_rgba(0,0,0,0.04)]"
             >
+              <img
+                src={report.imageUrl}
+                alt={`${report.lake} fishing report`}
+                className="h-40 w-full rounded-[14px] object-cover"
+              />
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">Report</p>
               <h3 className="mt-3 text-lg font-semibold leading-6">{report.title}</h3>
               <p className="mt-2 text-sm font-medium text-slate-700">{report.lake}</p>
@@ -757,9 +817,9 @@ function LocalDiscoverySection() {
       </div>
 
       <div className="mt-8">
-        <div className="flex items-end justify-between gap-4">
+        <div className="text-center">
           <h2 className="text-2xl font-semibold leading-tight md:text-3xl">Hotbaits in Your Area</h2>
-          <Link href="/shop" className="shrink-0 text-sm font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-950">
+          <Link href="/shop" className="mt-2 inline-flex text-sm font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-950">
             View all hotbaits
           </Link>
         </div>
@@ -769,6 +829,7 @@ function LocalDiscoverySection() {
               key={bait.name}
               className="min-w-[280px] max-w-[320px] rounded-[20px] border border-black/10 bg-white p-5 shadow-[0_6px_18px_rgba(0,0,0,0.04)]"
             >
+              <img src={bait.imageUrl} alt={bait.name} className="h-40 w-full rounded-[14px] bg-slate-50 object-contain p-2" />
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-700">Hotbait</p>
               <h3 className="mt-3 text-lg font-semibold leading-6">{bait.name}</h3>
               <p className="mt-2 text-sm font-medium text-slate-700">
