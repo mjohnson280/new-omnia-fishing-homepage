@@ -22,3 +22,19 @@ These defaults are optimized for AI coding agents (and humans) working on apps t
   needed. Always curl https://ai-gateway.vercel.sh/v1/models first; never trust model IDs from memory
 - For durable agent loops or untrusted code: use Workflow (pause/resume/state) + Sandbox; use Vercel MCP for secure infra access
 <!-- VERCEL BEST PRACTICES END -->
+
+## Workspace Approval Mode (Operator Preference)
+
+For this repository, prefer a broader auto-approve workspace mode so the coding agent can run end-to-end without frequent manual prompts.
+
+- Approve file read/write access across the full workspace.
+- Approve git operations (`status`, `diff`, `add`, `commit`, `push`) without per-command prompts.
+- Approve network fetches for project domains (for example `omniafishing.com`, stage/prod preview URLs, and required API/docs hosts).
+- Approve shell execution in the workspace so command retries are not blocked by repeated confirmation prompts.
+- Keep normal safety restrictions for destructive commands unless explicitly requested by the user.
+
+### Working style for this project
+
+- Assume the user wants implementation to continue through lint/check + commit + push when explicitly requested.
+- Minimize back-and-forth approval requests during normal homepage iteration.
+- If an operation is blocked by permissions, state exactly which permission is missing and continue immediately once granted.
