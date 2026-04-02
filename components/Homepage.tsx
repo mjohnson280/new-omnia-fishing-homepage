@@ -693,7 +693,32 @@ function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
           </div>
         </div>
 
-        <HeroCarousel />
+        {/* Map preview card */}
+        <div className="rounded-[24px] border border-black/10 bg-gradient-to-br from-slate-50 to-slate-100 p-6 shadow-[0_10px_28px_rgba(0,0,0,0.05)]">
+          <div className="rounded-[18px] border border-black/10 bg-white p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand">
+              Live on the map
+            </p>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <div className="col-span-2 flex h-40 items-end rounded-xl bg-cyan-50 p-3">
+                <div className="w-full space-y-1.5">
+                  <div className="h-2 w-3/4 rounded-full bg-cyan-200" />
+                  <div className="h-2 w-1/2 rounded-full bg-cyan-100" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex-1 rounded-xl bg-slate-100" />
+                <div className="flex-1 rounded-xl border border-black/5 bg-slate-50" />
+              </div>
+            </div>
+            <div className="mt-3 rounded-xl border border-black/[0.07] bg-[#fafafa] p-3">
+              <p className="text-xs font-semibold text-slate-800">Top bait this week</p>
+              <p className="mt-0.5 text-[11px] text-slate-500">
+                Matched to lake, season &amp; species
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -904,25 +929,6 @@ function LocalDiscoverySection({ onAuthRequired }: { onAuthRequired: () => void 
 // ─── PRO Section ──────────────────────────────────────────────────────────────
 
 function ProSection({ onStartTrial }: { onStartTrial: () => void }) {
-  const features = [
-    {
-      label: 'Advanced Reports',
-      desc: 'Depth, structure, and seasonal pattern data per lake',
-    },
-    {
-      label: 'Tackle Match',
-      desc: 'Curated rigs matched to your exact conditions',
-    },
-    {
-      label: 'Trip Planner',
-      desc: 'Build and save multi-lake fishing itineraries',
-    },
-    {
-      label: 'PRO Alerts',
-      desc: 'Get notified when fish are active on your lakes',
-    },
-  ];
-
   return (
     <section className="px-8 pb-10 lg:px-14">
       <div className="rounded-[24px] bg-gradient-to-br from-brand to-brand-dark p-8 text-white md:p-10">
@@ -955,14 +961,7 @@ function ProSection({ onStartTrial }: { onStartTrial: () => void }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            {features.map((f) => (
-              <div key={f.label} className="rounded-[14px] bg-white/10 p-4 backdrop-blur-sm">
-                <p className="text-sm font-semibold text-white">{f.label}</p>
-                <p className="mt-1 text-xs leading-5 text-blue-200">{f.desc}</p>
-              </div>
-            ))}
-          </div>
+          <HeroCarousel />
         </div>
       </div>
     </section>
