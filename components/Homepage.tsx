@@ -148,6 +148,179 @@ const followedLakes: Lake[] = [
   { name: 'Guntersville', state: 'AL', href: '/map' },
 ];
 
+const fullTackleIndex: TackleCategory[] = [
+  {
+    title: 'Baits',
+    href: '/shop',
+    items: [
+      { label: 'Jigs', href: '/shop' },
+      { label: 'Soft Baits', href: '/shop' },
+      { label: 'Hard Baits', href: '/shop' },
+      { label: 'Wire Baits', href: '/shop' },
+      { label: 'Rigs', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Line',
+    href: '/shop',
+    items: [
+      { label: 'Braid / Super Line', href: '/shop' },
+      { label: 'Braid to Fluorocarbon Leader', href: '/shop' },
+      { label: 'Fluorocarbon', href: '/shop' },
+      { label: 'Monofilament', href: '/shop' },
+      { label: 'Lead Core', href: '/shop' },
+      { label: 'Ice Line', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Rods',
+    href: '/shop',
+    items: [
+      { label: 'Casting Rods', href: '/shop' },
+      { label: 'Spinning Rods', href: '/shop' },
+      { label: 'Ice Fishing Rods', href: '/shop' },
+      { label: 'Travel Rods', href: '/shop' },
+      { label: 'Combos', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Reels',
+    href: '/shop',
+    items: [
+      { label: 'Casting Reels', href: '/shop' },
+      { label: 'Spinning Reels', href: '/shop' },
+      { label: 'Ice Fishing Reels', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Terminal',
+    href: '/c/terminal',
+    items: [
+      { label: 'Hooks', href: '/c/terminal' },
+      { label: 'Weights', href: '/c/terminal' },
+      { label: 'Bobbers', href: '/c/terminal' },
+      { label: 'Beads', href: '/c/terminal' },
+      { label: 'Blades', href: '/c/terminal' },
+      { label: 'Leaders', href: '/c/terminal' },
+      { label: 'Skirts', href: '/c/terminal' },
+      { label: 'Swivels, Snaps & Clevises', href: '/c/terminal' },
+      { label: 'Pegs', href: '/c/terminal' },
+      { label: 'Rattles', href: '/c/terminal' },
+    ],
+  },
+  {
+    title: 'Accessories',
+    href: '/shop',
+    items: [
+      { label: 'Tackle Management', href: '/shop' },
+      { label: 'Tools', href: '/shop' },
+      { label: 'Tournament Accessories', href: '/shop' },
+      { label: 'Scents', href: '/shop' },
+      { label: 'Bags', href: '/shop' },
+      { label: 'Rod Racks', href: '/shop' },
+      { label: 'Nets', href: '/shop' },
+      { label: 'Trolling', href: '/shop' },
+      { label: 'Gift Cards', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Apparel',
+    href: '/shop',
+    items: [
+      { label: 'Rain Gear', href: '/shop' },
+      { label: 'Sun Protection', href: '/shop' },
+      { label: 'Sunglasses', href: '/shop' },
+      { label: 'Hats', href: '/shop' },
+      { label: 'Omnia Gear', href: '/shop' },
+      { label: "Women's Apparel", href: '/shop' },
+      { label: 'Footwear', href: '/shop' },
+      { label: 'Gloves', href: '/shop' },
+      { label: 'Waders', href: '/shop' },
+      { label: 'Ice Fishing', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Marine',
+    href: '/shop',
+    items: [
+      { label: 'Boat', href: '/shop' },
+      { label: 'Cameras & Accessories', href: '/shop' },
+      { label: 'Electronics', href: '/shop' },
+      { label: 'Flotation & Safety', href: '/shop' },
+      { label: 'Trolling Motors', href: '/shop' },
+    ],
+  },
+  {
+    title: 'Ice',
+    href: '/shop',
+    items: [
+      { label: 'Ice Augers', href: '/shop' },
+      { label: 'Ice Shelters', href: '/shop' },
+      { label: 'Ice Fishing Accessories', href: '/shop' },
+    ],
+  },
+  {
+    title: 'JDM',
+    href: '/shop',
+    items: [
+      { label: 'JDM Baits', href: '/shop' },
+      { label: 'JDM Rods', href: '/shop' },
+      { label: 'JDM Reels', href: '/shop' },
+    ],
+  },
+];
+
+const whyOmniaItems = [
+  {
+    title: 'Shop by Lake',
+    desc: 'Select your lake and get tackle recommendations filtered to your exact water body — species, season, and conditions all factored in. No more guessing what works where.',
+    imageUrl: 'https://omnia-fishing.imgix.net/cd331c54132f9c074e9bb8ca564adcfd.webp?auto=format&w=600',
+    href: '/map',
+    cta: 'Try it on the map',
+  },
+  {
+    title: 'Massive Selection',
+    desc: 'Thousands of baits, rods, reels, line, and accessories from the brands serious anglers trust — all in one place and ship fast.',
+    imageUrl: 'https://omnia-fishing.imgix.net/9fe61069d4dbd3fcdd6055e4f2120c09.webp?auto=format&w=600',
+    href: '/shop',
+    cta: 'Browse the catalog',
+  },
+  {
+    title: 'Omnia PRO',
+    desc: 'Water temperature, clarity, contours, weather layers, and historical fishing trends for thousands of U.S. lakes — on the app and web.',
+    imageUrl: 'https://omnia-fishing.imgix.net/793ec029286d162d25803c1c1bb794c8.webp?auto=format&w=600',
+    href: '/pro',
+    cta: 'See PRO features',
+  },
+];
+
+const promoSquares = [
+  {
+    label: 'Hotbaits This Week',
+    desc: 'What\'s producing right now across top lakes',
+    imageUrl: 'https://omnia-fishing.imgix.net/d94a5bbe86c9dffa19b6fd11b84357ab.webp?auto=format&w=600',
+    href: '/map',
+  },
+  {
+    label: 'New Arrivals',
+    desc: 'Fresh gear just added to the catalog',
+    imageUrl: 'https://omnia-fishing.imgix.net/4226f91adb29e91b1104ae7a7f8ace22.webp?auto=format&w=600',
+    href: '/shop',
+  },
+  {
+    label: 'Bargain Bin',
+    desc: 'Markdowns on top-rated tackle',
+    imageUrl: 'https://omnia-fishing.imgix.net/6fcfb5caa5cb64e8a156f80b406a7711.webp?auto=format&w=600',
+    href: '/shop',
+  },
+  {
+    label: 'PRO Lake Data',
+    desc: 'Contours, temp, clarity & weather on your lakes',
+    imageUrl: 'https://omnia-fishing.imgix.net/5e713d4f2f2d620e6c3928ca84fc34c6.webp?auto=format&w=600',
+    href: '/pro',
+  },
+];
+
 const condensedTackleIndex: TackleCategory[] = [
   {
     title: 'Baits',
@@ -213,6 +386,7 @@ const condensedTackleIndex: TackleCategory[] = [
 export default function Homepage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>('signin');
+  const [isAuthed, setIsAuthed] = useState(false);
 
   function openAuth(mode: AuthMode = 'signup') {
     setAuthMode(mode);
@@ -229,20 +403,28 @@ export default function Homepage() {
         />
       )}
       <PromoBar />
-      <SiteHeader onSignIn={() => openAuth('signin')} onSignUp={() => openAuth('signup')} />
+      <SiteHeader onSignIn={() => openAuth('signin')} onSignUp={() => openAuth('signup')} isAuthed={isAuthed} />
       <main className="flex flex-1">
         <div className="mx-auto flex w-full max-w-[1600px]">
-          <Sidebar onSignIn={() => openAuth('signin')} onSignUp={() => openAuth('signup')} />
+          {isAuthed
+            ? <AuthedSidebar />
+            : <Sidebar onSignIn={() => openAuth('signin')} onSignUp={() => openAuth('signup')} />
+          }
           <div className="min-w-0 flex-1">
             <MobileTopBar onSignIn={() => openAuth('signin')} />
             <HeroSection onGetStarted={() => openAuth('signup')} />
             <LocalDiscoverySection onAuthRequired={() => openAuth('signup')} />
-            <ProSection onStartTrial={() => openAuth('signup')} />
+            {isAuthed
+              ? <PromoSquaresSection />
+              : <ProSection onStartTrial={() => openAuth('signup')} />
+            }
+            <WhyOmniaSection />
             <TackleSection />
           </div>
         </div>
       </main>
       <SiteFooter />
+      <AuthToggle isAuthed={isAuthed} onToggle={() => setIsAuthed((v) => !v)} />
     </div>
   );
 }
@@ -306,7 +488,7 @@ const shopCategories = [
   { label: 'Promotions', href: '/shop' },
 ];
 
-function SiteHeader({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: () => void }) {
+function SiteHeader({ onSignIn, onSignUp, isAuthed }: { onSignIn: () => void; onSignUp: () => void; isAuthed: boolean }) {
   return (
     <header className="border-b border-black/10 bg-white">
       {/* Primary nav row */}
@@ -353,22 +535,30 @@ function SiteHeader({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: ()
             </svg>
           </button>
 
-          {/* Sign in — text link on md+ */}
-          <button
-            onClick={onSignIn}
-            className="hidden rounded-[8px] px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 md:block"
-          >
-            Sign In
-          </button>
-
-          {/* Create Account — filled button */}
-          <button
-            onClick={onSignUp}
-            className="rounded-[8px] bg-brand px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
-          >
-            <span className="hidden sm:inline">Create Account</span>
-            <span className="sm:hidden">Sign Up</span>
-          </button>
+          {isAuthed ? (
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-bold text-white">
+                M
+              </div>
+              <span className="hidden text-sm font-medium text-slate-700 md:block">My Account</span>
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={onSignIn}
+                className="hidden rounded-[8px] px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 md:block"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={onSignUp}
+                className="rounded-[8px] bg-brand px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
+              >
+                <span className="hidden sm:inline">Create Account</span>
+                <span className="sm:hidden">Sign Up</span>
+              </button>
+            </>
+          )}
 
           {/* Cart */}
           <button
@@ -1197,6 +1387,173 @@ function TackleSection() {
             ))}
           </div>
         </aside>
+      </div>
+    </section>
+  );
+}
+
+// ─── Auth State Toggle (prototype demo) ──────────────────────────────────────
+
+function AuthToggle({ isAuthed, onToggle }: { isAuthed: boolean; onToggle: () => void }) {
+  return (
+    <div className="fixed bottom-6 right-6 z-40">
+      <button
+        onClick={onToggle}
+        className="flex items-center gap-3 rounded-full border border-black/10 bg-white px-4 py-2.5 shadow-lg transition hover:shadow-xl"
+      >
+        <span className="text-xs font-medium text-slate-500">Preview as:</span>
+        <span
+          className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors ${isAuthed ? 'bg-brand' : 'bg-slate-300'}`}
+        >
+          <span
+            className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${isAuthed ? 'translate-x-[18px]' : 'translate-x-[3px]'}`}
+          />
+        </span>
+        <span className="text-xs font-semibold text-slate-800">
+          {isAuthed ? 'Member' : 'Guest'}
+        </span>
+      </button>
+    </div>
+  );
+}
+
+// ─── Authenticated Sidebar (Tackle Warehouse style) ───────────────────────────
+
+function AuthedSidebar() {
+  return (
+    <aside className="hidden w-[280px] shrink-0 flex-col overflow-y-auto bg-slate-900 xl:flex 2xl:w-[300px]">
+      <div className="flex flex-col px-5 py-7">
+
+        {/* Logo */}
+        <Link href="/" aria-label="Omnia Fishing Home" className="flex items-center gap-2.5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 p-2">
+            <img
+              src="https://www.omniafishing.com/logo.svg"
+              alt=""
+              className="h-full w-full object-contain brightness-0 invert"
+            />
+          </div>
+          <span className="text-[15px] font-semibold text-white">Omnia Fishing</span>
+        </Link>
+
+        {/* Map quick-access */}
+        <Link
+          href="/map"
+          className="mt-5 flex items-center justify-center gap-2 rounded-[10px] border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+        >
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+            <line x1="9" y1="3" x2="9" y2="18" />
+            <line x1="15" y1="6" x2="15" y2="21" />
+          </svg>
+          Open the Map
+        </Link>
+
+        <div className="my-5 h-px bg-white/10" />
+
+        {/* Full tackle category nav */}
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          Shop All Tackle
+        </p>
+        <nav aria-label="Tackle categories" className="mt-3">
+          {fullTackleIndex.map((cat) => (
+            <div key={cat.title} className="border-b border-white/[0.06] py-3 first:pt-0 last:border-0">
+              <Link
+                href={cat.href}
+                className="block text-[13px] font-semibold text-white transition hover:text-cyan-400"
+              >
+                {cat.title}
+              </Link>
+              <div className="mt-1.5 space-y-1 pl-3">
+                {cat.items.map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="block text-[12px] text-slate-400 transition hover:text-white"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </nav>
+      </div>
+    </aside>
+  );
+}
+
+// ─── Promo Squares (authenticated state) ─────────────────────────────────────
+
+function PromoSquaresSection() {
+  return (
+    <section className="px-8 pb-2 pt-6 lg:px-14">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+        Promotions
+      </p>
+      <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {promoSquares.map((promo) => (
+          <Link
+            key={promo.label}
+            href={promo.href}
+            className="group relative overflow-hidden rounded-[20px] shadow-[0_6px_18px_rgba(0,0,0,0.08)]"
+            style={{ aspectRatio: '1/1' }}
+          >
+            <img
+              src={promo.imageUrl}
+              alt={promo.label}
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <p className="text-sm font-semibold leading-5 text-white">{promo.label}</p>
+              <p className="mt-0.5 text-[11px] leading-4 text-white/75">{promo.desc}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ─── Why Omnia Is Different ───────────────────────────────────────────────────
+
+function WhyOmniaSection() {
+  return (
+    <section className="px-8 py-10 lg:px-14">
+      <div className="text-center">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+          Why Omnia is different
+        </p>
+        <h2 className="mt-2 text-3xl font-semibold leading-tight">
+          Built for how anglers actually fish
+        </h2>
+      </div>
+      <div className="mt-8 grid gap-6 md:grid-cols-3">
+        {whyOmniaItems.map((item) => (
+          <article
+            key={item.title}
+            className="overflow-hidden rounded-[24px] border border-black/10 bg-white shadow-[0_6px_18px_rgba(0,0,0,0.04)]"
+          >
+            <div className="aspect-[16/9] overflow-hidden">
+              <img
+                src={item.imageUrl}
+                alt={item.title}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-slate-950">{item.title}</h3>
+              <p className="mt-2 text-sm leading-7 text-slate-600">{item.desc}</p>
+              <Link
+                href={item.href}
+                className="mt-4 inline-flex text-sm font-semibold text-brand underline underline-offset-4 hover:text-brand-dark"
+              >
+                {item.cta} →
+              </Link>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
