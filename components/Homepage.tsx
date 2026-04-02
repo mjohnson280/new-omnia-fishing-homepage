@@ -321,63 +321,46 @@ const promoSquares = [
   },
 ];
 
-const condensedTackleIndex: TackleCategory[] = [
+const promoTilesRow1 = [
   {
-    title: 'Baits',
+    label: '25% Off',
+    sublabel: 'Rapala DT Series Crankbaits',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/pages/home.hero_img.e0c317ff2b4d2c7c645b08676cd14398.25dts.jpg?auto=format&w=700',
     href: '/shop',
-    items: [
-      { label: 'Jigs', href: '/shop' },
-      { label: 'Hard Baits', href: '/shop' },
-      { label: 'Wire Baits', href: '/shop' },
-      { label: 'Soft Baits', href: '/shop' },
-    ],
   },
   {
-    title: 'Rods',
-    href: '/shop',
-    items: [
-      { label: 'Casting Rods', href: '/shop' },
-      { label: 'Spinning Rods', href: '/shop' },
-      { label: 'Travel Rods', href: '/shop' },
-    ],
+    label: 'Fish More. Stress Less.',
+    sublabel: 'Personalized for your lakes',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/pages/home.hero_2_img.ae24b4b009b1c31f1ee06ae1dae35974.home-pfa.png?auto=format&w=700',
+    href: '/map',
   },
   {
-    title: 'Reels',
+    label: 'RASA Rod Giveaway',
+    sublabel: 'Most sensitive rods on Earth — enter now',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/pages/home.hero_3_img.4943c3fcb7cb55e69d5fa034dff67bd7.rasas.jpg?auto=format&w=700',
     href: '/shop',
-    items: [
-      { label: 'Casting Reels', href: '/shop' },
-      { label: 'Spinning Reels', href: '/shop' },
-      { label: 'Ice Fishing Reels', href: '/shop' },
-    ],
+  },
+];
+
+const promoTilesRow2Wide = {
+  label: 'Open the Map',
+  sublabel: 'Find lakes, read reports, shop what works',
+  imageUrl: 'https://omnia-fishing.imgix.net/production/pages/home.subhero_1_img.baf2253ad08ee0229a8a2ee1d62a988c.home-nonAuthenticated.png?auto=format&w=1200',
+  href: '/map',
+};
+
+const promoTilesRow2Stack = [
+  {
+    label: 'Fish with Seth Feider',
+    sublabel: 'Win a guided trip to Mille Lacs',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/pages/home.subhero_2_img.c68752dba8d1bf0b82dc99eb61aa7c97.seth-r2-social-evergreen.jpg?auto=format&w=600',
+    href: '/map',
   },
   {
-    title: 'Line',
+    label: 'New Arrivals',
+    sublabel: 'Fresh gear just added',
+    imageUrl: 'https://omnia-fishing.imgix.net/production/pages/home.subhero_3_img.d0c3254551a9e76b63f35e5145863c62.nas.jpg?auto=format&w=600',
     href: '/shop',
-    items: [
-      { label: 'Braid / Super Line', href: '/shop' },
-      { label: 'Fluorocarbon', href: '/shop' },
-      { label: 'Monofilament', href: '/shop' },
-    ],
-  },
-  {
-    title: 'Terminal',
-    href: '/c/terminal',
-    items: [
-      { label: 'Hooks', href: '/c/terminal' },
-      { label: 'Weights', href: '/c/terminal' },
-      { label: 'Bobbers', href: '/c/terminal' },
-      { label: 'Skirts', href: '/c/terminal' },
-    ],
-  },
-  {
-    title: 'Accessories',
-    href: '/shop',
-    items: [
-      { label: 'Gift Cards', href: '/shop' },
-      { label: 'Tools', href: '/shop' },
-      { label: 'Tackle Management', href: '/shop' },
-      { label: 'Nets', href: '/shop' },
-    ],
   },
 ];
 
@@ -419,7 +402,7 @@ export default function Homepage() {
               : <ProSection onStartTrial={() => openAuth('signup')} />
             }
             <WhyOmniaSection />
-            <TackleSection />
+            <HomepagePromoTiles />
           </div>
         </div>
       </main>
@@ -1314,79 +1297,80 @@ function ProSection({ onStartTrial }: { onStartTrial: () => void }) {
   );
 }
 
-// ─── Tackle Section ───────────────────────────────────────────────────────────
+// ─── Homepage Promo Tiles ─────────────────────────────────────────────────────
 
-function TackleSection() {
+function PromoTile({
+  imageUrl,
+  label,
+  sublabel,
+  href,
+  className = '',
+}: {
+  imageUrl: string;
+  label: string;
+  sublabel?: string;
+  href: string;
+  className?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`group relative overflow-hidden rounded-[20px] ${className}`}
+    >
+      <img
+        src={imageUrl}
+        alt={label}
+        className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-5">
+        <p className="text-lg font-bold leading-tight text-white">{label}</p>
+        {sublabel && (
+          <p className="mt-1 text-sm text-white/80">{sublabel}</p>
+        )}
+      </div>
+    </Link>
+  );
+}
+
+function HomepagePromoTiles() {
   return (
     <section className="px-8 pb-14 lg:px-14">
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
-        <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
-            Shop Tackle
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold leading-tight">
-            Browse by category
-          </h2>
-          <div className="mt-5 grid gap-4 xl:grid-cols-2">
-            {condensedTackleIndex.map((category) => (
-              <div
-                key={category.title}
-                className="rounded-[20px] border border-black/10 bg-white p-5"
-              >
-                <div className="flex items-center justify-between">
-                  <Link href={category.href} className="text-lg font-semibold hover:text-brand">
-                    {category.title}
-                  </Link>
-                  <Link href={category.href} className="text-xs font-semibold text-slate-500 hover:text-brand">
-                    View all →
-                  </Link>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {category.items.map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className="rounded-full border border-black/10 bg-[#fafafa] px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-brand/30 hover:text-brand"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Row 1 — 3 equal tiles */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        {promoTilesRow1.map((tile) => (
+          <PromoTile
+            key={tile.label}
+            imageUrl={tile.imageUrl}
+            label={tile.label}
+            sublabel={tile.sublabel}
+            href={tile.href}
+            className="aspect-[4/3]"
+          />
+        ))}
+      </div>
 
-        <aside className="rounded-[24px] border border-black/10 bg-[#f6f7f8] p-6">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
-            Why Omnia
-          </p>
-          <div className="mt-5 space-y-5">
-            {[
-              {
-                title: 'Start on the map',
-                desc: 'Plan around your exact lake and current conditions before you buy anything.',
-              },
-              {
-                title: 'Local intel first',
-                desc: 'Real reports from anglers on the water so your first cast is intentional.',
-              },
-              {
-                title: 'Tackle that fits',
-                desc: 'Categories and recommendations matched to species, season, and technique.',
-              },
-              {
-                title: 'One place, full flow',
-                desc: 'Plan, shop, and track everything without bouncing between apps and tabs.',
-              },
-            ].map((item) => (
-              <div key={item.title}>
-                <p className="text-sm font-semibold text-slate-900">{item.title}</p>
-                <p className="mt-1 text-sm leading-6 text-slate-500">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </aside>
+      {/* Row 2 — wide left + 2 stacked right */}
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <PromoTile
+          imageUrl={promoTilesRow2Wide.imageUrl}
+          label={promoTilesRow2Wide.label}
+          sublabel={promoTilesRow2Wide.sublabel}
+          href={promoTilesRow2Wide.href}
+          className="aspect-[4/3] sm:col-span-2 sm:aspect-auto sm:min-h-[300px]"
+        />
+        <div className="flex flex-col gap-3">
+          {promoTilesRow2Stack.map((tile) => (
+            <PromoTile
+              key={tile.label}
+              imageUrl={tile.imageUrl}
+              label={tile.label}
+              sublabel={tile.sublabel}
+              href={tile.href}
+              className="flex-1 min-h-[140px]"
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
