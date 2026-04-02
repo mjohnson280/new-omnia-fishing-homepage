@@ -220,7 +220,7 @@ export default function Homepage() {
   }
 
   return (
-    <main className="min-h-screen bg-white text-slate-950">
+    <div className="flex min-h-screen flex-col bg-white text-slate-950">
       {showAuthModal && (
         <AuthModal
           mode={authMode}
@@ -228,17 +228,177 @@ export default function Homepage() {
           onClose={() => setShowAuthModal(false)}
         />
       )}
-      <div className="mx-auto flex max-w-[1600px]">
-        <Sidebar onSignIn={() => openAuth('signin')} onSignUp={() => openAuth('signup')} />
-        <div className="min-w-0 flex-1">
-          <MobileTopBar onSignIn={() => openAuth('signin')} />
-          <HeroSection onGetStarted={() => openAuth('signup')} />
-          <LocalDiscoverySection onAuthRequired={() => openAuth('signup')} />
-          <ProSection onStartTrial={() => openAuth('signup')} />
-          <TackleSection />
+      <PromoBar />
+      <SiteHeader onSignIn={() => openAuth('signin')} onSignUp={() => openAuth('signup')} />
+      <main className="flex flex-1">
+        <div className="mx-auto flex w-full max-w-[1600px]">
+          <Sidebar onSignIn={() => openAuth('signin')} onSignUp={() => openAuth('signup')} />
+          <div className="min-w-0 flex-1">
+            <MobileTopBar onSignIn={() => openAuth('signin')} />
+            <HeroSection onGetStarted={() => openAuth('signup')} />
+            <LocalDiscoverySection onAuthRequired={() => openAuth('signup')} />
+            <ProSection onStartTrial={() => openAuth('signup')} />
+            <TackleSection />
+          </div>
+        </div>
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}
+
+// ─── Promo Bar ───────────────────────────────────────────────────────────────
+
+const promoMessages = [
+  { text: '25% Off Rapala DT Series Crankbaits', cta: 'Shop now', href: '/shop' },
+  { text: 'Fish Mille Lacs with Seth Feider — We\'ll Get You There', cta: 'Learn more', href: '/map' },
+  { text: 'Win a RASA Rod | Most Sensitive Rods on Earth!', cta: 'Enter now', href: '/shop' },
+  { text: 'PRO members get free shipping, rewards & local lake data', cta: 'Start free trial', href: '/pro' },
+  { text: 'Markdowns on popular products — See all bargain offers', cta: 'Shop deals', href: '/shop' },
+];
+
+function PromoBar() {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setIndex((i) => (i + 1) % promoMessages.length);
+        setVisible(true);
+      }, 300);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const msg = promoMessages[index];
+
+  return (
+    <div className="bg-slate-900 px-4 py-2.5 text-center text-xs text-white">
+      <span
+        className={`inline-flex items-center gap-2 transition-opacity duration-300 ${visible ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <span className="font-medium">{msg.text}</span>
+        <Link
+          href={msg.href}
+          className="shrink-0 rounded-full border border-white/25 px-2.5 py-0.5 text-[11px] font-semibold text-white/90 transition hover:border-white/60 hover:text-white"
+        >
+          {msg.cta} →
+        </Link>
+      </span>
+    </div>
+  );
+}
+
+// ─── Site Header ─────────────────────────────────────────────────────────────
+
+const shopCategories = [
+  { label: 'Baits', href: '/shop' },
+  { label: 'Line', href: '/shop' },
+  { label: 'Rods', href: '/shop' },
+  { label: 'Reels', href: '/shop' },
+  { label: 'Terminal', href: '/c/terminal' },
+  { label: 'Accessories', href: '/shop' },
+  { label: 'Marine', href: '/shop' },
+  { label: 'Ice', href: '/shop' },
+  { label: 'JDM', href: '/shop' },
+  { label: 'Promotions', href: '/shop' },
+];
+
+function SiteHeader({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: () => void }) {
+  return (
+    <header className="border-b border-black/10 bg-white">
+      {/* Primary nav row */}
+      <div className="mx-auto flex max-w-[1600px] items-center gap-6 px-6 py-3">
+        {/* Logo */}
+        <Link href="/" aria-label="Omnia Fishing Home" className="shrink-0">
+          <img
+            src="https://www.omniafishing.com/logo.svg"
+            alt="Omnia Fishing"
+            className="h-8 w-8 object-contain"
+          />
+        </Link>
+
+        {/* Primary nav — hidden on small screens */}
+        <nav aria-label="Primary" className="hidden items-center gap-6 md:flex">
+          {[
+            { label: 'Map', href: '/map' },
+            { label: 'States', href: '/states' },
+            { label: 'Brands', href: '/brands' },
+            { label: 'Media', href: '/media' },
+          ].map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="text-sm font-medium text-slate-700 transition hover:text-slate-950"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex-1" />
+
+        {/* Utility actions */}
+        <div className="flex items-center gap-2">
+          {/* Search */}
+          <button
+            aria-label="Search"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+
+          {/* Sign in — text link on md+ */}
+          <button
+            onClick={onSignIn}
+            className="hidden rounded-[8px] px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 md:block"
+          >
+            Sign In
+          </button>
+
+          {/* Create Account — filled button */}
+          <button
+            onClick={onSignUp}
+            className="rounded-[8px] bg-brand px-3 py-1.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
+          >
+            <span className="hidden sm:inline">Create Account</span>
+            <span className="sm:hidden">Sign Up</span>
+          </button>
+
+          {/* Cart */}
+          <button
+            aria-label="Cart"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+          </button>
         </div>
       </div>
-    </main>
+
+      {/* Shop categories row */}
+      <div className="border-t border-black/[0.06] bg-white">
+        <div className="mx-auto flex max-w-[1600px] items-center gap-0.5 overflow-x-auto px-6 py-1.5 scrollbar-none">
+          {shopCategories.map((cat) => (
+            <Link
+              key={cat.label}
+              href={cat.href}
+              className="shrink-0 rounded-md px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            >
+              {cat.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </header>
   );
 }
 
@@ -390,7 +550,7 @@ function AuthModal({
 
 function Sidebar({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: () => void }) {
   return (
-    <aside className="sticky top-0 hidden h-screen w-[280px] shrink-0 flex-col overflow-y-auto border-r border-black/10 bg-[#f6f7f8] xl:flex 2xl:w-[300px]">
+    <aside className="hidden w-[280px] shrink-0 flex-col overflow-y-auto border-r border-black/10 bg-[#f6f7f8] xl:flex 2xl:w-[300px]">
       <div className="flex flex-1 flex-col px-7 py-8">
 
         {/* Logo */}
@@ -1043,5 +1203,146 @@ function TackleSection() {
         </aside>
       </div>
     </section>
+  );
+}
+
+// ─── Site Footer ─────────────────────────────────────────────────────────────
+
+const footerColumns = [
+  {
+    heading: 'Shop',
+    links: [
+      { label: 'New Arrivals', href: '/shop' },
+      { label: 'Best Sellers', href: '/shop' },
+      { label: 'Bargain Bin', href: '/shop' },
+      { label: 'Sales', href: '/shop' },
+      { label: 'Gift Cards', href: '/shop' },
+    ],
+  },
+  {
+    heading: 'Resources',
+    links: [
+      { label: 'Fishing Reports', href: '/map' },
+      { label: 'Articles', href: '/articles' },
+      { label: 'Techniques', href: '/techniques' },
+      { label: 'Species', href: '/species' },
+      { label: 'Organizations', href: '/organizations' },
+      { label: 'Lake Maps', href: '/map' },
+      { label: 'PRO Features', href: '/pro' },
+    ],
+  },
+  {
+    heading: 'Company',
+    links: [
+      { label: 'About Us', href: '/about' },
+      { label: 'News', href: '/news' },
+      { label: 'Careers', href: '/careers' },
+      { label: 'Ambassador Program', href: '/ambassadors' },
+      { label: 'Student Angler Program', href: '/students' },
+    ],
+  },
+  {
+    heading: 'Support',
+    links: [
+      { label: 'Expert Consultation', href: '/support' },
+      { label: 'Shipping & Returns', href: '/shipping' },
+      { label: 'FAQs', href: '/faq' },
+    ],
+  },
+];
+
+function SiteFooter() {
+  return (
+    <footer className="bg-slate-900 text-white">
+      <div className="mx-auto max-w-[1600px] px-8 py-14">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
+
+          {/* Brand column */}
+          <div>
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 p-1.5">
+                <img
+                  src="https://www.omniafishing.com/logo.svg"
+                  alt="Omnia Fishing"
+                  className="h-5 w-5 object-contain"
+                />
+              </div>
+              <span className="text-[15px] font-semibold">Omnia Fishing</span>
+            </div>
+            <p className="mt-4 text-sm leading-7 text-slate-400">
+              Map-based fishing planning, local reports, and contextual tackle — all in one place.
+            </p>
+
+            {/* Social */}
+            <div className="mt-6 flex gap-3">
+              <Link href="https://www.facebook.com/omniafishing" aria-label="Facebook"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-400 transition hover:bg-white/20 hover:text-white">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </Link>
+              <Link href="https://www.instagram.com/omniafishing" aria-label="Instagram"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-400 transition hover:bg-white/20 hover:text-white">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                </svg>
+              </Link>
+              <Link href="https://www.youtube.com/omniafishing" aria-label="YouTube"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-slate-400 transition hover:bg-white/20 hover:text-white">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+                </svg>
+              </Link>
+            </div>
+
+            {/* Contact */}
+            <div className="mt-6 space-y-1 text-xs text-slate-500">
+              <p>Minneapolis, MN</p>
+              <Link href="mailto:hello@omniafishing.com" className="hover:text-slate-300">
+                hello@omniafishing.com
+              </Link>
+            </div>
+          </div>
+
+          {/* Link columns */}
+          {footerColumns.map((col) => (
+            <div key={col.heading}>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                {col.heading}
+              </p>
+              <ul className="mt-4 space-y-3">
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-slate-400 transition hover:text-white"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-white/[0.08]">
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-8 py-5">
+          <p className="text-xs text-slate-500">
+            © {new Date().getFullYear()} Omnia Fishing, Inc. All rights reserved.
+          </p>
+          <div className="flex gap-5">
+            <Link href="/terms" className="text-xs text-slate-500 transition hover:text-slate-300">
+              Terms &amp; Conditions
+            </Link>
+            <Link href="/privacy" className="text-xs text-slate-500 transition hover:text-slate-300">
+              Privacy Policy
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }
