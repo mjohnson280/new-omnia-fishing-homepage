@@ -395,7 +395,7 @@ export default function Homepage() {
           }
           <div className="min-w-0 flex-1">
             <MobileTopBar onSignIn={() => openAuth('signin')} />
-            <HeroSection onGetStarted={() => openAuth('signup')} />
+            <HeroSection onGetStarted={() => openAuth('signup')} isAuthed={isAuthed} />
             <LocalDiscoverySection onAuthRequired={() => openAuth('signup')} />
             {isAuthed
               ? <PromoSquaresSection />
@@ -982,7 +982,119 @@ function HeroCarousel() {
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
-function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
+function HeroSection({ onGetStarted, isAuthed }: { onGetStarted: () => void; isAuthed: boolean }) {
+  if (isAuthed) {
+    return (
+      <section className="bg-white px-8 py-8 lg:px-14 lg:py-10">
+        <div className="grid items-start gap-8 lg:grid-cols-2">
+          {/* Left — action-focused, no onboarding pitch */}
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand">
+              Welcome back
+            </p>
+            <h1 className="mt-3 text-4xl font-semibold leading-[1.15] md:text-5xl">
+              Your lakes are ready.
+            </h1>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              Jump back to the map, check what&apos;s biting, or head to your dashboard for the full picture.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Link
+                href="/map"
+                data-event="home_click_map_authed"
+                className="rounded-[10px] bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
+              >
+                Open the Map
+              </Link>
+              <Link
+                href="/app/dashboard"
+                data-event="home_click_dashboard"
+                className="rounded-[10px] border border-black/15 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                Go to Dashboard
+              </Link>
+              <Link
+                href="/app"
+                data-event="home_click_app_authed"
+                className="text-xs text-slate-400 underline underline-offset-4 hover:text-slate-700"
+              >
+                Also on iOS &amp; Android
+              </Link>
+            </div>
+          </div>
+
+          {/* Right — Your Lakes + Recent Reports in 2 columns */}
+          <div className="rounded-[24px] border border-black/10 bg-[#f7f8fa] p-5">
+            <div className="grid grid-cols-2 gap-4">
+              {/* Your Lakes */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Your Lakes</p>
+                  <Link href="/app/dashboard" className="text-[11px] font-semibold text-brand hover:underline">Manage</Link>
+                </div>
+                <div className="mt-3 space-y-2">
+                  {followedLakes.slice(0, 4).map((lake) => (
+                    <Link
+                      key={lake.name}
+                      href={lake.href}
+                      className="flex items-center justify-between rounded-[10px] border border-black/[0.07] bg-white px-3 py-2.5 transition hover:border-brand/30"
+                    >
+                      <div>
+                        <p className="text-xs font-semibold text-slate-800">{lake.name}</p>
+                        <p className="text-[11px] text-slate-400">{lake.state}</p>
+                      </div>
+                      <svg className="h-3.5 w-3.5 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </Link>
+                  ))}
+                  <Link
+                    href="/map"
+                    className="block rounded-[10px] border border-dashed border-black/15 px-3 py-2 text-center text-[11px] font-semibold text-slate-400 transition hover:border-brand/40 hover:text-brand"
+                  >
+                    + Follow a lake
+                  </Link>
+                </div>
+              </div>
+
+              {/* Recent Reports */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">Recent Reports</p>
+                  <Link href="/map" className="text-[11px] font-semibold text-brand hover:underline">View all</Link>
+                </div>
+                <div className="mt-3 space-y-2">
+                  {fishingReports.slice(0, 4).map((report) => (
+                    <Link
+                      key={report.title}
+                      href={report.href}
+                      className="block rounded-[10px] border border-black/[0.07] bg-white px-3 py-2.5 transition hover:border-brand/30"
+                    >
+                      <p className="text-xs font-semibold leading-4 text-slate-800">{report.title}</p>
+                      <p className="mt-0.5 text-[11px] text-slate-400">{report.lake}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Dashboard CTA */}
+            <Link
+              href="/app/dashboard"
+              data-event="home_click_full_dashboard"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-[12px] border border-black/10 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            >
+              View full dashboard
+              <svg className="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-white px-8 py-10 lg:px-14 lg:py-14">
       <div className="grid items-center gap-10 lg:grid-cols-2">
