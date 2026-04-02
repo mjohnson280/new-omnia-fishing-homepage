@@ -554,20 +554,16 @@ function Sidebar({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: () =>
       <div className="flex flex-1 flex-col px-7 py-8">
 
         {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <Link
-            href="/"
-            aria-label="Omnia Fishing Home"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/15 bg-white p-1"
-          >
+        <Link href="/" aria-label="Omnia Fishing Home" className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200/80 p-1.5">
             <img
               src="https://www.omniafishing.com/logo.svg"
-              alt="Omnia Fishing"
-              className="h-5 w-5 object-contain"
+              alt=""
+              className="h-full w-full object-contain"
             />
-          </Link>
+          </div>
           <span className="text-[15px] font-semibold text-slate-900">Omnia Fishing</span>
-        </div>
+        </Link>
 
         {/* Auth CTA */}
         <div className="mt-5 flex gap-2">
