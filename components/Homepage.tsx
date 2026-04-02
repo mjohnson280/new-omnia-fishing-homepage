@@ -555,11 +555,11 @@ function Sidebar({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: () =>
 
         {/* Logo */}
         <Link href="/" aria-label="Omnia Fishing Home" className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200/80 p-1.5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-900 p-2">
             <img
               src="https://www.omniafishing.com/logo.svg"
               alt=""
-              className="h-full w-full object-contain"
+              className="h-full w-full object-contain brightness-0 invert"
             />
           </div>
           <span className="text-[15px] font-semibold text-slate-900">Omnia Fishing</span>
