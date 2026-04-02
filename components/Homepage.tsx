@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type Lake = {
   name: string;
@@ -430,19 +430,9 @@ function Sidebar({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: () =>
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
             Plan Your Trip
           </p>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {['Largemouth Bass', 'Walleye', 'Smallmouth Bass', 'Trout', 'Crappie', 'Northern Pike'].map(
-              (species) => (
-                <Link
-                  key={species}
-                  href={`/map?species=${encodeURIComponent(species)}`}
-                  className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:border-brand/40 hover:text-brand"
-                >
-                  {species}
-                </Link>
-              )
-            )}
-          </div>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Select a lake to see top techniques, survey data, and fishing reports.
+          </p>
           <Link
             href="/map"
             data-event="sidebar_click_map"
@@ -582,6 +572,85 @@ function MobileTopBar({ onSignIn }: { onSignIn: () => void }) {
   );
 }
 
+// ─── Hero Carousel ────────────────────────────────────────────────────────────
+
+const heroSlides = [
+  {
+    imageUrl: 'https://omnia-fishing.imgix.net/67e80d143eb27b6cd5b65d007b1406dd.webp?auto=format&w=800',
+    label: 'The Omnia Map',
+    desc: 'Search any lake. See what\'s biting right now.',
+  },
+  {
+    imageUrl: 'https://omnia-fishing.imgix.net/cd331c54132f9c074e9bb8ca564adcfd.webp?auto=format&w=800',
+    label: 'Map-Based Shopping',
+    desc: 'Tackle matched to your exact lake and conditions.',
+  },
+  {
+    imageUrl: 'https://omnia-fishing.imgix.net/9fe61069d4dbd3fcdd6055e4f2120c09.webp?auto=format&w=800',
+    label: 'Local Fishing Reports',
+    desc: 'Real intel from anglers who were just there.',
+  },
+  {
+    imageUrl: 'https://omnia-fishing.imgix.net/d94a5bbe86c9dffa19b6fd11b84357ab.webp?auto=format&w=800',
+    label: 'Real-Time Lake Intel',
+    desc: 'Scout smarter before you ever hit the water.',
+  },
+  {
+    imageUrl: 'https://omnia-fishing.imgix.net/4226f91adb29e91b1104ae7a7f8ace22.webp?auto=format&w=800',
+    label: 'AI Report Summaries',
+    desc: 'The key patterns, surfaced instantly.',
+  },
+];
+
+function HeroCarousel() {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((c) => (c + 1) % heroSlides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative overflow-hidden rounded-[24px] shadow-[0_10px_28px_rgba(0,0,0,0.08)]">
+      {heroSlides.map((slide, i) => (
+        <div
+          key={slide.label}
+          className={`transition-opacity duration-700 ${i === current ? 'opacity-100' : 'pointer-events-none absolute inset-0 opacity-0'}`}
+        >
+          <img
+            src={slide.imageUrl}
+            alt={slide.label}
+            className="h-full w-full object-cover"
+            style={{ aspectRatio: '4/3' }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent px-6 pb-5 pt-10">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-300">
+              {slide.label}
+            </p>
+            <p className="mt-1 text-sm font-medium text-white">{slide.desc}</p>
+          </div>
+        </div>
+      ))}
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-4 right-5 flex gap-1.5">
+        {heroSlides.map((slide, i) => (
+          <button
+            key={slide.label}
+            onClick={() => setCurrent(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            className={`h-1.5 rounded-full transition-all ${
+              i === current ? 'w-5 bg-white' : 'w-1.5 bg-white/40 hover:bg-white/70'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
 function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
@@ -624,32 +693,7 @@ function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
           </div>
         </div>
 
-        {/* App preview card */}
-        <div className="rounded-[24px] border border-black/10 bg-gradient-to-br from-slate-50 to-slate-100 p-6 shadow-[0_10px_28px_rgba(0,0,0,0.05)]">
-          <div className="rounded-[18px] border border-black/10 bg-white p-5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-brand">
-              Live on the map
-            </p>
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              <div className="col-span-2 flex h-40 items-end rounded-xl bg-cyan-50 p-3">
-                <div className="space-y-1.5 w-full">
-                  <div className="h-2 w-3/4 rounded-full bg-cyan-200" />
-                  <div className="h-2 w-1/2 rounded-full bg-cyan-100" />
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex-1 rounded-xl bg-slate-100" />
-                <div className="flex-1 rounded-xl bg-slate-50 border border-black/5" />
-              </div>
-            </div>
-            <div className="mt-3 rounded-xl border border-black/[0.07] bg-[#fafafa] p-3">
-              <p className="text-xs font-semibold text-slate-800">Top bait this week</p>
-              <p className="mt-0.5 text-[11px] text-slate-500">
-                Matched to lake, season &amp; species
-              </p>
-            </div>
-          </div>
-        </div>
+        <HeroCarousel />
       </div>
     </section>
   );
@@ -906,7 +950,7 @@ function ProSection({ onStartTrial }: { onStartTrial: () => void }) {
                 href="/pro"
                 className="rounded-[10px] border border-white/25 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
               >
-                See what&apos;s included
+                What&apos;s included in PRO
               </Link>
             </div>
           </div>
