@@ -778,6 +778,38 @@ function Sidebar({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: () =>
 
         <div className="my-6 h-px bg-black/[0.07]" />
 
+        {/* Featured Layer */}
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            Featured Layer
+          </p>
+          <Link
+            href="/map"
+            data-event="sidebar_click_featured_layer"
+            className="group mt-3 block overflow-hidden rounded-[14px] border border-black/[0.07] bg-white shadow-[0_4px_14px_rgba(0,0,0,0.07)] transition hover:shadow-[0_6px_20px_rgba(0,0,0,0.11)]"
+          >
+            <div className="relative aspect-[3/4] overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1566232392379-afd9298e6a46?w=400&q=80"
+                alt="Fishing Pressure layer on the Omnia map"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-3.5">
+                <p className="text-[13px] font-semibold leading-5 text-white">Fishing Pressure</p>
+                <p className="mt-0.5 text-[11px] leading-4 text-white/75">
+                  See where anglers are actively fishing &mdash; updated daily.
+                </p>
+                <span className="mt-2.5 inline-block rounded-[8px] bg-white/20 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-sm">
+                  View on Map →
+                </span>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        <div className="my-6 h-px bg-black/[0.07]" />
+
         {/* Your Lakes — auth gated */}
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
@@ -1546,6 +1578,38 @@ function AuthedSidebar() {
         </Link>
 
         <div className="my-5 h-px bg-white/10" />
+
+        {/* Featured Layer */}
+        <div className="mb-5">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+            Featured Layer
+          </p>
+          <Link
+            href="/map"
+            data-event="sidebar_authed_click_featured_layer"
+            className="group mt-3 block overflow-hidden rounded-[14px] border border-white/10 transition hover:border-white/20"
+          >
+            <div className="relative aspect-[3/4] overflow-hidden rounded-[14px]">
+              <img
+                src="https://images.unsplash.com/photo-1566232392379-afd9298e6a46?w=400&q=80"
+                alt="Fishing Pressure layer on the Omnia map"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-3.5">
+                <p className="text-[13px] font-semibold leading-5 text-white">Fishing Pressure</p>
+                <p className="mt-0.5 text-[11px] leading-4 text-white/65">
+                  See where anglers are actively fishing &mdash; updated daily.
+                </p>
+                <span className="mt-2.5 inline-block rounded-[8px] bg-white/15 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-sm">
+                  View on Map →
+                </span>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        <div className="mb-4 h-px bg-white/10" />
 
         {/* Full tackle category nav */}
         <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
