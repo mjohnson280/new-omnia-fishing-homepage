@@ -1,4 +1,7 @@
-# AEO Lake Content System — Dev Handoff
+# AEO Lake Content System — Dev Handoff (quick reference)
+
+> **Full handoff doc:** [`docs/aeo-lake-content-system.md`](../../docs/aeo-lake-content-system.md).
+> This file is the short, code-adjacent version.
 
 Implementation of `omnia-lake-aeo-build-spec.md`. Built as a self-contained,
 server-rendered prototype in the homepage-redesign repo. Lift it into the Omnia
