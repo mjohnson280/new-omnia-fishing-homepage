@@ -56,15 +56,24 @@ The `AuthModal` component handles Sign in / Create account in a single modal wit
 ```
 /
 ├── app/
-│   ├── layout.tsx       # Root layout, metadata, global font
-│   └── page.tsx         # Thin entry point — renders <Homepage />
-│   └── globals.css      # Tailwind base + CSS custom properties
+│   ├── layout.tsx                          # Root layout, metadata, global font
+│   ├── page.tsx                            # Thin entry point — renders <Homepage />
+│   ├── globals.css                         # Tailwind base + CSS custom properties
+│   ├── sitemap.ts                          # AEO: hub + 20 guide sitemap entries
+│   ├── llms.txt/route.ts                   # AEO: /llms.txt hub + lake index
+│   ├── a/best-bass-lakes-2026/page.tsx     # AEO: bass hub page
+│   └── w/[slug]/fishing-patterns/page.tsx  # AEO: 20 lake guide pages (SSG)
 ├── components/
-│   └── Homepage.tsx     # All homepage sections in one file (prototype convention)
+│   ├── Homepage.tsx                        # All homepage sections in one file (prototype convention)
+│   └── aeo/                                # AEO components (ui.tsx, Chrome.tsx)
+├── lib/
+│   └── aeo/                                # AEO data + helpers (data, patterns, schema, links, format, types)
+├── docs/
+│   └── aeo-lake-content-system.md          # AEO dev handoff doc
 ├── public/
-│   └── images/          # Static assets
-├── AGENTS.md            # Workspace approval mode + Vercel best practices
-├── CLAUDE.md            # This file
+│   └── images/                             # Static assets
+├── AGENTS.md                               # Workspace approval mode + Vercel best practices
+├── CLAUDE.md                               # This file
 ├── next.config.js
 ├── tailwind.config.ts
 └── tsconfig.json
@@ -153,6 +162,41 @@ For this repository, prefer a broader auto-approve mode:
 
 ---
 
+## AEO Lake Content System
+
+A hub-and-spoke content system (implements `omnia-lake-aeo-build-spec.md`) that
+makes Omnia the cited answer for lake-specific fishing-strategy queries in answer
+engines (Google AI Overviews/AI Mode, ChatGPT, Perplexity, Gemini) and routes that
+traffic to lake guides, the map, and PRO. Built in this repo, handed off to devs to
+deploy on omniafishing.com.
+
+- **Hub** `/a/best-bass-lakes-2026` — ranked 20-lake list (`ItemList` + `FAQPage`
+  JSON-LD), methodology, map CTA.
+- **Lake guides** `/w/{slug}/fishing-patterns` — server-rendered **answer block**
+  above each detail table (the core AEO unit), season/species sections with stable
+  anchors (`#summer-smallmouth-bass`), pattern summary, sibling-lake internal links,
+  map CTA, FAQ. `Article` + `Dataset` + `FAQPage` + `BreadcrumbList` JSON-LD. All 20
+  prerender as static HTML so indexable content is in the initial response.
+- **Code:** `lib/aeo/` (data + helpers), `components/aeo/` (UI), routes under `app/`.
+- **Full handoff:** `docs/aeo-lake-content-system.md`.
+
+**Key invariants (don't break):**
+- Every answer block must be server-rendered prose, above its table, with a stable
+  `anchorId` that is never regenerated. Expanders use native `<details>` so detail
+  tables stay in the DOM/crawlable when collapsed.
+- All JSON-LD URLs and `<link rel="canonical">` point to production
+  (`www.omniafishing.com`), regardless of where deployed.
+- **Prototype is `noindex`** (both page templates) so mjcreativelogic.com never
+  competes with the real Omnia pages. Devs remove the `robots` noindex on prod.
+
+**Data status:** only **Mille Lacs** has real worked-example data
+(`dataStatus: 'reference'`). The other 19 use illustrative templates in
+`lib/aeo/patterns.ts` (`dataStatus: 'sample'`) and render a visible "prototype note";
+the synthesis pipeline replaces these in production. Product links (map/shop/PRO) use
+`PROD_BASE` in `lib/aeo/links.ts` — set to `''` for same-origin links on prod.
+
+---
+
 ## Git Workflow
 
 - Working branch: `stage`
@@ -160,3 +204,7 @@ For this repository, prefer a broader auto-approve mode:
 - Push to `stage` triggers Vercel preview deploy to stage.mjcreativelogic.com
 - PRs to `main` are used for production promotion
 - Commit messages should describe *why*, not just what changed
+
+> **Note (this dev environment):** Mike has asked to push directly to `main`
+> (skipping the stage→PR promotion) when working in this sandbox. Honor that when
+> stated; the documented stage→PR flow is the default elsewhere.
