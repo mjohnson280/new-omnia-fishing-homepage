@@ -420,6 +420,7 @@ const promoMessages = [
   { text: 'Win a RASA Rod | Most Sensitive Rods on Earth!', cta: 'Enter now', href: '/shop' },
   { text: 'PRO members get free shipping, rewards & local lake data', cta: 'Start free trial', href: '/pro' },
   { text: 'Markdowns on popular products — See all bargain offers', cta: 'Shop deals', href: '/shop' },
+  { text: 'New: The Best Bass Lakes of 2026 — ranked from 20,000+ reports', cta: 'See the list', href: '/a/best-bass-lakes-2026' },
 ];
 
 function PromoBar() {
@@ -1155,6 +1156,13 @@ function HeroSection({ onGetStarted, isAuthed }: { onGetStarted: () => void; isA
               className="rounded-[10px] border border-black/15 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
             >
               Download the App
+            </Link>
+            <Link
+              href="/a/best-bass-lakes-2026"
+              data-event="home_click_best_bass_lakes"
+              className="rounded-[10px] border border-black/15 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            >
+              Best Bass Lakes 2026
             </Link>
             <button
               onClick={onGetStarted}
