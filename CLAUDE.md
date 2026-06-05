@@ -56,22 +56,30 @@ The `AuthModal` component handles Sign in / Create account in a single modal wit
 ```
 /
 ├── app/
-│   ├── layout.tsx                          # Root layout, metadata, global font
-│   ├── page.tsx                            # Thin entry point — renders <Homepage />
-│   ├── globals.css                         # Tailwind base + CSS custom properties
-│   ├── sitemap.ts                          # AEO: hub + 20 guide sitemap entries
-│   ├── llms.txt/route.ts                   # AEO: /llms.txt hub + lake index
-│   ├── a/best-fishing-lakes-2026/page.tsx  # AEO: Top Fishing Lakes hub (multi-species)
-│   └── w/[slug]/fishing-patterns/page.tsx  # AEO: 20 lake guide pages (SSG)
+│   ├── layout.tsx                              # Root layout, metadata, global font
+│   ├── page.tsx                                # Thin entry point — renders <Homepage />
+│   ├── globals.css                             # Tailwind base + CSS custom properties
+│   ├── sitemap.ts                              # AEO: national + MN hub + 20 guide entries
+│   ├── llms.txt/route.ts                       # AEO: /llms.txt hub + lake index
+│   ├── a/best-fishing-lakes-2026/page.tsx      # AEO: Top Fishing Lakes hub (national, multi-species)
+│   ├── a/best-fishing-lakes-minnesota/page.tsx # AEO: MN hub — 500-lake directory (vs minnesotafishing.guide)
+│   ├── w/[slug]/fishing-patterns/page.tsx      # AEO: 20 lake guide pages (SSG)
+│   ├── w/[slug]/fish-species/page.tsx          # AEO: per-lake DNR fish-species spoke
+│   ├── shop/lake/[slug]/[species]/page.tsx     # Contextual-commerce collection (matched tackle)
+│   ├── tackle/page.tsx                         # Natural-language tackle portal
+│   └── api/matched-tackle/route.ts             # Headless matched-tackle endpoint
 ├── components/
-│   ├── Homepage.tsx                        # All homepage sections in one file (prototype convention)
-│   └── aeo/                                # AEO components (ui.tsx, Chrome.tsx)
+│   ├── Homepage.tsx                            # All homepage sections in one file (prototype convention)
+│   └── aeo/                                    # ui, Chrome, MatchedTackle, TacklePortal, MnLakeBrowser, FishSpeciesSurvey
 ├── lib/
-│   └── aeo/                                # AEO data + helpers (data, patterns, schema, links, format, types)
+│   └── aeo/                                    # data, patterns, schema, links, format, types, tackle, centroid, dnr, mn-lakes
 ├── docs/
-│   └── aeo-lake-content-system.md          # AEO dev handoff doc
+│   ├── aeo-lake-content-system.md              # AEO hub+guides handoff
+│   ├── matched-tackle-and-nl-portal.md         # Matched-tackle engine + NL portal handoff
+│   ├── mn-fishing-and-dnr.md                   # MN hub + DNR spoke handoff
+│   └── lake-centroid-tool.md                   # slug→centroid→map deep-link tool
 ├── public/
-│   └── images/                             # Static assets
+│   └── images/                                 # Static assets
 ├── AGENTS.md                               # Workspace approval mode + Vercel best practices
 ├── CLAUDE.md                               # This file
 ├── next.config.js
@@ -195,6 +203,70 @@ deploy on omniafishing.com.
 `lib/aeo/patterns.ts` (`dataStatus: 'sample'`) and render a visible "prototype note";
 the synthesis pipeline replaces these in production. Product links (map/shop/PRO) use
 `PROD_BASE` in `lib/aeo/links.ts` — set to `''` for same-origin links on prod.
+
+---
+
+## Matched-Tackle Engine + NL Portal
+
+Omnia's "rank techniques, sort baits by report mentions on the lake" engine — today
+buried in the map app — modeled as a single **shared headless service** so every
+surface renders the same result (no forked ranking). Full handoff:
+`docs/matched-tackle-and-nl-portal.md`.
+
+- **Engine** `lib/aeo/tackle.ts` — `getMatchedTackle()` single source of truth (mock
+  catalog + deterministic report-mentions now; wire to the real recommendation API).
+  `parseTackleQuery()` is a deterministic NL stand-in (prod: LLM via Vercel AI Gateway).
+- **Contract** `/api/matched-tackle` — structured params or free-text `q=`.
+- **Renderer** `components/aeo/MatchedTackle.tsx` — props-only, used in every surface.
+- **Surfaces:** shop collection `/shop/lake/{slug}/{species}` (indexable, `Product`/
+  `ItemList` JSON-LD), inline compact embed in the AEO answer blocks, and the NL
+  portal `/tackle`. `shopBaitsUrl` targets the collection; `mapTechniquesUrl`
+  deep-links the map's `top_techniques` tab.
+- **Param vocabulary matches Omnia's live map URLs:** snake_case `species`
+  (`largemouth_bass`), lowercase `season_group`, kebab `waterbody_slug`.
+- **Centroid tool** `lib/aeo/centroid.ts` (+ `docs/lake-centroid-tool.md`): slug →
+  basin centroid → canonical map deep-link, for 3rd parties. NOTE: the data.ts
+  coordinates were hand-seeded, not geocoded; the MN dataset has real centroids.
+
+## Minnesota Hub + DNR Spoke
+
+State-scoped sibling of the national hub, built to out-rank DNR-only directories
+(minnesotafishing.guide). Full handoff: `docs/mn-fishing-and-dnr.md`.
+
+- **Hub** `/a/best-fishing-lakes-minnesota` — searchable/sortable directory of **all
+  500 MN lakes** (`components/aeo/MnLakeBrowser.tsx`), ranked by real Omnia blended
+  score; full list server-rendered (crawlable) with client search/sort on top.
+- **Data** `lib/aeo/mn-lakes.ts` — **AUTO-GENERATED** from the MN top-500 TSV export
+  (name, slug, real centroid, reports, favorites, score). Do not hand-edit; re-import
+  to refresh.
+- **DNR spoke** `/w/{slug}/fish-species` (`components/aeo/FishSpeciesSurvey.tsx`) —
+  answer block + structured DNR survey table fused with Omnia activity. Renders DNR
+  when present, an explicit "coming soon" state otherwise.
+- **DNR contract** `lib/aeo/dnr.ts` — `DnrSurvey`/`DnrSpeciesRow`, **joined to lake
+  metadata by slug** so generated + DNR data stay independent. Currently ONE
+  illustrative example (Lake Minnetonka, `isSample`); dev replaces `DNR_BY_SLUG` with
+  the real DNR source.
+
+**⚠ OPEN QUESTION — resolve first next session (Matt's call):** *Has the MN work
+actually helped AEO, our original goal?* Honest read: the 500-lake hub is mostly a
+**directory/index** — it ranks for navigation but answer engines cite *substantive
+passages*, which live in the **spokes**. The fish-species spokes have the right
+structure but real detail for only 1 lake (499 are empty pending states). So the AEO
+value is currently **gated on populating the spokes with real DNR + report data**.
+Decide: (a) do Omnia's existing prod `/w/{slug}/fish-species` pages already hold DNR
+data (then RESTRUCTURE for AEO, don't rebuild)? (b) should directory rows link to our
+spokes once populated? (c) does the hub itself need more citable content (per-lake
+one-liners, "best walleye lakes in MN" sub-sections)? (d) how do we MEASURE AEO lift
+(AI-overview citations, referral traffic, indexed spokes)? See the session log memory.
+
+## Pending dev inputs (blocking production lift)
+
+1. **Is the tackle matcher a headless API or locked in the map client?** Determines
+   whether lifting the matched-tackle work to prod is small wiring or a real extract.
+2. **A sample of the real DNR fields** per lake (which metrics: CPUE? abundance
+   rating? lengths? survey year?) — to align `DnrSurvey` to Omnia's real DNR model.
+3. **Which branch the demo URL deploys from** — pushes went to `main`; if
+   stage.mjcreativelogic.com serves `stage`, sync it.
 
 ---
 
