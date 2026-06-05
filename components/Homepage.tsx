@@ -1218,6 +1218,11 @@ const AEO_HUBS: { label: string; href: string; tag: string }[] = [
     href: '/shop/lake/mille-lacs-lake-fishing-reports/smallmouth_bass?season_group=summer',
     tag: 'Shop',
   },
+  {
+    label: 'Lake fish-species (DNR retrofit)',
+    href: '/w/lake-minnetonka-fishing-reports/fish-species',
+    tag: 'DNR',
+  },
 ];
 
 function AeoDemoStrip() {
