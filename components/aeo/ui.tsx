@@ -238,11 +238,13 @@ export function AnswerBlock({ pattern, lake }: { pattern: Pattern; lake: Lake })
 
       <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
         <a
-          href={shopBaitsUrl(lake, pattern.species)}
+          href={shopBaitsUrl(lake, pattern)}
+          target="_blank"
+          rel="noopener"
           data-event="aeo_click_shop_baits"
           className="text-sm font-semibold text-brand hover:text-brand-dark"
         >
-          Shop these baits →
+          Shop these baits ↗
         </a>
       </div>
 

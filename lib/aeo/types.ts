@@ -21,6 +21,19 @@ export interface Pattern {
   isPro?: boolean;
   /** Optional hand-written answer block; falls back to generated prose (Section 5). */
   answerOverride?: string;
+  // ── Shop linkout enrichment (optional) ──────────────────────────────────
+  // The synthesis pipeline should emit CANONICAL shop-facet slugs here, drawn
+  // from the store's existing taxonomy — NOT kebab'd prose. snake_case to match
+  // Omnia's live param vocabulary (e.g. species=largemouth_bass). Omitting these
+  // yields a clean (waterbody_slug, season_group, species) link, which matches
+  // the live map/shop convention exactly.
+  /** Canonical technique slugs, e.g. ['drop_shot', 'ned_rig']. */
+  techniqueTags?: string[];
+  /** Canonical bait-color family slug, e.g. 'natural_craw'. */
+  colorFamily?: string;
+  /** Optional curated hotbaits collection id; if set, the shop link uses it
+   *  instead of the faceted form (merchandising controls exactly what shows). */
+  shopCollection?: string;
 }
 
 export interface LakeStats {

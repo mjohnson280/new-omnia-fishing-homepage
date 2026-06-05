@@ -8,7 +8,8 @@
 // production site so the demo actually goes somewhere useful, while the hub<->guide
 // navigation stays internal so you can click through the system itself.
 
-import type { Lake } from './types';
+import type { Lake, Pattern } from './types';
+import { patternKey, seasonGroupParam, speciesParam } from './format';
 
 /** Production origin. Devs: set to '' for same-origin links in the Omnia codebase. */
 export const PROD_BASE = 'https://www.omniafishing.com';
@@ -45,10 +46,63 @@ export function lakeMapUrl(lake: Lake, base: string = PROD_BASE): string {
   );
 }
 
-/** A lake's "shop these baits" link, scoped to species/lake where the store supports it. */
-export function shopBaitsUrl(lake: Lake, species: string): string {
-  const params = new URLSearchParams({ waterbody_slug: lake.slug, species });
-  return `${PROD_BASE}/shop?${params.toString()}`;
+/**
+ * "Shop these baits" linkout for a pattern. Aligns with Omnia's live param
+ * vocabulary (snake_case `species`, `season_group`, kebab `waterbody_slug`), so
+ * the store can resolve matched tackle the same way the map's top-techniques tab
+ * does. Prefers a curated hotbaits collection when the pattern defines one;
+ * otherwise emits the faceted form. Technique/color are sent ONLY when the pattern
+ * carries canonical tags — we never ship kebab'd prose that matches no facet.
+ *
+ * The store must ignore unknown params and progressively relax to
+ * (waterbody_slug + species) rather than ever returning zero results.
+ */
+export function shopBaitsUrl(lake: Lake, pattern: Pattern, base: string = PROD_BASE): string {
+  // Curated-collection mode: merchandising controls exactly what shows.
+  if (pattern.shopCollection) {
+    const params = new URLSearchParams({
+      collection: pattern.shopCollection,
+      waterbody_slug: lake.slug,
+      src: 'aeo_lake_guide',
+    });
+    return `${base}/shop?${params.toString()}`;
+  }
+
+  // Faceted mode: the canonical (waterbody, season_group, species) key + additive
+  // attribution params. Matches the live map/shop convention exactly when no
+  // canonical enrichment tags are present.
+  const params = new URLSearchParams({
+    waterbody_slug: lake.slug,
+    species: speciesParam(pattern.species),
+    season_group: seasonGroupParam(pattern.season),
+    pattern: patternKey(lake.slug, pattern.anchorId),
+    src: 'aeo_lake_guide',
+  });
+  const technique = pattern.techniqueTags?.[0];
+  if (technique) params.set('technique', technique);
+  if (pattern.colorFamily) params.set('color', pattern.colorFamily);
+  return `${base}/shop?${params.toString()}`;
+}
+
+/**
+ * Deep-link into the map's "top techniques" tab for a pattern — the EXISTING
+ * Omnia surface that shows matched techniques/tackle for a lake+season+species.
+ * Mirrors the live URL shape: lat/lng/zoom + season_group + species + tab.
+ * Use this when the intent is "see what's working here", vs. shopBaitsUrl for
+ * a direct commerce destination.
+ */
+export function mapTechniquesUrl(lake: Lake, pattern: Pattern, base: string = PROD_BASE): string {
+  const { lat, lng } = lake.coordinates;
+  const params = new URLSearchParams({
+    lat: String(lat),
+    lng: String(lng),
+    zoom: String(lake.zoom ?? 12), // techniques view frames tighter than the overview
+    waterbody_slug: lake.slug,
+    season_group: seasonGroupParam(pattern.season),
+    species: speciesParam(pattern.species),
+    tab: 'top_techniques',
+  });
+  return `${base}/map?${params.toString()}`;
 }
 
 // ── Internal prototype routes (hub <-> guide navigation) ─────────────────────

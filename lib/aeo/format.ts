@@ -9,6 +9,29 @@ export function kebab(s: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+/** snake_case, matching Omnia's live param vocabulary (e.g. species=largemouth_bass). */
+export function snake(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+/** Species param value, snake_case: "Smallmouth Bass" -> "smallmouth_bass". */
+export function speciesParam(species: string): string {
+  return snake(species);
+}
+
+/** Omnia's season filter param is `season_group`, lowercased: "Summer" -> "summer". */
+export function seasonGroupParam(season: Season): string {
+  return season.toLowerCase();
+}
+
+/** Stable cross-lake pattern key for attribution/curation: "{slug}__{anchorId}". */
+export function patternKey(slug: string, anchorId: string): string {
+  return `${slug}__${anchorId}`;
+}
+
 /** Anchor id = "{season-phase}-{species}", kebab-case. Stable across rebuilds. */
 export function anchorFor(season: Season, phase: SpawnPhase, species: string): string {
   const parts = [season, phase ?? '', species].filter(Boolean).join(' ');

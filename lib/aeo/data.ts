@@ -28,6 +28,9 @@ const milleLacsPatterns: Pattern[] = [
     forage: { primary: 'crawfish' },
     baitColors: ['Natural Craw Colors', 'Smoke'],
     structures: { primary: 'Rock transitions', secondary: 'Gravel flats' },
+    // Illustrative canonical shop-facet slugs (production: from the store taxonomy).
+    techniqueTags: ['jerkbait', 'tube_jig'],
+    colorFamily: 'natural_craw',
   },
   {
     season: 'Summer',
@@ -42,6 +45,8 @@ const milleLacsPatterns: Pattern[] = [
     forage: { primary: 'crawfish', secondary: 'perch' },
     baitColors: ['Natural Craw Colors', 'Dark Neutrals'],
     structures: { primary: 'Rock reefs', secondary: 'Mud basin edges' },
+    techniqueTags: ['drop_shot', 'ned_rig'],
+    colorFamily: 'natural_craw',
     isPro: true,
     answerOverride:
       'For summer smallmouth bass on Mille Lacs Lake, work a drop shot or Ned rig slowly across rock reefs in 12 to 17 feet using natural craw colors. Water temps run 68 to 75°F, and fish scatter from 4 to 17 feet after the crawfish hatch, favoring subtle presentations under pressure.',
@@ -59,6 +64,8 @@ const milleLacsPatterns: Pattern[] = [
     forage: { primary: 'perch', secondary: 'tullibee' },
     baitColors: ['Gold', 'Firetiger'],
     structures: { primary: 'Mud-basin edges', secondary: 'Mid-lake humps' },
+    techniqueTags: ['live_bait_rig', 'spinner_rig'],
+    colorFamily: 'gold',
     isPro: true,
   },
   {
@@ -74,6 +81,8 @@ const milleLacsPatterns: Pattern[] = [
     forage: { primary: 'baitfish', secondary: 'perch' },
     baitColors: ['Natural Baitfish', 'Metallic'],
     structures: { primary: 'Shallow rock', secondary: 'Rock points' },
+    techniqueTags: ['blade_bait', 'jigging'],
+    colorFamily: 'natural_baitfish',
     answerOverride:
       'In fall, Mille Lacs walleye hit blade baits and slow vertical jigs on shallow rock in 7 to 12 feet, with strong low-light and night activity. Natural baitfish and metallic colors work best as water cools into the 30s and 40s.',
   },
@@ -89,6 +98,8 @@ const milleLacsPatterns: Pattern[] = [
     forage: { primary: 'tullibee', secondary: 'perch' },
     baitColors: ['Natural Sucker', 'Perch'],
     structures: { primary: 'Rock bars', secondary: 'Weed edges' },
+    techniqueTags: ['bucktail', 'glide_bait'],
+    colorFamily: 'natural_sucker',
     isPro: true,
   },
 ];
