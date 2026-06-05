@@ -89,16 +89,21 @@ export function lakeDatasetSchema(lake: Lake) {
   };
 }
 
-export function hubItemListSchema(lakes: Lake[]) {
+export function hubItemListSchema(
+  lakes: Lake[],
+  name = 'The Top Fishing Lakes in America 2026',
+) {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'The Top Fishing Lakes in America 2026',
+    name,
     itemListOrder: 'https://schema.org/ItemListOrderDescending',
     numberOfItems: lakes.length,
-    itemListElement: lakes.map((lake) => ({
+    itemListElement: lakes.map((lake, i) => ({
       '@type': 'ListItem',
-      position: lake.rank,
+      // Position within THIS list (1-based), not the lake's national rank — a
+      // state subset would otherwise emit a gappy 2,3,15… sequence.
+      position: i + 1,
       name: lake.name,
       url: canonicalGuideUrl(lake.slug),
     })),

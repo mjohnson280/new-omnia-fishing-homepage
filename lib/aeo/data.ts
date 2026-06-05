@@ -439,6 +439,14 @@ export function siblingLakes(slug: string, count = 6): Lake[] {
     .slice(0, count);
 }
 
+/**
+ * Lakes in a given state, ranked. `state` strings can be multi-state ("OH/PA/NY/MI"),
+ * so match on the slash-separated parts. Used by state hubs (e.g. Minnesota).
+ */
+export function lakesByState(abbr: string): Lake[] {
+  return lakesByRank().filter((l) => l.state.split('/').includes(abbr));
+}
+
 // ── Hub config (build-spec Sections 6.1, 8.2) ────────────────────────────────
 // Concept: the most ACTIVE fishing lakes in America by Omnia report + favorites
 // volume across all species (not a bass-only editorial list). The 20 lakes/order
@@ -452,7 +460,7 @@ export const hubTopLakes2026: HubConfig = {
   intro:
     'These are the most active fishing lakes in America for 2026 — the waters Omnia anglers fish, follow, and file reports on the most. Ranked from 20,000+ angler fishing reports and favorites across every species, from largemouth and smallmouth to walleye, muskie, and crappie. Each lake links to a full seasonal pattern guide built from those real reports.',
   methodology:
-    'Lakes are ranked by a blended activity score that combines angler report volume and favorites in the Omnia system across all species, then tie-broken by export order. This surfaces the lakes anglers are actually on the water for — not an editor&rsquo;s pick. Pattern guides are synthesized from the underlying reports and refreshed as new reports come in.',
+    "Lakes are ranked by a blended activity score that combines angler report volume and favorites in the Omnia system across all species, then tie-broken by export order. This surfaces the lakes anglers are actually on the water for — not an editor's pick. Pattern guides are synthesized from the underlying reports and refreshed as new reports come in.",
   updatedAt: UPDATED,
   faq: [
     {
@@ -474,6 +482,42 @@ export const hubTopLakes2026: HubConfig = {
       question: "My lake isn't on the list — can I still get patterns?",
       answerHtml:
         'Yes. Omnia has seasonal patterns and reports for 100,000+ waterbodies. Open the map and search any lake to pull up its fishing patterns, reports, and matched tackle.',
+    },
+  ],
+};
+
+// ── Minnesota state hub (sibling of the national hub; reuses the same guides) ─
+// Scaffold: renders whatever MN lakes exist in LAKES today (lakesByState('MN')).
+// Drop the full top-20 MN slugs into SEEDS and this hub fills out automatically.
+
+export const hubBestLakesMN: HubConfig = {
+  slug: 'best-fishing-lakes-minnesota',
+  title: 'The Best Fishing Lakes in Minnesota',
+  intro:
+    'These are the most active fishing lakes in Minnesota for 2026 — the waters Omnia anglers fish, follow, and file reports on the most. Ranked from real angler reports and favorites across every species, from walleye and muskie to largemouth, smallmouth, pike, and crappie. Each lake pairs Minnesota DNR survey data with live Omnia reports, then links to a full seasonal pattern guide and the map.',
+  methodology:
+    "Lakes are ranked by a blended activity score combining Omnia angler report volume and favorites across all species. Each lake page fuses the Minnesota DNR's survey data (which species are present and how abundant) with Omnia's real-time reports (what's actually biting and how) — so the answer is current, not just an old survey.",
+  updatedAt: UPDATED,
+  faq: [
+    {
+      question: 'What is the best lake to fish in Minnesota in 2026?',
+      answerHtml:
+        'Mille Lacs Lake, Lake Minnetonka, and Leech Lake are among the most active fishing lakes in Minnesota by Omnia angler reports. Mille Lacs is a world-class smallmouth and walleye fishery; Minnetonka is a structure-rich multi-species metro lake; Leech is a premier walleye and muskie water.',
+    },
+    {
+      question: 'What is the best walleye lake in Minnesota?',
+      answerHtml:
+        'Mille Lacs and Leech Lake rank among Minnesota&rsquo;s top walleye fisheries, backed by both DNR survey data and heavy Omnia report volume. Open any lake&rsquo;s guide for the season-by-season walleye pattern, or the map to see what anglers are catching right now.',
+    },
+    {
+      question: 'Where does this Minnesota fishing data come from?',
+      answerHtml:
+        'Each lake combines two sources: Minnesota DNR fisheries survey data (species present, relative abundance, size structure) and Omnia&rsquo;s own angler fishing reports and favorites. The DNR data tells you what&rsquo;s in the lake; the Omnia reports tell you what&rsquo;s biting and on what — refreshed as new reports come in.',
+    },
+    {
+      question: "My Minnesota lake isn't listed — can I still get data?",
+      answerHtml:
+        'Yes. Omnia has reports, species data, and seasonal patterns for thousands of Minnesota waterbodies. Open the map and search any lake to pull up its fishing reports, fish species, and matched tackle.',
     },
   ],
 };

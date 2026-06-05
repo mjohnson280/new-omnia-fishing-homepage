@@ -396,6 +396,7 @@ export default function Homepage() {
           <div className="min-w-0 flex-1">
             <MobileTopBar onSignIn={() => openAuth('signin')} />
             <HeroSection onGetStarted={() => openAuth('signup')} isAuthed={isAuthed} />
+            <AeoDemoStrip />
             <LocalDiscoverySection onAuthRequired={() => openAuth('signup')} />
             {isAuthed
               ? <PromoSquaresSection />
@@ -1200,6 +1201,39 @@ function HeroSection({ onGetStarted, isAuthed }: { onGetStarted: () => void; isA
             </div>
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── AEO demo strip (prototype-only launcher for the answer-engine landing pages) ──
+// Add one entry per hub. Visible on stage.mjcreativelogic.com so all AEO pages are
+// demoable from the homepage; devs drop this when lifting into omniafishing.com.
+const AEO_HUBS: { label: string; href: string; tag: string }[] = [
+  { label: 'Top Fishing Lakes in America', href: '/a/best-fishing-lakes-2026', tag: 'National' },
+  { label: 'Best Fishing Lakes in Minnesota', href: '/a/best-fishing-lakes-minnesota', tag: 'MN' },
+];
+
+function AeoDemoStrip() {
+  return (
+    <section className="border-y border-black/10 bg-slate-50 px-8 py-4 lg:px-14">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+          AEO landing pages
+        </span>
+        {AEO_HUBS.map((h) => (
+          <Link
+            key={h.href}
+            href={h.href}
+            data-event="home_click_aeo_demo"
+            className="inline-flex items-center gap-2 rounded-[10px] border border-black/15 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-brand hover:text-brand"
+          >
+            {h.label}
+            <span className="rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">
+              {h.tag}
+            </span>
+          </Link>
+        ))}
       </div>
     </section>
   );

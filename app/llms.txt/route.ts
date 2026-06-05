@@ -1,5 +1,5 @@
-import { lakesByRank, hubTopLakes2026 } from '@/lib/aeo/data';
-import { canonicalGuideUrl, canonicalHubUrl } from '@/lib/aeo/links';
+import { lakesByRank, hubTopLakes2026, hubBestLakesMN } from '@/lib/aeo/data';
+import { canonicalGuideUrl, canonicalHubUrl, MN_HUB_PATH } from '@/lib/aeo/links';
 
 // /llms.txt — points answer engines at the hub and the full lake index
 // (build-spec Section 9.4). Served as text/plain.
@@ -14,6 +14,7 @@ export function GET(): Response {
     '',
     '## Top Fishing Lakes in America 2026',
     `- [${hubTopLakes2026.title}](${canonicalHubUrl()}): Ranked list of the 20 most active fishing lakes in America for 2026 (all species), from 20,000+ angler reports.`,
+    `- [${hubBestLakesMN.title}](${canonicalHubUrl(MN_HUB_PATH)}): The most active fishing lakes in Minnesota (all species), pairing MN DNR survey data with live Omnia reports.`,
     '',
     '## Lake fishing pattern guides',
     ...lakes.map(

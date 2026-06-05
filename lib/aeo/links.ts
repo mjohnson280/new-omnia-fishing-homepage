@@ -25,13 +25,24 @@ export const productLinks = {
 };
 
 /**
- * Canonical map deep-link (build-spec Section 9.5). The single source of truth so
- * every link is consistent. Defaults to zoom=10; large waters override per-lake.
+ * Canonical map deep-link from a bare point (build-spec Section 9.5). The single
+ * source of truth for the URL shape so every link — in-app and from the standalone
+ * centroid tool (lib/aeo/centroid.ts) — is identical. Defaults to zoom=10.
  */
+export function mapDeepLink(
+  point: { slug: string; lat: number; lng: number; zoom?: number },
+  base: string = PROD_BASE,
+): string {
+  const zoom = point.zoom ?? 10;
+  return `${base}/map?lat=${point.lat}&lng=${point.lng}&waterbody_slug=${point.slug}&zoom=${zoom}`;
+}
+
+/** Map deep-link for a Lake record (delegates to mapDeepLink). */
 export function lakeMapUrl(lake: Lake, base: string = PROD_BASE): string {
-  const { lat, lng } = lake.coordinates;
-  const zoom = lake.zoom ?? 10;
-  return `${base}/map?lat=${lat}&lng=${lng}&waterbody_slug=${lake.slug}&zoom=${zoom}`;
+  return mapDeepLink(
+    { slug: lake.slug, lat: lake.coordinates.lat, lng: lake.coordinates.lng, zoom: lake.zoom },
+    base,
+  );
 }
 
 /** A lake's "shop these baits" link, scoped to species/lake where the store supports it. */
@@ -44,6 +55,9 @@ export function shopBaitsUrl(lake: Lake, species: string): string {
 // These stay relative so the demo is navigable on mjcreativelogic.com.
 
 export const HUB_PATH = '/a/best-fishing-lakes-2026';
+
+/** State-scoped hub paths. Add one line per new state hub. */
+export const MN_HUB_PATH = '/a/best-fishing-lakes-minnesota';
 
 export function guidePath(lake: Pick<Lake, 'slug'>): string {
   return `/w/${lake.slug}/fishing-patterns`;
@@ -62,6 +76,6 @@ export function canonicalGuideUrl(slug: string): string {
   return `${CANONICAL_BASE}/w/${slug}/fishing-patterns`;
 }
 
-export function canonicalHubUrl(): string {
-  return `${CANONICAL_BASE}${HUB_PATH}`;
+export function canonicalHubUrl(path: string = HUB_PATH): string {
+  return `${CANONICAL_BASE}${path}`;
 }

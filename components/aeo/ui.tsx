@@ -375,6 +375,52 @@ export function LakeRankCard({ lake }: { lake: Lake }) {
   );
 }
 
+// ── Compact lake card (denser grid for long state/regional lists) ────────────
+
+export function CompactLakeCard({ lake }: { lake: Lake }) {
+  return (
+    <article className="flex h-full flex-col rounded-card border border-slate-200 bg-white p-4 shadow-soft transition hover:border-brand/40">
+      <div className="flex items-baseline justify-between gap-2">
+        <h2 className="text-base font-semibold leading-snug text-slate-900">{lake.name}</h2>
+        <span className="shrink-0 text-xs font-medium text-slate-400">{lake.state}</span>
+      </div>
+      <p className="mt-1 text-xs leading-5 text-slate-500">
+        {lake.stats.topSpecies.join(' · ')}
+      </p>
+      <dl className="mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-slate-500">
+        <div className="flex gap-1">
+          <dt className="font-semibold">Peak:</dt>
+          <dd>{lake.peakSeason}</dd>
+        </div>
+        <div className="flex gap-1">
+          <dt className="font-semibold">Reports:</dt>
+          <dd>{lake.reportCount.toLocaleString()}</dd>
+        </div>
+      </dl>
+      <div className="mt-auto flex items-center gap-x-4 pt-3">
+        <Link
+          href={guidePath(lake)}
+          target="_blank"
+          rel="noopener"
+          data-event="aeo_click_guide_from_state_hub"
+          className="text-xs font-semibold text-brand hover:text-brand-dark"
+        >
+          Guide →
+        </Link>
+        <a
+          href={lakeMapUrl(lake)}
+          target="_blank"
+          rel="noopener"
+          data-event="aeo_click_map_from_state_hub"
+          className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+        >
+          Map ↗
+        </a>
+      </div>
+    </article>
+  );
+}
+
 // ── FAQ block (renders Q/A; FAQPage JSON-LD emitted by the page) ──────────────
 
 export function FaqBlock({ items, heading = 'FAQ' }: { items: FaqItem[]; heading?: string }) {
