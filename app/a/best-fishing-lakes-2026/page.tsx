@@ -7,7 +7,7 @@ import {
   LakeRankCard,
   MapCTA,
 } from '@/components/aeo/ui';
-import { hubBass2026, lakesByRank } from '@/lib/aeo/data';
+import { hubTopLakes2026, lakesByRank } from '@/lib/aeo/data';
 import { canonicalHubUrl, HUB_PATH } from '@/lib/aeo/links';
 import {
   breadcrumbSchema,
@@ -16,20 +16,20 @@ import {
   hubItemListSchema,
 } from '@/lib/aeo/schema';
 
-const hub = hubBass2026;
+const hub = hubTopLakes2026;
 const lakes = lakesByRank();
 
 export const metadata: Metadata = {
   title: `${hub.title} | Omnia Fishing`,
   description:
-    'The 20 best bass lakes in America for 2026, ranked from 20,000+ angler reports — with full seasonal pattern guides and matched tackle for each.',
+    'The top fishing lakes in America for 2026 — the most active waters by Omnia angler reports across every species, ranked from 20,000+ reports, with full seasonal pattern guides and matched tackle for each.',
   alternates: { canonical: canonicalHubUrl() },
   // Prototype lives on mjcreativelogic.com; the canonical + indexable copy is the
   // production omniafishing.com page. Keep this copy out of the index.
   robots: { index: false, follow: true },
 };
 
-export default function BestBassLakesHub() {
+export default function TopFishingLakesHub() {
   return (
     <AeoChrome>
       <JsonLd
@@ -45,7 +45,7 @@ export default function BestBassLakesHub() {
           trail={[
             { name: 'Home', href: '/' },
             { name: 'Articles' },
-            { name: 'Best Bass Lakes 2026' },
+            { name: 'Top Fishing Lakes in America' },
           ]}
         />
 

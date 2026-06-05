@@ -104,10 +104,12 @@ export function MapCTA({
     return (
       <a
         href={mapUrl}
+        target="_blank"
+        rel="noopener"
         data-event="aeo_click_map_inline"
         className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:text-brand-dark"
       >
-        View this lake on the map →
+        View this lake on the map ↗
       </a>
     );
   }
@@ -123,10 +125,12 @@ export function MapCTA({
         </div>
         <a
           href={mapUrl}
+          target="_blank"
+          rel="noopener"
           data-event="aeo_click_map_banner"
           className="shrink-0 rounded-btn bg-white px-5 py-3 text-sm font-semibold text-brand transition hover:bg-brand-light"
         >
-          View your lake on the map →
+          View your lake on the map ↗
         </a>
       </div>
     </section>
@@ -287,7 +291,7 @@ export function TopActiveLakes({ lakes }: { lakes: Lake[] }) {
   return (
     <section className="rounded-card border border-slate-200 bg-slate-50 p-5">
       <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-        More top bass lakes
+        More top fishing lakes
       </h2>
       <ul className="mt-3 flex flex-wrap gap-2">
         {lakes.map((l) => (
@@ -346,6 +350,10 @@ export function LakeRankCard({ lake }: { lake: Lake }) {
           <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
             <Link
               href={guidePath(lake)}
+              // Opens in a new tab so the hub list stays put — the ranked list IS
+              // the user's "back," and it's the page most search/AI traffic compares against.
+              target="_blank"
+              rel="noopener"
               data-event="aeo_click_guide_from_hub"
               className="text-sm font-semibold text-brand hover:text-brand-dark"
             >
@@ -353,10 +361,12 @@ export function LakeRankCard({ lake }: { lake: Lake }) {
             </Link>
             <a
               href={lakeMapUrl(lake)}
+              target="_blank"
+              rel="noopener"
               data-event="aeo_click_map_from_hub_card"
-              className="text-sm font-medium text-slate-500 hover:text-slate-800"
+              className="inline-flex items-center gap-1.5 rounded-btn bg-slate-900 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
             >
-              Open on the map
+              Open on the map ↗
             </a>
           </div>
         </div>

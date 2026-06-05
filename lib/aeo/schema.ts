@@ -93,7 +93,7 @@ export function hubItemListSchema(lakes: Lake[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Best Bass Lakes of 2026',
+    name: 'The Top Fishing Lakes in America 2026',
     itemListOrder: 'https://schema.org/ItemListOrderDescending',
     numberOfItems: lakes.length,
     itemListElement: lakes.map((lake) => ({
@@ -116,7 +116,7 @@ export function hubBreadcrumb(hub: HubConfig): Crumb[] {
 export function lakeBreadcrumb(lake: Lake): Crumb[] {
   return [
     { name: 'Home', url: `${CANONICAL_BASE}/` },
-    { name: 'Best Bass Lakes 2026', url: `${CANONICAL_BASE}${HUB_PATH}` },
+    { name: 'Top Fishing Lakes in America', url: `${CANONICAL_BASE}${HUB_PATH}` },
     { name: lake.name, url: canonicalGuideUrl(lake.slug) },
   ];
 }

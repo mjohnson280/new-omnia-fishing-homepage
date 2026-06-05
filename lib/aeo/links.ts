@@ -43,7 +43,7 @@ export function shopBaitsUrl(lake: Lake, species: string): string {
 // ── Internal prototype routes (hub <-> guide navigation) ─────────────────────
 // These stay relative so the demo is navigable on mjcreativelogic.com.
 
-export const HUB_PATH = '/a/best-bass-lakes-2026';
+export const HUB_PATH = '/a/best-fishing-lakes-2026';
 
 export function guidePath(lake: Pick<Lake, 'slug'>): string {
   return `/w/${lake.slug}/fishing-patterns`;

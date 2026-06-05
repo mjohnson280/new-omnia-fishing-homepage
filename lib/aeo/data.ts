@@ -1,4 +1,4 @@
-// Source of truth for the bass hub + lake guides.
+// Source of truth for the Top Fishing Lakes hub + lake guides.
 //
 // In production this is a CMS collection / versioned lakes/{slug}.json fed by the
 // synthesis pipeline. Here it is a typed module so the prototype is self-contained
@@ -440,30 +440,35 @@ export function siblingLakes(slug: string, count = 6): Lake[] {
 }
 
 // ── Hub config (build-spec Sections 6.1, 8.2) ────────────────────────────────
+// Concept: the most ACTIVE fishing lakes in America by Omnia report + favorites
+// volume across all species (not a bass-only editorial list). The 20 lakes/order
+// are unchanged from the original bass ranking; only the framing is multi-species.
+// To make the order strictly track activity, re-sort SEEDS by `reports` (or a
+// blended report+favorites score) — that would lift Minnetonka/Mille Lacs higher.
 
-export const hubBass2026: HubConfig = {
-  slug: 'best-bass-lakes-2026',
-  title: 'The Best Bass Lakes of 2026',
+export const hubTopLakes2026: HubConfig = {
+  slug: 'best-fishing-lakes-2026',
+  title: 'The Top Fishing Lakes in America',
   intro:
-    'These are the 20 best bass lakes in the country for 2026, ranked by Omnia using 20,000+ angler fishing reports plus favorites data. Guntersville, Mille Lacs and Lake Minnetonka top the list, but every lake below links to a full seasonal pattern guide built from real reports.',
+    'These are the most active fishing lakes in America for 2026 — the waters Omnia anglers fish, follow, and file reports on the most. Ranked from 20,000+ angler fishing reports and favorites across every species, from largemouth and smallmouth to walleye, muskie, and crappie. Each lake links to a full seasonal pattern guide built from those real reports.',
   methodology:
-    'Lakes are ranked by a blended score combining angler report volume and favorites in the Omnia system, then tie-broken by export order. Pattern guides are synthesized from the underlying reports and refreshed as new reports come in.',
+    'Lakes are ranked by a blended activity score that combines angler report volume and favorites in the Omnia system across all species, then tie-broken by export order. This surfaces the lakes anglers are actually on the water for — not an editor&rsquo;s pick. Pattern guides are synthesized from the underlying reports and refreshed as new reports come in.',
   updatedAt: UPDATED,
   faq: [
     {
-      question: 'What is the best bass lake in America in 2026?',
+      question: 'What are the top fishing lakes in America in 2026?',
       answerHtml:
-        'Guntersville Lake in Alabama tops Omnia&rsquo;s 2026 ranking as the best overall bass lake, driven by its Tennessee River grass, ledge fishing, and consistent big-largemouth reports. Mille Lacs Lake (MN) and Lake Minnetonka (MN) round out the top three.',
+        'Guntersville Lake (AL), Mille Lacs Lake (MN), and Lake Minnetonka (MN) lead Omnia&rsquo;s 2026 ranking of the most active fishing lakes in America, measured by angler report volume and favorites across all species. The full top 20 spans premier bass, walleye, and muskie fisheries nationwide.',
     },
     {
-      question: 'How were these bass lakes ranked?',
+      question: 'How were these lakes ranked?',
       answerHtml:
-        'Each lake earns a blended score from its angler report volume and favorites in the Omnia system across 20,000+ reports. Lakes that tie at the top are broken by export order. The ranking refreshes as new reports come in.',
+        'Each lake earns a blended activity score from its angler report volume and favorites in the Omnia system across 20,000+ reports and every species. Lakes that tie at the top are broken by export order. The ranking refreshes as new reports come in, so it reflects where anglers are fishing right now.',
     },
     {
-      question: 'When is the best time to fish Guntersville Lake?',
+      question: 'Are these only bass lakes?',
       answerHtml:
-        'The pre-spawn through spring window (roughly February to April) is the most famous big-bass period on Guntersville, when largemouth stage outside grass flats. Fall is a strong second window as bass follow shad into the creeks.',
+        'No. The ranking is multi-species: it counts activity across largemouth, smallmouth, and spotted bass plus walleye, muskie, pike, crappie, and more. Waters like Mille Lacs, Leech Lake, and Lake Winnebago rank on the strength of their walleye and muskie fishing as much as their bass.',
     },
     {
       question: "My lake isn't on the list — can I still get patterns?",

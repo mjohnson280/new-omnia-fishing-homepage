@@ -19,7 +19,7 @@ codebase and wire it to real data.
 | `lib/aeo/links.ts` | URL helpers, incl. canonical map deep-link `lakeMapUrl` (spec §9.5) |
 | `components/aeo/ui.tsx` | All presentational components (spec §7), server-rendered |
 | `components/aeo/Chrome.tsx` | Lightweight header/footer for the prototype pages |
-| `app/a/best-bass-lakes-2026/page.tsx` | Hub (spec §6.1) |
+| `app/a/best-fishing-lakes-2026/page.tsx` | Hub (spec §6.1) — "Top Fishing Lakes in America", multi-species |
 | `app/w/[slug]/fishing-patterns/page.tsx` | Lake guide (spec §6.2), static for 20 lakes |
 | `app/sitemap.ts` | Hub + 20 guide sitemap entries (spec §9.4) |
 | `app/llms.txt/route.ts` | `/llms.txt` hub + lake index (spec §9.4) |

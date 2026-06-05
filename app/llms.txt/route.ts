@@ -1,4 +1,4 @@
-import { lakesByRank, hubBass2026 } from '@/lib/aeo/data';
+import { lakesByRank, hubTopLakes2026 } from '@/lib/aeo/data';
 import { canonicalGuideUrl, canonicalHubUrl } from '@/lib/aeo/links';
 
 // /llms.txt — points answer engines at the hub and the full lake index
@@ -12,8 +12,8 @@ export function GET(): Response {
     '',
     '> Map-based fishing planning, local angler reports, and seasonal fishing patterns for 100,000+ waterbodies, with contextual tackle matched to lake, season, and species.',
     '',
-    '## Best Bass Lakes 2026',
-    `- [${hubBass2026.title}](${canonicalHubUrl()}): Ranked list of the 20 best bass lakes in America for 2026, from 20,000+ angler reports.`,
+    '## Top Fishing Lakes in America 2026',
+    `- [${hubTopLakes2026.title}](${canonicalHubUrl()}): Ranked list of the 20 most active fishing lakes in America for 2026 (all species), from 20,000+ angler reports.`,
     '',
     '## Lake fishing pattern guides',
     ...lakes.map(

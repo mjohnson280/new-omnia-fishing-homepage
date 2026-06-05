@@ -61,7 +61,7 @@ The `AuthModal` component handles Sign in / Create account in a single modal wit
 │   ├── globals.css                         # Tailwind base + CSS custom properties
 │   ├── sitemap.ts                          # AEO: hub + 20 guide sitemap entries
 │   ├── llms.txt/route.ts                   # AEO: /llms.txt hub + lake index
-│   ├── a/best-bass-lakes-2026/page.tsx     # AEO: bass hub page
+│   ├── a/best-fishing-lakes-2026/page.tsx  # AEO: Top Fishing Lakes hub (multi-species)
 │   └── w/[slug]/fishing-patterns/page.tsx  # AEO: 20 lake guide pages (SSG)
 ├── components/
 │   ├── Homepage.tsx                        # All homepage sections in one file (prototype convention)
@@ -170,8 +170,9 @@ engines (Google AI Overviews/AI Mode, ChatGPT, Perplexity, Gemini) and routes th
 traffic to lake guides, the map, and PRO. Built in this repo, handed off to devs to
 deploy on omniafishing.com.
 
-- **Hub** `/a/best-bass-lakes-2026` — ranked 20-lake list (`ItemList` + `FAQPage`
-  JSON-LD), methodology, map CTA.
+- **Hub** `/a/best-fishing-lakes-2026` — "Top Fishing Lakes in America": ranked
+  20-lake list of the most active waters by Omnia report/favorites volume across all
+  species (`ItemList` + `FAQPage` JSON-LD), methodology, map CTA.
 - **Lake guides** `/w/{slug}/fishing-patterns` — server-rendered **answer block**
   above each detail table (the core AEO unit), season/species sections with stable
   anchors (`#summer-smallmouth-bass`), pattern summary, sibling-lake internal links,

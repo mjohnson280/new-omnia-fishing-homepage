@@ -37,7 +37,7 @@ and validated.
 
 | Page | Route | Notes |
 | --- | --- | --- |
-| Bass hub | `/a/best-bass-lakes-2026` | Ranked list of 20 lakes, `ItemList` + `FAQPage` JSON-LD, methodology, map CTA |
+| Top Fishing Lakes hub | `/a/best-fishing-lakes-2026` | Ranked list of 20 most-active lakes (all species), `ItemList` + `FAQPage` JSON-LD, methodology, map CTA |
 | Lake guide | `/w/{slug}/fishing-patterns` | Answer blocks + tables by season/species, `Article` + `Dataset` + `FAQPage` + `BreadcrumbList` JSON-LD. All 20 prerender as static HTML |
 | Sitemap | `/sitemap.xml` | Hub + 20 guide URLs (production-canonical) |
 | LLM index | `/llms.txt` | Hub + lake index for answer engines |
@@ -60,7 +60,7 @@ intentional `<img>` warnings), and `next build` (27 static pages, all 20 guides 
 | `lib/aeo/links.ts` | URL helpers + `lakeMapUrl` (spec §9.5) | **Set `PROD_BASE=''`** |
 | `components/aeo/ui.tsx` | All presentational components (spec §7), server-rendered | Keep / restyle |
 | `components/aeo/Chrome.tsx` | Prototype header/footer | **Replace with real Omnia chrome** |
-| `app/a/best-bass-lakes-2026/page.tsx` | Hub (spec §6.1) | **Drop noindex** |
+| `app/a/best-fishing-lakes-2026/page.tsx` | Hub (spec §6.1) | **Drop noindex** |
 | `app/w/[slug]/fishing-patterns/page.tsx` | Lake guide (spec §6.2) | **Drop noindex; merge into existing page** |
 | `app/sitemap.ts` | Sitemap generation | Merge into main sitemap |
 | `app/llms.txt/route.ts` | `/llms.txt` | Keep / merge into root llms.txt |

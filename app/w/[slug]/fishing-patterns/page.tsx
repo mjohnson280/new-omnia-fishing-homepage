@@ -97,7 +97,7 @@ export default function LakeFishingPatterns({ params }: { params: { slug: string
         <Breadcrumbs
           trail={[
             { name: 'Home', href: '/' },
-            { name: 'Best Bass Lakes 2026', href: '/a/best-bass-lakes-2026' },
+            { name: 'Top Fishing Lakes in America', href: '/a/best-fishing-lakes-2026' },
             { name: lake.name },
           ]}
         />
@@ -232,13 +232,16 @@ export default function LakeFishingPatterns({ params }: { params: { slug: string
           <FaqBlock items={faq} heading={`${lake.name} fishing FAQ`} />
         </div>
 
-        {/* Back to hub */}
+        {/* Hub discovery link — framed as discovery, not "back", since most
+            search/AI traffic lands here directly and never saw the hub. The
+            breadcrumb above is the always-correct wayfinding regardless of arrival. */}
         <div className="mt-10 border-t border-slate-200 pt-6">
           <Link
-            href="/a/best-bass-lakes-2026"
+            href="/a/best-fishing-lakes-2026"
+            data-event="aeo_click_hub_from_guide"
             className="text-sm font-semibold text-brand hover:text-brand-dark"
           >
-            ← Back to the Best Bass Lakes of 2026
+            See all of America&apos;s Top Fishing Lakes →
           </Link>
         </div>
       </div>
