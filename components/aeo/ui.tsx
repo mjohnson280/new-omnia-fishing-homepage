@@ -15,6 +15,8 @@ import {
   productLinks,
   shopBaitsUrl,
 } from '@/lib/aeo/links';
+import { getMatchedTackle } from '@/lib/aeo/tackle';
+import { MatchedTackle } from './MatchedTackle';
 
 // ── JSON-LD ──────────────────────────────────────────────────────────────────
 
@@ -227,6 +229,13 @@ function capitalize(s: string): string {
 export function AnswerBlock({ pattern, lake }: { pattern: Pattern; lake: Lake }) {
   const heading = patternHeading(pattern, lake.name);
   const answer = buildAnswerText(pattern, lake.name);
+  // Inline, server-rendered matched tackle — the baits become part of the
+  // indexable answer, so a citation lands on "here's the pattern AND what to buy".
+  const tackle = getMatchedTackle({
+    waterbodySlug: lake.slug,
+    species: pattern.species,
+    seasonGroup: pattern.season,
+  });
 
   return (
     <section
@@ -236,6 +245,10 @@ export function AnswerBlock({ pattern, lake }: { pattern: Pattern; lake: Lake })
       <h3 className="text-lg font-semibold capitalize text-slate-900">{heading}</h3>
       <p className="mt-2 leading-7 text-slate-700">{answer}</p>
 
+      <div className="mt-4">
+        <MatchedTackle result={tackle} variant="compact" />
+      </div>
+
       <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
         <a
           href={shopBaitsUrl(lake, pattern)}
@@ -244,7 +257,7 @@ export function AnswerBlock({ pattern, lake }: { pattern: Pattern; lake: Lake })
           data-event="aeo_click_shop_baits"
           className="text-sm font-semibold text-brand hover:text-brand-dark"
         >
-          Shop these baits ↗
+          Shop all {pattern.species.toLowerCase()} baits for {lake.name} ↗
         </a>
       </div>
 

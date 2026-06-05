@@ -9,7 +9,7 @@
 // navigation stays internal so you can click through the system itself.
 
 import type { Lake, Pattern } from './types';
-import { patternKey, seasonGroupParam, speciesParam } from './format';
+import { seasonGroupParam, speciesParam } from './format';
 
 /** Production origin. Devs: set to '' for same-origin links in the Omnia codebase. */
 export const PROD_BASE = 'https://www.omniafishing.com';
@@ -57,31 +57,21 @@ export function lakeMapUrl(lake: Lake, base: string = PROD_BASE): string {
  * The store must ignore unknown params and progressively relax to
  * (waterbody_slug + species) rather than ever returning zero results.
  */
-export function shopBaitsUrl(lake: Lake, pattern: Pattern, base: string = PROD_BASE): string {
-  // Curated-collection mode: merchandising controls exactly what shows.
-  if (pattern.shopCollection) {
-    const params = new URLSearchParams({
-      collection: pattern.shopCollection,
-      waterbody_slug: lake.slug,
-      src: 'aeo_lake_guide',
-    });
-    return `${base}/shop?${params.toString()}`;
-  }
-
-  // Faceted mode: the canonical (waterbody, season_group, species) key + additive
-  // attribution params. Matches the live map/shop convention exactly when no
-  // canonical enrichment tags are present.
+export function shopBaitsUrl(lake: Lake, pattern: Pattern, base: string = ''): string {
+  // Path-based contextual collection page (the reference /shop/lake route). The
+  // path carries the stable (waterbody, species) key; season + canonical
+  // technique/color ride as query refinements. `base` defaults to '' so the link
+  // is internal in this prototype and clicks through to the reference page; devs
+  // point it at PROD_BASE once /shop/lake exists on omniafishing.com.
   const params = new URLSearchParams({
-    waterbody_slug: lake.slug,
-    species: speciesParam(pattern.species),
     season_group: seasonGroupParam(pattern.season),
-    pattern: patternKey(lake.slug, pattern.anchorId),
     src: 'aeo_lake_guide',
   });
+  if (pattern.shopCollection) params.set('collection', pattern.shopCollection);
   const technique = pattern.techniqueTags?.[0];
   if (technique) params.set('technique', technique);
   if (pattern.colorFamily) params.set('color', pattern.colorFamily);
-  return `${base}/shop?${params.toString()}`;
+  return `${base}/shop/lake/${lake.slug}/${speciesParam(pattern.species)}?${params.toString()}`;
 }
 
 /**
@@ -91,15 +81,19 @@ export function shopBaitsUrl(lake: Lake, pattern: Pattern, base: string = PROD_B
  * Use this when the intent is "see what's working here", vs. shopBaitsUrl for
  * a direct commerce destination.
  */
-export function mapTechniquesUrl(lake: Lake, pattern: Pattern, base: string = PROD_BASE): string {
+export function mapTechniquesUrl(
+  lake: Lake,
+  opts: { species: string; seasonGroup: string },
+  base: string = PROD_BASE,
+): string {
   const { lat, lng } = lake.coordinates;
   const params = new URLSearchParams({
     lat: String(lat),
     lng: String(lng),
     zoom: String(lake.zoom ?? 12), // techniques view frames tighter than the overview
     waterbody_slug: lake.slug,
-    season_group: seasonGroupParam(pattern.season),
-    species: speciesParam(pattern.species),
+    season_group: opts.seasonGroup.toLowerCase(),
+    species: speciesParam(opts.species),
     tab: 'top_techniques',
   });
   return `${base}/map?${params.toString()}`;

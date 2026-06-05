@@ -1212,6 +1212,12 @@ function HeroSection({ onGetStarted, isAuthed }: { onGetStarted: () => void; isA
 const AEO_HUBS: { label: string; href: string; tag: string }[] = [
   { label: 'Top Fishing Lakes in America', href: '/a/best-fishing-lakes-2026', tag: 'National' },
   { label: 'Best Fishing Lakes in Minnesota', href: '/a/best-fishing-lakes-minnesota', tag: 'MN' },
+  { label: 'Tackle Match (natural language)', href: '/tackle', tag: 'New' },
+  {
+    label: 'Shop: Mille Lacs smallmouth',
+    href: '/shop/lake/mille-lacs-lake-fishing-reports/smallmouth_bass?season_group=summer',
+    tag: 'Shop',
+  },
 ];
 
 function AeoDemoStrip() {
