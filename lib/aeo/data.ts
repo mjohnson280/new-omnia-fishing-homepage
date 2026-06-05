@@ -505,7 +505,7 @@ export const hubBestLakesMN: HubConfig = {
   slug: 'best-fishing-lakes-minnesota',
   title: 'The Best Fishing Lakes in Minnesota',
   intro:
-    'These are the most active fishing lakes in Minnesota for 2026 — the waters Omnia anglers fish, follow, and file reports on the most. Ranked from real angler reports and favorites across every species, from walleye and muskie to largemouth, smallmouth, pike, and crappie. Each lake pairs Minnesota DNR survey data with live Omnia reports, then links to a full seasonal pattern guide and the map.',
+    "These are the 500 most active fishing lakes in Minnesota, ranked by Omnia from real angler reports and favorites across every species — walleye, muskie, largemouth, smallmouth, pike, and crappie. Lake Minnetonka, Mille Lacs, and Lake Vermilion top the list. Each lake pairs Minnesota DNR survey data with live Omnia reports, then links to its fish species, the map, and a seasonal pattern guide — so you get what's in the lake and what's biting in one place.",
   methodology:
     "Lakes are ranked by a blended activity score combining Omnia angler report volume and favorites across all species. Each lake page fuses the Minnesota DNR's survey data (which species are present and how abundant) with Omnia's real-time reports (what's actually biting and how) — so the answer is current, not just an old survey.",
   updatedAt: UPDATED,
@@ -513,7 +513,7 @@ export const hubBestLakesMN: HubConfig = {
     {
       question: 'What is the best lake to fish in Minnesota in 2026?',
       answerHtml:
-        'Mille Lacs Lake, Lake Minnetonka, and Leech Lake are among the most active fishing lakes in Minnesota by Omnia angler reports. Mille Lacs is a world-class smallmouth and walleye fishery; Minnetonka is a structure-rich multi-species metro lake; Leech is a premier walleye and muskie water.',
+        'Lake Minnetonka, Mille Lacs Lake, and Lake Vermilion lead Omnia&rsquo;s ranking of the most active fishing lakes in Minnesota, measured by angler report volume and favorites. The directory below ranks 500 Minnesota lakes, each pairing DNR survey data with live Omnia reports — covering walleye, muskie, bass, pike, and panfish waters statewide.',
     },
     {
       question: 'What is the best walleye lake in Minnesota?',
