@@ -9,10 +9,11 @@ import { lakeTabUrl, mapDeepLink } from '@/lib/aeo/links';
 // crawlable for AEO; the search + sort are client-only refinements after hydration.
 //
 // The competitive wedge vs. DNR-only directories: every row links to the lake's
-// DNR fish-species page AND shows Omnia angler activity (reports + favorites) that
-// a static DNR republisher doesn't have.
+// DNR fish-species page AND shows real Omnia angler activity (report volume) that a
+// static DNR republisher doesn't have. Favorites are an internal signal (they feed
+// the activity score) and are intentionally NOT surfaced here.
 
-type SortKey = 'rank' | 'reports' | 'favorites' | 'name';
+type SortKey = 'rank' | 'reports' | 'name';
 
 export function MnLakeBrowser({ lakes }: { lakes: MnLake[] }) {
   const [query, setQuery] = useState('');
@@ -25,8 +26,6 @@ export function MnLakeBrowser({ lakes }: { lakes: MnLake[] }) {
       switch (sortKey) {
         case 'reports':
           return b.reports - a.reports;
-        case 'favorites':
-          return b.favorites - a.favorites;
         case 'name':
           return a.name.localeCompare(b.name);
         default:
@@ -48,7 +47,7 @@ export function MnLakeBrowser({ lakes }: { lakes: MnLake[] }) {
         />
         <div className="flex items-center gap-1.5 text-xs">
           <span className="font-semibold text-slate-500">Sort:</span>
-          {(['rank', 'reports', 'favorites', 'name'] as SortKey[]).map((k) => (
+          {(['rank', 'reports', 'name'] as SortKey[]).map((k) => (
             <button
               key={k}
               onClick={() => setSortKey(k)}
@@ -75,7 +74,6 @@ export function MnLakeBrowser({ lakes }: { lakes: MnLake[] }) {
               <th scope="col" className="px-3 py-2.5 w-12">#</th>
               <th scope="col" className="px-3 py-2.5">Lake</th>
               <th scope="col" className="px-3 py-2.5 text-right">Reports</th>
-              <th scope="col" className="px-3 py-2.5 text-right">Favorites</th>
               <th scope="col" className="px-3 py-2.5 text-right">DNR &amp; map</th>
             </tr>
           </thead>
@@ -86,9 +84,6 @@ export function MnLakeBrowser({ lakes }: { lakes: MnLake[] }) {
                 <td className="px-3 py-2.5 font-medium text-slate-800">{l.name}</td>
                 <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
                   {l.reports.toLocaleString()}
-                </td>
-                <td className="px-3 py-2.5 text-right tabular-nums text-slate-700">
-                  {l.favorites.toLocaleString()}
                 </td>
                 <td className="px-3 py-2.5">
                   <div className="flex items-center justify-end gap-3 whitespace-nowrap">

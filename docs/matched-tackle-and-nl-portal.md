@@ -75,9 +75,28 @@ map's `top_techniques` tab.
 
 ## What production needs to do
 
-1. **Wire `getMatchedTackle`** to the real recommendation API (rank by technique, sort
-   baits by report mentions on the waterbody). Keep the return shape and everything
-   downstream is unchanged.
+> **Confirmed (Matt, 2026-06-08):** the ranking engine **is already headless** — it
+> serves both the map *and* the legacy lake pages and is "wide open for use." So
+> lifting matched-tackle onto our surfaces is **wiring, not a backend extraction.**
+> Two specifics still need the engineer (for Matt's eng call) before the wrapper is
+> exact — Matt is product, not the engineer, so these are stubbed pending that call:
+>
+> - **Q1 — How is the service addressed?** The exact endpoint / resolver name the map
+>   and legacy lake pages already call (e.g. `/api/...` route or GraphQL resolver).
+>   That one string is all `getMatchedTackle()`'s production body needs to call.
+> - **Q2 — Does the response already include the report-mention sort?** i.e. does the
+>   service return baits *already ordered* by mentions on that waterbody, or does it
+>   return ranked techniques + bait lists and the **client** does the report-mention
+>   sort? Decides whether the `reportMentions` sort in `tackle.ts` (line ~269) stays in
+>   our wrapper or is redundant.
+>
+> Until answered, `getMatchedTackle()` keeps its mock body; the contract/return shape
+> below is the stub the real call must satisfy.
+
+1. **Wire `getMatchedTackle`** to the real (confirmed-headless) recommendation API —
+   rank by technique, sort baits by report mentions on the waterbody. Endpoint name =
+   **Q1 above**; whether to keep our local sort = **Q2 above**. Keep the return shape
+   and everything downstream is unchanged.
 2. **Canonical technique/color slugs.** The resolver expects canonical tags
    (`Pattern.techniqueTags`, `colorFamily`) from the store taxonomy; the synthesis
    pipeline should emit them. Sample lakes fall back to a per-species default today.

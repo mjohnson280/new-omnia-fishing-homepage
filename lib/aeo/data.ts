@@ -503,27 +503,32 @@ export const hubTopLakes2026: HubConfig = {
 
 export const hubBestLakesMN: HubConfig = {
   slug: 'best-fishing-lakes-minnesota',
-  title: 'The Best Fishing Lakes in Minnesota',
+  title: 'The Best Bass Lakes in Minnesota',
   intro:
-    "These are the 500 most active fishing lakes in Minnesota, ranked by Omnia from real angler reports and favorites across every species — walleye, muskie, largemouth, smallmouth, pike, and crappie. Lake Minnetonka, Mille Lacs, and Lake Vermilion top the list. Each lake pairs Minnesota DNR survey data with live Omnia reports, then links to its fish species, the map, and a seasonal pattern guide — so you get what's in the lake and what's biting in one place.",
+    "These are Minnesota's best bass lakes — ranked largemouth and smallmouth waters drawn from real Omnia angler reports, not just an old survey. Lake Minnetonka and Lake Waconia lead for largemouth; Mille Lacs and Lake Vermilion are trophy smallmouth water. Every lake pairs Minnesota DNR fish-species data with live Omnia reports and links straight to the map, so you get what's in the lake and where the bass are biting in one place. Below the bass lists you'll also find the 50 most active fishing lakes statewide and the full 500-lake directory.",
   methodology:
-    "Lakes are ranked by a blended activity score combining Omnia angler report volume and favorites across all species. Each lake page fuses the Minnesota DNR's survey data (which species are present and how abundant) with Omnia's real-time reports (what's actually biting and how) — so the answer is current, not just an old survey.",
+    "Bass lakes are ranked by Omnia angler report volume for the species — largemouth and smallmouth tallied separately — then cross-checked against Minnesota DNR survey data so a lake only ranks where the bass actually live. Each lake page fuses the DNR's survey (which species are present and how abundant) with Omnia's real-time reports (what's biting and on what) — so the answer is current, not a decade-old snapshot.",
   updatedAt: UPDATED,
   faq: [
     {
-      question: 'What is the best lake to fish in Minnesota in 2026?',
+      question: 'What is the best bass lake in Minnesota in 2026?',
       answerHtml:
-        'Lake Minnetonka, Mille Lacs Lake, and Lake Vermilion lead Omnia&rsquo;s ranking of the most active fishing lakes in Minnesota, measured by angler report volume and favorites. The directory below ranks 500 Minnesota lakes, each pairing DNR survey data with live Omnia reports — covering walleye, muskie, bass, pike, and panfish waters statewide.',
+        'For largemouth bass, Lake Minnetonka, Lake Waconia, and Forest Lake lead Omnia&rsquo;s ranking by angler report volume — sprawling, weed-rich metro waters. For smallmouth bass, Mille Lacs, Lake Vermilion, and Lake Pepin are Minnesota&rsquo;s standouts, with rock and reef structure that grows trophy-class fish. Each pairs DNR survey data with live Omnia reports.',
     },
     {
-      question: 'What is the best walleye lake in Minnesota?',
+      question: 'What is the best smallmouth bass lake in Minnesota?',
       answerHtml:
-        'Mille Lacs and Leech Lake rank among Minnesota&rsquo;s top walleye fisheries, backed by both DNR survey data and heavy Omnia report volume. Open any lake&rsquo;s guide for the season-by-season walleye pattern, or the map to see what anglers are catching right now.',
+        'Mille Lacs Lake is widely regarded as Minnesota&rsquo;s premier smallmouth fishery — its vast rock and gravel reefs routinely produce 20-inch-plus smallmouth. Lake Vermilion, Lake Pepin, and the border waters (Rainy, Kabetogama, Lake of the Woods) round out the best smallmouth lakes in the state.',
+    },
+    {
+      question: 'What about walleye, muskie, and panfish?',
+      answerHtml:
+        'Bass is Omnia&rsquo;s focus, but our reports and DNR data cover every Minnesota species. Mille Lacs and Leech Lake rank among the top walleye fisheries; use the map filtered by species to see what&rsquo;s biting now, and watch for dedicated best-of-Minnesota guides for walleye, muskie, and panfish.',
     },
     {
       question: 'Where does this Minnesota fishing data come from?',
       answerHtml:
-        'Each lake combines two sources: Minnesota DNR fisheries survey data (species present, relative abundance, size structure) and Omnia&rsquo;s own angler fishing reports and favorites. The DNR data tells you what&rsquo;s in the lake; the Omnia reports tell you what&rsquo;s biting and on what — refreshed as new reports come in.',
+        'Each lake combines two sources: Minnesota DNR fisheries survey data (species present, relative abundance, size structure) and Omnia&rsquo;s own angler fishing reports. The DNR data tells you what&rsquo;s in the lake; the Omnia reports tell you what&rsquo;s biting and on what — refreshed as new reports come in.',
     },
     {
       question: "My Minnesota lake isn't listed — can I still get data?",

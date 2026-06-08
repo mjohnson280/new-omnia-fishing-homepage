@@ -20,6 +20,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.85,
     },
+    {
+      url: canonicalHubUrl(`${MN_HUB_PATH}/all-lakes`),
+      lastModified: lakes[0]?.updatedAt,
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    },
     ...lakes.map((lake) => ({
       url: canonicalGuideUrl(lake.slug),
       lastModified: lake.updatedAt,

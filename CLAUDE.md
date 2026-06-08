@@ -233,9 +233,20 @@ surface renders the same result (no forked ranking). Full handoff:
 State-scoped sibling of the national hub, built to out-rank DNR-only directories
 (minnesotafishing.guide). Full handoff: `docs/mn-fishing-and-dnr.md`.
 
-- **Hub** `/a/best-fishing-lakes-minnesota` — searchable/sortable directory of **all
-  500 MN lakes** (`components/aeo/MnLakeBrowser.tsx`), ranked by real Omnia blended
-  score; full list server-rendered (crawlable) with client search/sort on top.
+- **Hub** `/a/best-fishing-lakes-minnesota` — **BASS-FOCUSED** (Omnia's focus), redesigned
+  2026-06-08 away from a flat 500-row table toward citable content. Leads with
+  **"Best Largemouth/Smallmouth Bass Lakes in Minnesota"** ranked sections
+  (`components/aeo/MnSpeciesRanking.tsx` + `lib/aeo/mn-species.ts`) — the AEO unit that
+  answers real queries with quotable passages — then a server-rendered **top-50 most
+  active** list, an "other species → map" strip, methodology + FAQ. **Favorites are no
+  longer displayed anywhere** (internal signal; still feeds the score). The full 500-lake
+  searchable directory (`MnLakeBrowser.tsx`) moved to the linked sub-page
+  **`/a/best-fishing-lakes-minnesota/all-lakes`**.
+- **Species rankings are reusable:** `<MnSpeciesRankings rankings={...}>` is config-driven,
+  so a future `/a/best-walleye-lakes-minnesota` is the same component fed a walleye config
+  — no forked layout. The MN hub instantiates it with `MN_BASS_RANKINGS`. The bass picks
+  are CURATED from well-known MN bass waters (`isSample`), not yet DNR-verified; report
+  counts + centroids are real (joined from `MN_LAKES` by slug).
 - **Data** `lib/aeo/mn-lakes.ts` — **AUTO-GENERATED** from the MN top-500 TSV export
   (name, slug, real centroid, reports, favorites, score). Do not hand-edit; re-import
   to refresh.
@@ -247,26 +258,32 @@ State-scoped sibling of the national hub, built to out-rank DNR-only directories
   illustrative example (Lake Minnetonka, `isSample`); dev replaces `DNR_BY_SLUG` with
   the real DNR source.
 
-**⚠ OPEN QUESTION — resolve first next session (Matt's call):** *Has the MN work
-actually helped AEO, our original goal?* Honest read: the 500-lake hub is mostly a
-**directory/index** — it ranks for navigation but answer engines cite *substantive
-passages*, which live in the **spokes**. The fish-species spokes have the right
-structure but real detail for only 1 lake (499 are empty pending states). So the AEO
-value is currently **gated on populating the spokes with real DNR + report data**.
-Decide: (a) do Omnia's existing prod `/w/{slug}/fish-species` pages already hold DNR
-data (then RESTRUCTURE for AEO, don't rebuild)? (b) should directory rows link to our
-spokes once populated? (c) does the hub itself need more citable content (per-lake
-one-liners, "best walleye lakes in MN" sub-sections)? (d) how do we MEASURE AEO lift
-(AI-overview citations, referral traffic, indexed spokes)? See the session log memory.
+**AEO question — partially resolved 2026-06-08 (Matt's call):** *Has the MN work
+helped AEO?* Diagnosis confirmed: the flat 500-lake directory ranked for *navigation*,
+but answer engines cite *substantive passages*. **Action taken:** redesigned the hub
+around citable content — the **"Best [species] Bass Lakes in Minnesota" ranked sections
+with per-lake blurbs** are now the lead AEO unit (addresses (c)); the full directory was
+demoted to the `/all-lakes` sub-page; top-50 + species lists link to the fish-species
+spokes (addresses (b)). **Still open:** (a) do Omnia's existing prod
+`/w/{slug}/fish-species` pages already hold DNR data — if so RESTRUCTURE, don't rebuild
+(still pending dev input #2); (d) how to MEASURE AEO lift (AI-overview citations,
+referral traffic, indexed spokes). The deeper AEO payoff remains **gated on populating
+the spokes with real DNR + report data**. See the session log memory.
 
 ## Pending dev inputs (blocking production lift)
 
-1. **Is the tackle matcher a headless API or locked in the map client?** Determines
-   whether lifting the matched-tackle work to prod is small wiring or a real extract.
+1. ~~**Is the tackle matcher a headless API or locked in the map client?**~~
+   **RESOLVED (Matt, 2026-06-08): it's headless** — already serves the map *and* the
+   legacy lake pages, "wide open for use." So lifting matched-tackle to prod is
+   **wiring, not extraction.** Two specifics still pending the engineer (Matt's eng
+   call): (Q1) the exact endpoint/resolver name to call, and (Q2) whether the response
+   already includes the report-mention bait sort or the client does it. Stubbed in
+   `docs/matched-tackle-and-nl-portal.md` until answered.
 2. **A sample of the real DNR fields** per lake (which metrics: CPUE? abundance
    rating? lengths? survey year?) — to align `DnrSurvey` to Omnia's real DNR model.
-3. **Which branch the demo URL deploys from** — pushes went to `main`; if
-   stage.mjcreativelogic.com serves `stage`, sync it.
+3. ~~**Which branch the demo URL deploys from**~~ **RESOLVED (Matt, 2026-06-08): keep
+   pushing directly to `main`; no stage sync needed.** (Matches the direct-push-to-main
+   note in the Git Workflow section.)
 
 ---
 
