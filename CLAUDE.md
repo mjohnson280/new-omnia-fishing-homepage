@@ -247,6 +247,13 @@ State-scoped sibling of the national hub, built to out-rank DNR-only directories
   — no forked layout. The MN hub instantiates it with `MN_BASS_RANKINGS`. The bass picks
   are CURATED from well-known MN bass waters (`isSample`), not yet DNR-verified; report
   counts + centroids are real (joined from `MN_LAKES` by slug).
+- **CTA hierarchy (mirrors the national `LakeRankCard`):** primary = **"Read the {lake}
+  guide →"** (`/w/{slug}/fishing-patterns`), rendered ONLY when a guide exists
+  (`getLake(slug)` truthy — `resolveRanking` exposes `hasGuide`). Then the map button, then
+  **"DNR survey data ↗"** as a secondary link (DNR is intentionally NOT the lead — guides
+  are). In the prototype the guide exists for the 20 built lakes (incl. MN's Minnetonka,
+  Mille Lacs, Leech); it lights up for the rest as Omnia adds pattern pages. The top-50
+  index does the same (name → guide when present, marked "· Guide", else the DNR tab).
 - **Data** `lib/aeo/mn-lakes.ts` — **AUTO-GENERATED** from the MN top-500 TSV export
   (name, slug, real centroid, reports, favorites, score). Do not hand-edit; re-import
   to refresh.
