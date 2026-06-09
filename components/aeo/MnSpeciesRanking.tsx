@@ -5,7 +5,7 @@
 // Reusable: feed it MN_BASS_RANKINGS here, or a walleye config on a future page. The
 // layout never forks.
 
-import { lakeTabUrl, mapDeepLink } from '@/lib/aeo/links';
+import { guidePath, lakeTabUrl, mapDeepLink } from '@/lib/aeo/links';
 import {
   resolveRanking,
   type SpeciesRanking,
@@ -40,23 +40,36 @@ function SpeciesSection({ ranking }: { ranking: SpeciesRanking }) {
               </div>
               <p className="mt-1 text-sm leading-6 text-slate-600">{l.blurb}</p>
               <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5">
-                <a
-                  href={lakeTabUrl(l.slug, 'fish-species')}
-                  target="_blank"
-                  rel="noopener"
-                  data-event="mn_click_fish_species"
-                  className="text-sm font-semibold text-brand hover:text-brand-dark"
-                >
-                  DNR fish species ↗
-                </a>
+                {/* Primary CTA: the seasonal pattern guide — but only when one exists. */}
+                {l.hasGuide && (
+                  <a
+                    href={guidePath({ slug: l.slug })}
+                    target="_blank"
+                    rel="noopener"
+                    data-event="mn_click_guide"
+                    className="text-sm font-semibold text-brand hover:text-brand-dark"
+                  >
+                    Read the {l.name} guide →
+                  </a>
+                )}
                 <a
                   href={mapDeepLink({ slug: l.slug, lat: l.lat, lng: l.lng })}
                   target="_blank"
                   rel="noopener"
                   data-event="mn_click_map"
-                  className="text-sm font-medium text-slate-500 hover:text-slate-800"
+                  className="inline-flex items-center gap-1.5 rounded-btn bg-slate-900 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
                 >
                   Open on the map ↗
+                </a>
+                {/* Secondary: DNR survey data (every lake has this tab on prod). */}
+                <a
+                  href={lakeTabUrl(l.slug, 'fish-species')}
+                  target="_blank"
+                  rel="noopener"
+                  data-event="mn_click_dnr"
+                  className="text-sm font-medium text-slate-500 hover:text-slate-800"
+                >
+                  DNR survey data ↗
                 </a>
               </div>
             </div>

@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import { AeoChrome } from '@/components/aeo/Chrome';
 import { Breadcrumbs, FaqBlock, JsonLd, MapCTA } from '@/components/aeo/ui';
 import { MnSpeciesRankings } from '@/components/aeo/MnSpeciesRanking';
-import { hubBestLakesMN } from '@/lib/aeo/data';
+import { getLake, hubBestLakesMN } from '@/lib/aeo/data';
 import { MN_LAKES } from '@/lib/aeo/mn-lakes';
 import { MN_BASS_RANKINGS, resolveRanking } from '@/lib/aeo/mn-species';
 import {
   CANONICAL_BASE,
   canonicalHubUrl,
+  guidePath,
   lakeTabUrl,
   mapDeepLink,
   MN_HUB_PATH,
@@ -155,37 +156,43 @@ export default function BestFishingLakesMinnesota() {
             fish-species data and the map.
           </p>
           <ol className="mt-5 grid gap-2 sm:grid-cols-2">
-            {topLakes.map((l) => (
-              <li
-                key={l.slug}
-                className="flex items-center gap-3 rounded-btn border border-slate-200 bg-white px-3 py-2.5 text-sm transition hover:border-brand/40"
-              >
-                <span className="w-7 shrink-0 text-right font-bold tabular-nums text-brand">
-                  {l.rank}
-                </span>
-                <a
-                  href={lakeTabUrl(l.slug, 'fish-species')}
-                  target="_blank"
-                  rel="noopener"
-                  data-event="mn_click_fish_species"
-                  className="min-w-0 flex-1 truncate font-medium text-slate-800 hover:text-brand"
+            {topLakes.map((l) => {
+              // Prefer the seasonal pattern guide when one exists; otherwise the
+              // name falls back to the lake's DNR survey tab.
+              const hasGuide = Boolean(getLake(l.slug));
+              return (
+                <li
+                  key={l.slug}
+                  className="flex items-center gap-3 rounded-btn border border-slate-200 bg-white px-3 py-2.5 text-sm transition hover:border-brand/40"
                 >
-                  {l.name.trim()}
-                </a>
-                <span className="shrink-0 text-xs tabular-nums text-slate-400">
-                  {l.reports.toLocaleString()} reports
-                </span>
-                <a
-                  href={mapDeepLink({ slug: l.slug, lat: l.lat, lng: l.lng })}
-                  target="_blank"
-                  rel="noopener"
-                  data-event="mn_click_map"
-                  className="shrink-0 text-xs font-semibold text-slate-500 hover:text-slate-800"
-                >
-                  Map ↗
-                </a>
-              </li>
-            ))}
+                  <span className="w-7 shrink-0 text-right font-bold tabular-nums text-brand">
+                    {l.rank}
+                  </span>
+                  <a
+                    href={hasGuide ? guidePath({ slug: l.slug }) : lakeTabUrl(l.slug, 'fish-species')}
+                    target="_blank"
+                    rel="noopener"
+                    data-event={hasGuide ? 'mn_click_guide' : 'mn_click_dnr'}
+                    className="min-w-0 flex-1 truncate font-medium text-slate-800 hover:text-brand"
+                  >
+                    {l.name.trim()}
+                    {hasGuide && <span className="ml-1.5 text-xs font-normal text-brand">· Guide</span>}
+                  </a>
+                  <span className="shrink-0 text-xs tabular-nums text-slate-400">
+                    {l.reports.toLocaleString()} reports
+                  </span>
+                  <a
+                    href={mapDeepLink({ slug: l.slug, lat: l.lat, lng: l.lng })}
+                    target="_blank"
+                    rel="noopener"
+                    data-event="mn_click_map"
+                    className="shrink-0 text-xs font-semibold text-slate-500 hover:text-slate-800"
+                  >
+                    Map ↗
+                  </a>
+                </li>
+              );
+            })}
           </ol>
 
           <a

@@ -17,6 +17,7 @@
 // blended with Omnia report volume for that species. Report counts + centroids are
 // already real (joined from MN_LAKES by slug).
 
+import { getLake } from './data';
 import { MN_LAKES, type MnLake } from './mn-lakes';
 
 const BY_SLUG = new Map<string, MnLake>(MN_LAKES.map((l) => [l.slug, l]));
@@ -51,6 +52,10 @@ export interface ResolvedSpeciesLake {
   lng: number;
   reports: number;
   blurb: string;
+  /** True when a /w/{slug}/fishing-patterns guide exists for this lake — drives the
+   *  primary "Read the guide" CTA. In prod this is true for any lake with a pattern
+   *  page; in the prototype it's the 20 built guides (3 of which are MN top lakes). */
+  hasGuide: boolean;
 }
 
 /** Join a ranking's picks to real lake metadata, dropping any unknown slug. */
@@ -67,6 +72,7 @@ export function resolveRanking(r: SpeciesRanking): ResolvedSpeciesLake[] {
         lng: lake.lng,
         reports: lake.reports,
         blurb: p.blurb,
+        hasGuide: Boolean(getLake(lake.slug)),
       };
     })
     .filter((x): x is ResolvedSpeciesLake => x !== null);
