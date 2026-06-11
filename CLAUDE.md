@@ -78,7 +78,8 @@ The `AuthModal` component handles Sign in / Create account in a single modal wit
 │   ├── matched-tackle-and-nl-portal.md         # Matched-tackle engine + NL portal handoff
 │   ├── mn-fishing-and-dnr.md                   # MN hub + DNR spoke handoff
 │   ├── lake-centroid-tool.md                   # slug→centroid→map deep-link tool
-│   └── aeo-canonical-sop.md                    # AEO canonical structure SOP (dev + partner playbook)
+│   ├── aeo-canonical-sop.md                    # AEO canonical structure SOP (dev + partner playbook)
+│   └── handoff-checklist.md                    # Pick-up-tomorrow checklist: test → hand off → dev inputs
 ├── public/
 │   └── images/                                 # Static assets
 ├── AGENTS.md                               # Workspace approval mode + Vercel best practices
@@ -278,17 +279,21 @@ State-scoped sibling of the national hub, built to out-rank DNR-only directories
   illustrative example (Lake Minnetonka, `isSample`); dev replaces `DNR_BY_SLUG` with
   the real DNR source.
 
-**AEO question — partially resolved 2026-06-08 (Matt's call):** *Has the MN work
-helped AEO?* Diagnosis confirmed: the flat 500-lake directory ranked for *navigation*,
-but answer engines cite *substantive passages*. **Action taken:** redesigned the hub
-around citable content — the **"Best [species] Bass Lakes in Minnesota" ranked sections
-with per-lake blurbs** are now the lead AEO unit (addresses (c)); the full directory was
-demoted to the `/all-lakes` sub-page; top-50 + species lists link to the fish-species
-spokes (addresses (b)). **Still open:** (a) do Omnia's existing prod
+**AEO question — partially resolved 2026-06-08, refined 2026-06-11 (Matt's calls):**
+*Has the MN work helped AEO?* Diagnosis confirmed: the flat 500-lake directory ranked
+for *navigation*, but answer engines cite *substantive passages*. **2026-06-08:**
+redesigned the hub around citable content. **2026-06-11:** harmonized both hubs onto one
+**lake-first structure** (ranked by all-site activity) with a **swappable editorial
+lens** — national reads multi-species, MN reads bass; same skeleton, only the lens
+changes. The bass per-species ranked sections (still citable passages) moved **below**
+the lake-first primary list as the bass deep-dive. Both hubs render the shared
+`CanonicalLakeCard` with the four-destination cluster. Governed by
+`docs/aeo-canonical-sop.md`. **Still open:** (a) do Omnia's existing prod
 `/w/{slug}/fish-species` pages already hold DNR data — if so RESTRUCTURE, don't rebuild
 (still pending dev input #2); (d) how to MEASURE AEO lift (AI-overview citations,
 referral traffic, indexed spokes). The deeper AEO payoff remains **gated on populating
-the spokes with real DNR + report data**. See the session log memory.
+the spokes with real DNR + report data**. See the session log memory and
+`docs/handoff-checklist.md`.
 
 ## Pending dev inputs (blocking production lift)
 
