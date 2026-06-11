@@ -114,6 +114,74 @@ map's `top_techniques` tab.
 
 ---
 
+## `/shop` filtered + sorted API requirements (the full store contract)
+
+The whole backend contract for the **filtered, sorted `/shop` experience** in one place,
+so a backend dev never has to assemble it from scattered notes. This is what powers
+`/shop/lake/{slug}/{species}` (and the same data behind the map's `top_techniques` tab).
+
+### 1. Accepted query params (facets)
+
+All optional except the path key. Use Omnia's live vocabulary exactly — the same params
+the map already uses, so links resolve identically across surfaces.
+
+| Param | Form | Role |
+| --- | --- | --- |
+| `waterbody_slug` | kebab, `-fishing-reports` suffix | **path key** (required) — scopes results to the lake |
+| `species` | snake_case (`smallmouth_bass`) | **path key** (required) — the target fish |
+| `season_group` | lowercase (`summer`) | filter — seasonal technique/bait ranking |
+| `technique` | canonical snake_case (`drop_shot`) | filter — narrow to one technique section |
+| `color` | canonical family slug (`natural_craw`) | filter — bait color family |
+| `collection` | curated id | merchandising override (show exactly this curated set) |
+| `src` | string | attribution only — never affects results |
+
+### 2. Sort (non-negotiable order)
+
+1. **Techniques** ranked by the engine for `(waterbody_slug, season_group, species)` —
+   `rank` 1 = top technique.
+2. **Baits within each technique** sorted **descending by report mentions on THIS
+   waterbody** (`reportMentions`). This lake-specific mention count is the sort key — not
+   global popularity, not price. It's the whole differentiator.
+
+This is exactly the `MatchedTackleResult` shape in *The contract* above; the store renders
+it directly.
+
+### 3. Filter behavior — **relax, never zero**
+
+A filtered query must **never return an empty result set**. The store ignores params it
+can't satisfy and progressively relaxes toward the path key:
+
+```
+(waterbody_slug + species + season_group + technique + color)
+   → drop color
+   → drop technique
+   → drop season_group
+   → (waterbody_slug + species)        ← the floor; always returns something
+```
+
+Unknown/unsupported params are ignored, not errored. A citation or a deep-link that
+carries a stale facet should still land on a useful page.
+
+### 4. Canonical taxonomy dependency
+
+`technique` and `color` facet values must come from the **store's canonical taxonomy**,
+shared with the map and emitted by the synthesis pipeline (`Pattern.techniqueTags`,
+`colorFamily`). Never accept kebab'd free-text prose as a facet — if it doesn't match a
+canonical slug, treat it as absent (rule #3). This is what keeps the map's
+`top_techniques` tab and `/shop` in lockstep.
+
+### 5. Still blocking exact wiring (the two open engineering Qs)
+
+- **Q1** — the real headless endpoint/resolver name `getMatchedTackle()` should call.
+- **Q2** — whether that service already returns baits sorted by report mentions, or the
+  client applies the sort in #2.
+
+Until answered, the engine keeps its mock body and the `/shop` CTAs stay gated
+(`SHOP_LINKS_ENABLED = false` in `lib/aeo/links.ts`). Flip that flag once the endpoint is
+wired and `/shop/lake/...` is un-`noindex`ed.
+
+---
+
 ## The roadmap this sets up
 
 The NL portal is the seed of the feature you described: a conversational tackle
