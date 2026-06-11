@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import { AeoChrome } from '@/components/aeo/Chrome';
 import {
   Breadcrumbs,
+  CanonicalLakeCard,
   FaqBlock,
   JsonLd,
-  LakeRankCard,
   MapCTA,
 } from '@/components/aeo/ui';
-import { hubTopLakes2026, lakesByRank } from '@/lib/aeo/data';
+import { hubTopLakes2026, lakesByRank, lakeToCard } from '@/lib/aeo/data';
 import { canonicalHubUrl, HUB_PATH } from '@/lib/aeo/links';
 import {
   breadcrumbSchema,
@@ -82,11 +82,11 @@ export default function TopFishingLakesHub() {
           </a>
         </nav>
 
-        {/* Ranked list */}
+        {/* Ranked list — lake-first, shared CanonicalLakeCard (SOP §1). */}
         <ol className="mt-8 space-y-4">
           {lakes.map((l) => (
             <li key={l.slug}>
-              <LakeRankCard lake={l} />
+              <CanonicalLakeCard data={lakeToCard(l)} />
             </li>
           ))}
         </ol>

@@ -7,13 +7,17 @@
 // detail tables stay crawlable even when collapsed.
 
 import Link from 'next/link';
-import type { FaqItem, Lake, Pattern } from '@/lib/aeo/types';
+import type { FaqItem, Lake, LakeCardData, Pattern } from '@/lib/aeo/types';
 import { buildAnswerText, patternHeading } from '@/lib/aeo/format';
 import {
   guidePath,
   lakeMapUrl,
+  lakeTabUrl,
+  mapDeepLink,
   productLinks,
   shopBaitsUrl,
+  shopLakeSpeciesUrl,
+  SHOP_LINKS_ENABLED,
 } from '@/lib/aeo/links';
 import { getMatchedTackle } from '@/lib/aeo/tackle';
 import { MatchedTackle } from './MatchedTackle';
@@ -327,55 +331,88 @@ export function TopActiveLakes({ lakes }: { lakes: Lake[] }) {
 
 // ── Hub rank card (spec Section 7) ───────────────────────────────────────────
 
-export function LakeRankCard({ lake }: { lake: Lake }) {
+/**
+ * The ONE lake card both hubs render (national + state). It exposes the four
+ * canonical destinations in fixed SOP priority — patterns guide → fish-species (DNR)
+ * → map (centroid) → shop (gated) — from a normalized {@link LakeCardData}. Editorial
+ * focus (e.g. a bass lens) rides on optional fields and never reorders the list.
+ * See docs/aeo-canonical-sop.md §1–§2.
+ */
+export function CanonicalLakeCard({ data }: { data: LakeCardData }) {
+  const meta: { label: string; value: string }[] = [];
+  if (data.topSpecies?.length)
+    meta.push({ label: 'Top species', value: data.topSpecies.join(', ') });
+  if (data.peakSeason) meta.push({ label: 'Peak', value: data.peakSeason });
+  if (data.bestMonths?.length)
+    meta.push({ label: 'Best months', value: data.bestMonths.join(', ') });
+  meta.push({ label: 'Based on', value: `${data.reports.toLocaleString()} reports` });
+
+  const shopSpecies = data.shopSpecies ?? data.topSpecies?.[0];
+
   return (
     <article
-      id={`rank-${lake.rank}`}
+      id={`rank-${data.rank}`}
       className="scroll-mt-24 rounded-card border border-slate-200 bg-white p-5 shadow-soft transition hover:border-brand/40"
     >
       <div className="flex gap-4">
         <div className="shrink-0 text-2xl font-bold tabular-nums text-brand">
-          {String(lake.rank).padStart(2, '0')}
+          {String(data.rank).padStart(2, '0')}
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="text-lg font-semibold text-slate-900">
-            {lake.name}, {lake.state}
-          </h2>
-          <p className="mt-1 text-sm leading-6 text-slate-600">{lake.summary}</p>
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <h2 className="text-lg font-semibold text-slate-900">
+              {data.name}
+              {data.state ? `, ${data.state}` : ''}
+            </h2>
+            {data.focusBadge && (
+              <span className="rounded-full bg-brand-light px-2 py-0.5 text-xs font-semibold text-brand">
+                {data.focusBadge}
+              </span>
+            )}
+          </div>
+          {data.blurb && (
+            <p className="mt-1 text-sm leading-6 text-slate-600">{data.blurb}</p>
+          )}
 
           <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
-            <div className="flex gap-1.5">
-              <dt className="font-semibold text-slate-500">Top species:</dt>
-              <dd className="text-slate-700">{lake.stats.topSpecies.join(', ')}</dd>
-            </div>
-            <div className="flex gap-1.5">
-              <dt className="font-semibold text-slate-500">Peak:</dt>
-              <dd className="text-slate-700">{lake.peakSeason}</dd>
-            </div>
-            <div className="flex gap-1.5">
-              <dt className="font-semibold text-slate-500">Best months:</dt>
-              <dd className="text-slate-700">{lake.stats.bestMonths.join(', ')}</dd>
-            </div>
-            <div className="flex gap-1.5">
-              <dt className="font-semibold text-slate-500">Based on:</dt>
-              <dd className="text-slate-700">{lake.reportCount.toLocaleString()} reports</dd>
-            </div>
+            {meta.map((m) => (
+              <div key={m.label} className="flex gap-1.5">
+                <dt className="font-semibold text-slate-500">{m.label}:</dt>
+                <dd className="text-slate-700">{m.value}</dd>
+              </div>
+            ))}
           </dl>
 
+          {/* Four canonical destinations, SOP priority order. Map is the filled
+              button (the differentiator action); the rest are text links. */}
           <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
-            <Link
-              href={guidePath(lake)}
-              // Opens in a new tab so the hub list stays put — the ranked list IS
-              // the user's "back," and it's the page most search/AI traffic compares against.
+            {/* 1 (lead) — how/when: the seasonal pattern guide, when one exists. */}
+            {data.hasGuide && (
+              <Link
+                href={guidePath({ slug: data.slug })}
+                // Opens in a new tab so the hub list stays put — the ranked list IS
+                // the user's "back," and the page most search/AI traffic compares against.
+                target="_blank"
+                rel="noopener"
+                data-event="aeo_click_guide_from_hub"
+                className="text-sm font-semibold text-brand hover:text-brand-dark"
+              >
+                Read the {data.name} guide →
+              </Link>
+            )}
+            {/* 2 — what's in it: the DNR fish-species tab on prod. */}
+            <a
+              href={lakeTabUrl(data.slug, 'fish-species')}
               target="_blank"
               rel="noopener"
-              data-event="aeo_click_guide_from_hub"
-              className="text-sm font-semibold text-brand hover:text-brand-dark"
+              data-event="aeo_click_species_from_hub"
+              className="text-sm font-medium text-slate-500 hover:text-slate-800"
             >
-              Read the {lake.name} guide →
-            </Link>
+              Fish species (DNR) ↗
+            </a>
+            {/* 3 — where: the centroid map deep-link. */}
             <a
-              href={lakeMapUrl(lake)}
+              href={mapDeepLink({ slug: data.slug, lat: data.lat, lng: data.lng, zoom: data.zoom })}
               target="_blank"
               rel="noopener"
               data-event="aeo_click_map_from_hub_card"
@@ -383,6 +420,18 @@ export function LakeRankCard({ lake }: { lake: Lake }) {
             >
               Open on the map ↗
             </a>
+            {/* 4 — what to fish with: contextual shop collection (gated until API live). */}
+            {SHOP_LINKS_ENABLED && shopSpecies && (
+              <a
+                href={shopLakeSpeciesUrl(data.slug, shopSpecies, data.peakSeason)}
+                target="_blank"
+                rel="noopener"
+                data-event="aeo_click_shop_from_hub"
+                className="text-sm font-medium text-slate-500 hover:text-slate-800"
+              >
+                Shop matched baits ↗
+              </a>
+            )}
           </div>
         </div>
       </div>

@@ -18,7 +18,9 @@
 // already real (joined from MN_LAKES by slug).
 
 import { getLake } from './data';
+import { speciesParam } from './format';
 import { MN_LAKES, type MnLake } from './mn-lakes';
+import type { LakeCardData } from './types';
 
 const BY_SLUG = new Map<string, MnLake>(MN_LAKES.map((l) => [l.slug, l]));
 
@@ -76,6 +78,42 @@ export function resolveRanking(r: SpeciesRanking): ResolvedSpeciesLake[] {
       };
     })
     .filter((x): x is ResolvedSpeciesLake => x !== null);
+}
+
+/**
+ * The MN hub's PRIMARY list — lake-first, ranked by all-site activity (MN_LAKES
+ * order), adapted into the shared <CanonicalLakeCard> shape. This mirrors the national
+ * hub's structure exactly. The bass EDITORIAL LENS rides on top without reordering:
+ * where a lake also appears in a bass ranking we attach that pick's blurb + a species
+ * badge; lakes without a bass pick render a neutral card. The species-ranked bass
+ * sections live BELOW this list (the "bass content after lake-first" the article wants).
+ * See docs/aeo-canonical-sop.md §1.
+ */
+export function mnHubLakes(topN: number): LakeCardData[] {
+  const bassBySlug = new Map<string, { blurb: string; species: string }>();
+  for (const r of MN_BASS_RANKINGS) {
+    for (const p of r.picks) {
+      if (!bassBySlug.has(p.slug)) {
+        bassBySlug.set(p.slug, { blurb: p.blurb, species: r.speciesLabel });
+      }
+    }
+  }
+
+  return MN_LAKES.slice(0, topN).map((l) => {
+    const bass = bassBySlug.get(l.slug);
+    return {
+      rank: l.rank,
+      name: l.name.trim(),
+      slug: l.slug,
+      lat: l.lat,
+      lng: l.lng,
+      reports: l.reports,
+      hasGuide: Boolean(getLake(l.slug)),
+      blurb: bass?.blurb,
+      focusBadge: bass?.species,
+      shopSpecies: bass ? speciesParam(bass.species) : undefined,
+    };
+  });
 }
 
 // ── Minnesota BASS rankings (Omnia's focus) ──────────────────────────────────

@@ -62,7 +62,7 @@ The `AuthModal` component handles Sign in / Create account in a single modal wit
 │   ├── sitemap.ts                              # AEO: national + MN hub + 20 guide entries
 │   ├── llms.txt/route.ts                       # AEO: /llms.txt hub + lake index
 │   ├── a/best-fishing-lakes-2026/page.tsx      # AEO: Top Fishing Lakes hub (national, multi-species)
-│   ├── a/best-fishing-lakes-minnesota/page.tsx # AEO: MN hub — 500-lake directory (vs minnesotafishing.guide)
+│   ├── a/best-fishing-lakes-minnesota/page.tsx # AEO: MN state hub (lake-first, bass-content lens)
 │   ├── w/[slug]/fishing-patterns/page.tsx      # AEO: 20 lake guide pages (SSG)
 │   ├── w/[slug]/fish-species/page.tsx          # AEO: per-lake DNR fish-species spoke
 │   ├── shop/lake/[slug]/[species]/page.tsx     # Contextual-commerce collection (matched tackle)
@@ -77,7 +77,8 @@ The `AuthModal` component handles Sign in / Create account in a single modal wit
 │   ├── aeo-lake-content-system.md              # AEO hub+guides handoff
 │   ├── matched-tackle-and-nl-portal.md         # Matched-tackle engine + NL portal handoff
 │   ├── mn-fishing-and-dnr.md                   # MN hub + DNR spoke handoff
-│   └── lake-centroid-tool.md                   # slug→centroid→map deep-link tool
+│   ├── lake-centroid-tool.md                   # slug→centroid→map deep-link tool
+│   └── aeo-canonical-sop.md                    # AEO canonical structure SOP (dev + partner playbook)
 ├── public/
 │   └── images/                                 # Static assets
 ├── AGENTS.md                               # Workspace approval mode + Vercel best practices
@@ -170,6 +171,19 @@ For this repository, prefer a broader auto-approve mode:
 
 ---
 
+## AEO Canonical SOP (the governing playbook)
+
+`docs/aeo-canonical-sop.md` is the single playbook that governs every AEO surface below
+(dev + external-partner facing). It locks the structure: **lake-first ranking with a
+swappable editorial lens** (national reads multi-species, MN reads bass — same skeleton,
+only the lens changes), the **four canonical per-lake destinations in fixed priority**
+(patterns guide → fish-species → map centroid → shop), the **technique→bait ranking** as
+the shared spine that answers "how + what," and a **self-service "page kit"** so a partner
+(Tackle Warehouse, Wired2Fish) can generate the canonical page set from a lake list. Both
+hubs render the shared **`CanonicalLakeCard`** (`components/aeo/ui.tsx`) fed by per-hub
+adapters (`lakeToCard` in `data.ts`, `mnHubLakes` in `mn-species.ts`). When adding or
+changing an AEO page, conform to the SOP.
+
 ## AEO Lake Content System
 
 A hub-and-spoke content system (implements `omnia-lake-aeo-build-spec.md`) that
@@ -233,27 +247,26 @@ surface renders the same result (no forked ranking). Full handoff:
 State-scoped sibling of the national hub, built to out-rank DNR-only directories
 (minnesotafishing.guide). Full handoff: `docs/mn-fishing-and-dnr.md`.
 
-- **Hub** `/a/best-fishing-lakes-minnesota` — **BASS-FOCUSED** (Omnia's focus), redesigned
-  2026-06-08 away from a flat 500-row table toward citable content. Leads with
-  **"Best Largemouth/Smallmouth Bass Lakes in Minnesota"** ranked sections
-  (`components/aeo/MnSpeciesRanking.tsx` + `lib/aeo/mn-species.ts`) — the AEO unit that
-  answers real queries with quotable passages — then a server-rendered **top-50 most
-  active** list, an "other species → map" strip, methodology + FAQ. **Favorites are no
-  longer displayed anywhere** (internal signal; still feeds the score). The full 500-lake
-  searchable directory (`MnLakeBrowser.tsx`) moved to the linked sub-page
-  **`/a/best-fishing-lakes-minnesota/all-lakes`**.
-- **Species rankings are reusable:** `<MnSpeciesRankings rankings={...}>` is config-driven,
-  so a future `/a/best-walleye-lakes-minnesota` is the same component fed a walleye config
-  — no forked layout. The MN hub instantiates it with `MN_BASS_RANKINGS`. The bass picks
-  are CURATED from well-known MN bass waters (`isSample`), not yet DNR-verified; report
-  counts + centroids are real (joined from `MN_LAKES` by slug).
-- **CTA hierarchy (mirrors the national `LakeRankCard`):** primary = **"Read the {lake}
-  guide →"** (`/w/{slug}/fishing-patterns`), rendered ONLY when a guide exists
-  (`getLake(slug)` truthy — `resolveRanking` exposes `hasGuide`). Then the map button, then
-  **"DNR survey data ↗"** as a secondary link (DNR is intentionally NOT the lead — guides
-  are). In the prototype the guide exists for the 20 built lakes (incl. MN's Minnetonka,
-  Mille Lacs, Leech); it lights up for the rest as Omnia adds pattern pages. The top-50
-  index does the same (name → guide when present, marked "· Guide", else the DNR tab).
+- **Hub** `/a/best-fishing-lakes-minnesota` — **LAKE-FIRST, bass-content lens** (harmonized
+  with the national hub 2026-06-11). Structure mirrors the national page: a **primary
+  lake-first list** ranked by all-site activity (`mnHubLakes(20)` over `MN_LAKES`), rendered
+  with the shared **`CanonicalLakeCard`** (same component the national hub uses). Bass is the
+  editorial *content* lens, not the structure: the **"Best Largemouth/Smallmouth Bass Lakes"**
+  ranked sections (`MnSpeciesRanking.tsx` + `lib/aeo/mn-species.ts`) now sit **below** the
+  lake-first list as the bass deep-dive, plus an "other species → map" strip, methodology +
+  FAQ. **Favorites are not displayed** (internal signal; still feeds the score). Full 500-lake
+  directory (`MnLakeBrowser.tsx`) lives at the sub-page **`/all-lakes`**.
+- **Bass lens rides on the cards without reordering:** `mnHubLakes()` attaches each lake's
+  bass blurb + a species badge (from `MN_BASS_RANKINGS`) where one exists; lakes without a
+  bass pick render a neutral card. The ranking order never changes. The species-ranked
+  sections (`<MnSpeciesRankings>`) are still config-driven and reusable for a future
+  `/a/best-walleye-lakes-minnesota`. Bass picks are CURATED (`isSample`), not DNR-verified;
+  report counts + centroids are real (joined from `MN_LAKES` by slug).
+- **CTA cluster (shared `CanonicalLakeCard`, SOP priority):** **patterns guide** (lead,
+  `/w/{slug}/fishing-patterns`, rendered only when `hasGuide`) → **fish-species (DNR)**
+  (`/w/{slug}/fish-species`) → **map** (centroid deep-link, the filled button) → **shop**
+  (gated behind `SHOP_LINKS_ENABLED=false` until the recommendation API ships). Both hubs
+  render the identical four-destination cluster — see `docs/aeo-canonical-sop.md`.
 - **Data** `lib/aeo/mn-lakes.ts` — **AUTO-GENERATED** from the MN top-500 TSV export
   (name, slug, real centroid, reports, favorites, score). Do not hand-edit; re-import
   to refresh.

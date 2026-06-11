@@ -1,16 +1,20 @@
 import type { Metadata } from 'next';
 import { AeoChrome } from '@/components/aeo/Chrome';
-import { Breadcrumbs, FaqBlock, JsonLd, MapCTA } from '@/components/aeo/ui';
+import {
+  Breadcrumbs,
+  CanonicalLakeCard,
+  FaqBlock,
+  JsonLd,
+  MapCTA,
+} from '@/components/aeo/ui';
 import { MnSpeciesRankings } from '@/components/aeo/MnSpeciesRanking';
-import { getLake, hubBestLakesMN } from '@/lib/aeo/data';
+import { hubBestLakesMN } from '@/lib/aeo/data';
 import { MN_LAKES } from '@/lib/aeo/mn-lakes';
-import { MN_BASS_RANKINGS, resolveRanking } from '@/lib/aeo/mn-species';
+import { MN_BASS_RANKINGS, mnHubLakes } from '@/lib/aeo/mn-species';
 import {
   CANONICAL_BASE,
   canonicalHubUrl,
-  guidePath,
   lakeTabUrl,
-  mapDeepLink,
   MN_HUB_PATH,
   productLinks,
 } from '@/lib/aeo/links';
@@ -18,7 +22,7 @@ import { breadcrumbSchema, faqSchema } from '@/lib/aeo/schema';
 
 const hub = hubBestLakesMN;
 const ALL_LAKES_PATH = `${MN_HUB_PATH}/all-lakes`;
-const TOP_N = 50;
+const TOP_N = 20;
 
 // Other species we cover but don't yet feature with their own page. Each links into
 // the map filtered by species; dedicated /a/best-{species}-lakes-minnesota pages reuse
@@ -30,43 +34,31 @@ const OTHER_SPECIES: { label: string; param: string }[] = [
   { label: 'Crappie & Panfish', param: 'crappie' },
 ];
 
-// Featured bass lakes (union across both bass rankings, deduped) — the structured
-// ItemList for the page points at each lake's fish-species spoke.
-const featuredBassLakes = (() => {
-  const seen = new Set<string>();
-  const out: { slug: string; name: string }[] = [];
-  for (const ranking of MN_BASS_RANKINGS) {
-    for (const lake of resolveRanking(ranking)) {
-      if (seen.has(lake.slug)) continue;
-      seen.add(lake.slug);
-      out.push({ slug: lake.slug, name: lake.name });
-    }
-  }
-  return out;
-})();
-
 export const metadata: Metadata = {
-  title: `Best Bass Lakes in Minnesota 2026 | Omnia Fishing`,
+  title: `Best Fishing Lakes in Minnesota 2026 | Omnia Fishing`,
   description:
-    'The best bass fishing lakes in Minnesota — ranked largemouth and smallmouth waters from real Omnia angler reports, each paired with Minnesota DNR fish-species data and the map. Plus the 50 most active lakes statewide.',
+    "Minnesota's most active fishing lakes, ranked from real Omnia angler reports across every species and paired with Minnesota DNR fish-species data and the map. Plus Omnia's best largemouth and smallmouth bass lakes in the state.",
   alternates: { canonical: canonicalHubUrl(MN_HUB_PATH) },
   robots: { index: false, follow: true },
 };
 
 export default function BestFishingLakesMinnesota() {
-  const topLakes = MN_LAKES.slice(0, TOP_N);
+  // PRIMARY list — lake-first, ranked by all-site activity (mirrors the national hub).
+  const primaryLakes = mnHubLakes(TOP_N);
 
   const itemList = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Best Bass Lakes in Minnesota 2026',
+    name: 'Best Fishing Lakes in Minnesota 2026',
     itemListOrder: 'https://schema.org/ItemListOrderAscending',
-    numberOfItems: featuredBassLakes.length,
-    itemListElement: featuredBassLakes.map((l, i) => ({
+    numberOfItems: primaryLakes.length,
+    itemListElement: primaryLakes.map((l, i) => ({
       '@type': 'ListItem',
       position: i + 1,
       name: l.name,
-      url: `${CANONICAL_BASE}/w/${l.slug}/fish-species`,
+      url: l.hasGuide
+        ? `${CANONICAL_BASE}/w/${l.slug}/fishing-patterns`
+        : `${CANONICAL_BASE}/w/${l.slug}/fish-species`,
     })),
   };
 
@@ -89,7 +81,7 @@ export default function BestFishingLakesMinnesota() {
           trail={[
             { name: 'Home', href: '/' },
             { name: 'Articles' },
-            { name: 'Best Bass Lakes in Minnesota' },
+            { name: 'Best Fishing Lakes in Minnesota' },
           ]}
         />
 
@@ -106,16 +98,58 @@ export default function BestFishingLakesMinnesota() {
           Other Minnesota fishing sites republish the DNR&apos;s survey data alone. Omnia
           ranks each lake by what anglers actually report catching, then pairs it with the
           same DNR data — so you get not just <em>what&apos;s in the lake</em>, but{' '}
-          <em>where the bass are really biting</em> and what to throw.
+          <em>where it&apos;s really biting</em> and what to throw.
         </p>
 
-        {/* Bass rankings — the citable AEO core */}
-        <section className="mt-10 scroll-mt-24" id="best-bass-lakes">
-          <MnSpeciesRankings rankings={MN_BASS_RANKINGS} />
+        {/* PRIMARY: lake-first ranked list — same CanonicalLakeCard as the national hub */}
+        <section className="mt-10 scroll-mt-24" id="most-active">
+          <h2 className="text-2xl font-semibold text-slate-900">
+            The {TOP_N} most active fishing lakes in Minnesota
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+            Ranked across all species by Omnia angler activity. Each lake links to its
+            seasonal pattern guide, its Minnesota DNR fish-species data, and the map.
+          </p>
+          <ol className="mt-6 space-y-4">
+            {primaryLakes.map((l) => (
+              <li key={l.slug}>
+                <CanonicalLakeCard data={l} />
+              </li>
+            ))}
+          </ol>
+
+          <a
+            href={ALL_LAKES_PATH}
+            data-event="mn_click_all_lakes"
+            className="mt-6 inline-flex items-center gap-1.5 rounded-btn bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+          >
+            Browse all {MN_LAKES.length} Minnesota lakes →
+          </a>
+        </section>
+
+        {/* Map CTA banner */}
+        <div className="mt-12">
+          <MapCTA variant="banner" />
+        </div>
+
+        {/* BASS-FOCUSED CONTENT — the editorial lens, AFTER the lake-first structure.
+            Citable per-species answer passages; reuses the config-driven component. */}
+        <section className="mt-12 scroll-mt-24" id="best-bass-lakes">
+          <h2 className="text-2xl font-semibold text-slate-900">
+            Minnesota&apos;s best bass lakes, by species
+          </h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+            Bass is where Minnesota&apos;s report volume concentrates, so here&apos;s the
+            detail: Omnia&apos;s top largemouth and smallmouth waters, each with a
+            one-line read and a link into the lake.
+          </p>
+          <div className="mt-6">
+            <MnSpeciesRankings rankings={MN_BASS_RANKINGS} />
+          </div>
         </section>
 
         {/* Other species — same structure, separate pages (coming) */}
-        <section className="mt-10 scroll-mt-24" id="other-species">
+        <section className="mt-12 scroll-mt-24" id="other-species">
           <h2 className="text-xl font-semibold text-slate-900">
             Fishing for something other than bass?
           </h2>
@@ -141,80 +175,17 @@ export default function BestFishingLakesMinnesota() {
           </ul>
         </section>
 
-        {/* Map CTA banner */}
-        <div className="mt-12">
-          <MapCTA variant="banner" />
-        </div>
-
-        {/* Top 50 most active lakes — the "popular lakes" index, server-rendered */}
-        <section className="mt-12 scroll-mt-24" id="most-active">
-          <h2 className="text-2xl font-semibold text-slate-900">
-            The {TOP_N} most active fishing lakes in Minnesota
-          </h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-            Ranked across all species by Omnia angler report volume. Each links to its DNR
-            fish-species data and the map.
-          </p>
-          <ol className="mt-5 grid gap-2 sm:grid-cols-2">
-            {topLakes.map((l) => {
-              // Prefer the seasonal pattern guide when one exists; otherwise the
-              // name falls back to the lake's DNR survey tab.
-              const hasGuide = Boolean(getLake(l.slug));
-              return (
-                <li
-                  key={l.slug}
-                  className="flex items-center gap-3 rounded-btn border border-slate-200 bg-white px-3 py-2.5 text-sm transition hover:border-brand/40"
-                >
-                  <span className="w-7 shrink-0 text-right font-bold tabular-nums text-brand">
-                    {l.rank}
-                  </span>
-                  <a
-                    href={hasGuide ? guidePath({ slug: l.slug }) : lakeTabUrl(l.slug, 'fish-species')}
-                    target="_blank"
-                    rel="noopener"
-                    data-event={hasGuide ? 'mn_click_guide' : 'mn_click_dnr'}
-                    className="min-w-0 flex-1 truncate font-medium text-slate-800 hover:text-brand"
-                  >
-                    {l.name.trim()}
-                    {hasGuide && <span className="ml-1.5 text-xs font-normal text-brand">· Guide</span>}
-                  </a>
-                  <span className="shrink-0 text-xs tabular-nums text-slate-400">
-                    {l.reports.toLocaleString()} reports
-                  </span>
-                  <a
-                    href={mapDeepLink({ slug: l.slug, lat: l.lat, lng: l.lng })}
-                    target="_blank"
-                    rel="noopener"
-                    data-event="mn_click_map"
-                    className="shrink-0 text-xs font-semibold text-slate-500 hover:text-slate-800"
-                  >
-                    Map ↗
-                  </a>
-                </li>
-              );
-            })}
-          </ol>
-
-          <a
-            href={ALL_LAKES_PATH}
-            data-event="mn_click_all_lakes"
-            className="mt-5 inline-flex items-center gap-1.5 rounded-btn bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
-          >
-            Browse all {MN_LAKES.length} Minnesota lakes →
-          </a>
-        </section>
-
         {/* Methodology */}
         <section id="methodology" className="mt-12 scroll-mt-24 max-w-3xl">
           <h2 className="text-2xl font-semibold text-slate-900">
-            How we ranked Minnesota&apos;s bass lakes
+            How we ranked Minnesota&apos;s lakes
           </h2>
           <p className="mt-3 leading-7 text-slate-700">{hub.methodology}</p>
         </section>
 
         {/* FAQ */}
         <div className="mt-10">
-          <FaqBlock items={hub.faq} heading="Minnesota bass fishing FAQ" />
+          <FaqBlock items={hub.faq} heading="Minnesota fishing FAQ" />
         </div>
 
         {/* Spoke handoff note */}

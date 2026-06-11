@@ -99,6 +99,32 @@ export function mapTechniquesUrl(
   return `${base}/map?${params.toString()}`;
 }
 
+/**
+ * Master switch for the contextual-commerce ("what to fish with") CTA across the
+ * hubs and answer blocks. The /shop/lake/{slug}/{species} structure is built and the
+ * URL shape is canonical, but the real recommendation API isn't live yet — so we keep
+ * the link WIRED but OFF in the public surfaces (SOP §2.2 #4, §3.2). Devs flip this to
+ * `true` once getMatchedTackle() is backed by the prod ranking API.
+ */
+export const SHOP_LINKS_ENABLED = false;
+
+/**
+ * Canonical contextual-collection URL for a (lake, species[, season]) — the shoppable,
+ * technique-sorted, report-ranked "what to throw" page. Mirrors the /shop/lake route
+ * and the live param vocabulary; `species` is normalized to snake_case. Internal ('')
+ * in the prototype so the demo clicks through; devs point `base` at PROD_BASE on prod.
+ */
+export function shopLakeSpeciesUrl(
+  slug: string,
+  species: string,
+  seasonGroup?: string,
+  base: string = '',
+): string {
+  const params = new URLSearchParams({ src: 'aeo_hub' });
+  if (seasonGroup) params.set('season_group', seasonGroup.toLowerCase());
+  return `${base}/shop/lake/${slug}/${speciesParam(species)}?${params.toString()}`;
+}
+
 // ── Internal prototype routes (hub <-> guide navigation) ─────────────────────
 // These stay relative so the demo is navigable on mjcreativelogic.com.
 

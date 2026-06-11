@@ -6,8 +6,8 @@
 // comes from build-spec Section 11. Mille Lacs carries the real worked-example
 // patterns; the other 19 use illustrative templates (see patterns.ts).
 
-import type { HubConfig, Lake, Pattern } from './types';
-import { anchorFor } from './format';
+import type { HubConfig, Lake, LakeCardData, Pattern } from './types';
+import { anchorFor, speciesParam } from './format';
 import { buildSamplePatterns } from './patterns';
 
 const UPDATED = '2026-05-15';
@@ -439,6 +439,26 @@ export function getLake(slug: string): Lake | undefined {
   return LAKES.find((l) => l.slug === slug);
 }
 
+/** Adapt a national-hub Lake into the shared <CanonicalLakeCard> shape. */
+export function lakeToCard(lake: Lake): LakeCardData {
+  return {
+    rank: lake.rank,
+    name: lake.name,
+    state: lake.state,
+    slug: lake.slug,
+    lat: lake.coordinates.lat,
+    lng: lake.coordinates.lng,
+    zoom: lake.zoom,
+    reports: lake.reportCount,
+    hasGuide: true, // every national hub lake has a built guide
+    blurb: lake.summary,
+    topSpecies: lake.stats.topSpecies,
+    peakSeason: lake.peakSeason,
+    bestMonths: lake.stats.bestMonths,
+    shopSpecies: lake.stats.topSpecies[0] ? speciesParam(lake.stats.topSpecies[0]) : undefined,
+  };
+}
+
 export function lakesByRank(): Lake[] {
   return [...LAKES].sort((a, b) => a.rank - b.rank);
 }
@@ -503,11 +523,11 @@ export const hubTopLakes2026: HubConfig = {
 
 export const hubBestLakesMN: HubConfig = {
   slug: 'best-fishing-lakes-minnesota',
-  title: 'The Best Bass Lakes in Minnesota',
+  title: 'The Best Fishing Lakes in Minnesota',
   intro:
-    "These are Minnesota's best bass lakes — ranked largemouth and smallmouth waters drawn from real Omnia angler reports, not just an old survey. Lake Minnetonka and Lake Waconia lead for largemouth; Mille Lacs and Lake Vermilion are trophy smallmouth water. Every lake pairs Minnesota DNR fish-species data with live Omnia reports and links straight to the map, so you get what's in the lake and where the bass are biting in one place. Below the bass lists you'll also find the 50 most active fishing lakes statewide and the full 500-lake directory.",
+    "These are the most active fishing lakes in Minnesota — the waters Omnia anglers fish, follow, and file reports on the most, ranked across every species by the same blended activity score as our national list. Because Minnesota's reports concentrate heavily on bass right now, the guides and per-species picks here lean hard into largemouth and smallmouth. Every lake pairs Minnesota DNR fish-species data with live Omnia reports and links straight to the map, so you get what's in the lake and where it's biting in one place. Below the ranked lakes you'll find Omnia's best largemouth and smallmouth bass lakes in the state, plus the full 500-lake directory.",
   methodology:
-    "Bass lakes are ranked by Omnia angler report volume for the species — largemouth and smallmouth tallied separately — then cross-checked against Minnesota DNR survey data so a lake only ranks where the bass actually live. Each lake page fuses the DNR's survey (which species are present and how abundant) with Omnia's real-time reports (what's biting and on what) — so the answer is current, not a decade-old snapshot.",
+    "Lakes are ranked by a blended activity score that combines angler report volume and favorites across every species in the Omnia system — the same method as our national ranking — so the order reflects where Minnesota anglers actually are, not an editor's pick. Because today's reports skew heavily toward bass, the editorial guides and the per-species lists below focus on largemouth and smallmouth. Each lake page fuses the DNR's survey (which species are present and how abundant) with Omnia's real-time reports (what's biting and on what) — so the answer is current, not a decade-old snapshot.",
   updatedAt: UPDATED,
   faq: [
     {

@@ -88,3 +88,35 @@ export interface HubConfig {
   updatedAt: string;
   faq: FaqItem[];
 }
+
+/**
+ * Normalized input for the shared <CanonicalLakeCard> — the one lake card both the
+ * national and state hubs render (the harmony primitive). Every hub maps its own
+ * source shape (national `Lake`, state `MnLake`) into this so the four canonical
+ * destinations (patterns → fish-species → map → shop) render identically everywhere.
+ * Editorial "focus" (e.g. a bass lens on the MN hub) rides as optional fields and
+ * never changes the lake ordering. See docs/aeo-canonical-sop.md §1–§2.
+ */
+export interface LakeCardData {
+  rank: number;
+  name: string;
+  /** Shown on the national (multi-state) hub; omit on single-state hubs. */
+  state?: string;
+  slug: string;
+  lat: number;
+  lng: number;
+  zoom?: number;
+  reports: number;
+  /** A /w/{slug}/fishing-patterns guide exists → the lead "Read the guide" CTA. */
+  hasGuide: boolean;
+  /** Verdict (national) or editorial-lens blurb (state). Optional. */
+  blurb?: string;
+  /** Multi-species meta (national); usually absent on state lake-first lists. */
+  topSpecies?: string[];
+  peakSeason?: string;
+  bestMonths?: string[];
+  /** Short editorial focus badge, e.g. "Largemouth Bass" (MN bass lens). */
+  focusBadge?: string;
+  /** snake_case species for the (gated) shop link; falls back to topSpecies[0]. */
+  shopSpecies?: string;
+}
