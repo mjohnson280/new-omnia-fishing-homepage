@@ -479,7 +479,7 @@ function SiteHeader({ onSignIn, onSignUp, isAuthed }: { onSignIn: () => void; on
       {/* Primary nav row */}
       <div className="mx-auto flex max-w-[1600px] items-center gap-6 px-6 py-3">
         {/* Logo */}
-        <Link href="/" aria-label="Omnia Fishing Home" className="shrink-0">
+        <Link href="/omnia" aria-label="Omnia Fishing Home" className="shrink-0">
           <img
             src="https://www.omniafishing.com/logo.svg"
             alt="Omnia Fishing"
@@ -729,7 +729,7 @@ function Sidebar({ onSignIn, onSignUp }: { onSignIn: () => void; onSignUp: () =>
       <div className="flex flex-1 flex-col px-7 py-8">
 
         {/* Logo */}
-        <Link href="/" aria-label="Omnia Fishing Home" className="flex items-center gap-2.5">
+        <Link href="/omnia" aria-label="Omnia Fishing Home" className="flex items-center gap-2.5">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-900 p-2">
             <img
               src="https://www.omniafishing.com/logo.svg"
@@ -1606,7 +1606,7 @@ function AuthedSidebar() {
       <div className="flex flex-col px-5 py-7">
 
         {/* Logo */}
-        <Link href="/" aria-label="Omnia Fishing Home" className="flex items-center gap-2.5">
+        <Link href="/omnia" aria-label="Omnia Fishing Home" className="flex items-center gap-2.5">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 p-2">
             <img
               src="https://www.omniafishing.com/logo.svg"

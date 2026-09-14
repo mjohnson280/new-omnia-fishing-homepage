@@ -10,7 +10,7 @@ export function AeoChrome({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <header className="border-b border-black/10 bg-white">
         <div className="mx-auto flex max-w-container items-center gap-6 px-[var(--gutter)] py-3">
-          <Link href="/" aria-label="Omnia Fishing Home" className="shrink-0">
+          <Link href="/omnia" aria-label="Omnia Fishing Home" className="shrink-0">
             <img
               src="https://www.omniafishing.com/logo.svg"
               alt="Omnia Fishing"
@@ -23,7 +23,7 @@ export function AeoChrome({ children }: { children: React.ReactNode }) {
             <a href={productLinks.map} className="hover:text-brand">Map</a>
           </nav>
           <div className="ml-auto flex items-center gap-3 text-sm font-semibold">
-            <Link href="/" className="text-slate-500 hover:text-slate-800">
+            <Link href="/omnia" className="text-slate-500 hover:text-slate-800">
               Homepage
             </Link>
             <a
