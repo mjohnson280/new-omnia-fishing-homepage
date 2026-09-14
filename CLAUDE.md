@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is a Next.js prototype for the new **omniafishing.com** homepage, developed by the CEO (Mike Johnson) and handed off to devs once the layout is approved. It is deployed to Vercel and accessible at **stage.mjcreativelogic.com**.
+This is a Next.js prototype for the new **omniafishing.com** homepage, developed by the CEO (Mike Johnson) and handed off to devs once the layout is approved. It is deployed to Vercel on **www.mjcreativelogic.com** (production = `main`). Since 2026-09-14 the root `/` is a neutral "test site for Never9.ai" notice; the Omnia homepage prototype lives at **`/omnia`** and all AEO routes are unchanged.
 
 The goal is to replace the current omniafishing.com homepage with a non-authenticated landing page that drives three business outcomes, in priority order:
 
@@ -57,7 +57,8 @@ The `AuthModal` component handles Sign in / Create account in a single modal wit
 /
 ├── app/
 │   ├── layout.tsx                              # Root layout, metadata, global font
-│   ├── page.tsx                                # Thin entry point — renders <Homepage />
+│   ├── page.tsx                                # Root: neutral Never9.ai test-site notice (noindex)
+│   ├── omnia/page.tsx                          # Omnia homepage prototype — renders <Homepage />
 │   ├── globals.css                             # Tailwind base + CSS custom properties
 │   ├── sitemap.ts                              # AEO: national + MN hub + 20 guide entries
 │   ├── llms.txt/route.ts                       # AEO: /llms.txt hub + lake index
